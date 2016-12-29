@@ -1,7 +1,7 @@
 Dashboard och fjärrkontroll för hela hemmet.
 
-* [Bakgrund till projektet](background)
-* [Förslag på arkitektur](arkitektur)
+* [Bakgrund till projektet](/wikis/background)
+* [Förslag på arkitektur](/wikis/arkitektur)
 
 ![Screenshot](/uploads/6393dba9bc6b6b5734e5ef5fbc2433b0/Screenshot.png)
 
