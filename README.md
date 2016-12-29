@@ -1,9 +1,13 @@
+# node-smart-remote
+
 Dashboard och fjärrkontroll för hela hemmet.
 
-* [Bakgrund till projektet](/wikis/background)
-* [Förslag på arkitektur](/wikis/arkitektur)
+* [Bakgrund till projektet](https://gitlab.com/emilohman/node-smart-remote/wikis/background)
+* [Förslag på arkitektur](https://gitlab.com/emilohman/node-smart-remote/wikis/arkitektur)
+
 
 ![Screenshot](/uploads/6393dba9bc6b6b5734e5ef5fbc2433b0/Screenshot.png)
+
 
 # Install
 
