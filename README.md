@@ -17,6 +17,6 @@ Dashboard och fjärrkontroll för hela hemmet.
 
 ## Domoticz and MQTT
 
-1. Install MQTT Broker (apt-get install mosquitto)
+1. Install MQTT Broker (apt-get install mosquitto or brew install mosquitto) 
 2. Configure MQTT Hardware in Domoticz (Setup -> Hardware -> Type: MQTT Client Gateway)
 3. Update options /plugins/domoticz/domoticz.js to fit your setup (host and idx)
