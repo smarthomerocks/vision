@@ -2,8 +2,8 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var mqtt    = require('node-domoticz-mqtt');
 var options = {
-      idx:        [ 1, 4 ],
-      host:       '192.168.0.39',
+      idx:        [ 1],
+      host:       '192.168.1.127',
       status:     'remote/connected',
       request:    true,
       log:        false
