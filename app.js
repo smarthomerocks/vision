@@ -32,6 +32,7 @@ app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/light-switch', express.static(path.join(__dirname, 'modules', 'light-switch')));
+app.use('/config', express.static(path.join(__dirname, 'config')));
 
 var dashboard = new Dashboard();
 

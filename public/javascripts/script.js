@@ -12,6 +12,8 @@ $(function() {
   }
   window.setInterval( update_clock, 1000);
   update_clock();
+
+  Loader.loadModules();
 });
 
 function initMap() {
