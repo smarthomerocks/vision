@@ -1,33 +1,38 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
-var mqtt    = require('node-domoticz-mqtt');
-var options = {
-      idx:        [ 1],
-      host:       '192.168.1.127',
-      status:     'remote/connected',
-      request:    true,
-      log:        false
-  };
+var mqtt = require('node-domoticz-mqtt');
 
-function Domoticz() {
+function Domoticz(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
   this.type = 'home';
   this.start = function() {
-    var self = this;
-    this.domoticz = new mqtt.domoticz(options);
+    var self = this,
+        options = {
+          idx: config.idx,
+          host: config.host,
+          status: 'remote/connected',
+          request: true,
+          log: false
+        };
 
-    this.domoticz.on('data', function(data) {
-      console.log('Domoticz data', data);
+    if (this.domoticz) {
+      this.emit('connect');
+    } else {
+      this.domoticz = new mqtt.domoticz(options);
 
-      self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue });
-    });
+      this.domoticz.on('data', function(data) {
+        console.log('Domoticz data', data);
 
-    this.domoticz.on('connect', function() {
-      console.log('Domoticz connected');
+        self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue });
+      });
 
-      self.emit('connect');
-    });
+      this.domoticz.on('connect', function() {
+        console.log('Domoticz connected');
+
+        self.emit('connect');
+      });
+    }
   };
   this.getStatus = function(id) {
     console.log('getStatus', id);
@@ -48,7 +53,7 @@ function Domoticz() {
 util.inherits(Domoticz, EventEmitter);
 
 module.exports = {
-	create: function(Dashboard, app, io) {
-		return new Domoticz(Dashboard, app, io);
+	create: function(Dashboard, app, io, config) {
+		return new Domoticz(Dashboard, app, io, config);
 	}
 };

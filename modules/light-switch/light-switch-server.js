@@ -1,17 +1,10 @@
 function LightSwitch(Dashboard, app, io) {
-	var _socket,
-			socketList = [];
-      lightSwitchOn = false,
-      config = {
-        lightSwitchId: 1,
-        plugin: 'domoticz'
-      };
+	var socketList = [];
 
 	function connectSocket() {
 		var nsp = io.of('/light-switch');
 
 		nsp.on('connection', function(socket) {
-			_socket = socket;
 			socketList.push(socket);
 
 			console.log('Connected');
@@ -35,37 +28,37 @@ function LightSwitch(Dashboard, app, io) {
     	});
 
 			socket.emit('connected');
+
+			function onSocketUpdate(command, data) {
+				if (command === 'LIGHT_SWITCH_CONNECT') {
+					console.log('LIGHT_SWITCH_CONNECT');
+					connectPlugin(data.plugin);
+				} else if (command === 'LIGHT_SWITCH_TOGGLE') {
+		      console.log('LIGHT_SWITCH_TOGGLE');
+		      Dashboard.lights.toggle(data.plugin, data.id, data.stateOn);
+				} else if (command === 'LIGHT_SWITCH_STATUS') {
+				  console.log('LIGHT_SWITCH_STATUS');
+		      Dashboard.lights.getStatus(data.plugin, data.id);
+				}
+			}
+
+		  function sendStatus(id, isStateOn) {
+		    socket.emit('LIGHT_SWITCH_STATUS', { id: id, isStateOn: isStateOn });
+		  }
+
+		  function connectPlugin(plugin) {
+		    Dashboard.lights.on(plugin, 'connect', function(data) {
+					socket.emit('LIGHT_SWITCH_CONNECTED');
+		    });
+
+		    Dashboard.lights.on(plugin, 'change', function(data) {
+		      sendStatus(data.id, data.isStateOn);
+		    });
+
+		    Dashboard.lights.start(plugin);
+		  }
 		});
 	}
-
-	function onSocketUpdate(command, data) {
-		if (command === 'LIGHT_SWITCH_TOGGLE') {
-      console.log('LIGHT_SWITCH_TOGGLE');
-      Dashboard.lights.toggle(config.plugin, config.lightSwitchId, !lightSwitchOn);
-		} else if (command === 'LIGHT_SWITCH_STATUS') {
-		  console.log('LIGHT_SWITCH_STATUS');
-      Dashboard.lights.getStatus(config.plugin, config.lightSwitchId);
-		}
-	}
-
-  function sendStatus(isStateOn) {
-    if (_socket) {
-      _socket.emit('LIGHT_SWITCH_STATUS', { isStateOn: isStateOn });
-    }
-  }
-
-  function connectPlugin() {
-    Dashboard.lights.on(config.plugin, 'connect', function(data) {
-      Dashboard.lights.getStatus(config.plugin, config.lightSwitchId);
-    });
-
-    Dashboard.lights.on(config.plugin, 'change', function(data) {
-      lightSwitchOn = data.isStateOn;
-      sendStatus(data.isStateOn);
-    });
-
-    Dashboard.lights.start(config.plugin);
-  }
 
 	function exit() {
 		console.log('Exit light-switch');
@@ -76,7 +69,6 @@ function LightSwitch(Dashboard, app, io) {
 	}
 
 	connectSocket();
-  connectPlugin();
 
 	console.log('LIGHTSWITCH started');
 

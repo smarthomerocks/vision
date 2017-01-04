@@ -36,12 +36,9 @@ app.use('/config', express.static(path.join(__dirname, 'config')));
 
 var dashboard = new Dashboard();
 
-dashboard.loadConfig(function(config){
-  //TODO: Use config in module and plugin loading
-  dashboard.setPlugins(plugins.init(dashboard, app, io));
-  dashboard.setModules(modules.init(dashboard, app, io));
-
-});
+dashboard.setConfig(dashboard.loadConfig());
+dashboard.setPlugins(plugins.init(dashboard, app, io));
+dashboard.setModules(modules.init(dashboard, app, io));
 
 app.use('/', routes);
 
