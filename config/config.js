@@ -4,9 +4,9 @@ var config = {
     },
 	modules: [
 		{
-			module: 'light-switch',
+			module: "light-switch",
             config: {
-                parameter: "value"
+                
             }
 		}
     ]
