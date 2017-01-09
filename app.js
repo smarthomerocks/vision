@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/light-switch', express.static(path.join(__dirname, 'modules', 'light-switch')));
+app.use('/modules', express.static(path.join(__dirname, 'modules')));
 app.use('/config', express.static(path.join(__dirname, 'config')));
 
 var dashboard = new Dashboard();

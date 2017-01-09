@@ -1,6 +1,6 @@
 var config = {
     paths: {
-      modules: ""
+      modules: "/modules"
     },
     plugins: {
       "domoticz": {
@@ -15,6 +15,14 @@ var config = {
           title: "Fasad",
           plugin: "domoticz",
           id: 1
+        }
+      },
+      {
+        module: "light-switch",
+        config: {
+          title: "Fönster",
+          plugin: "domoticz",
+          id: 13
         }
       }
     ]

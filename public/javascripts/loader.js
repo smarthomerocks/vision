@@ -23,7 +23,7 @@ var Loader = (function() {
 					loadNextModule();
 				});
 			} else {
-                startModules();
+        startModules();
 			}
 		};
 
@@ -95,8 +95,14 @@ var Loader = (function() {
 		var url = module.path + "/" + module.file;
 
 		var afterLoad = function() {
-			//TODO: bootstrap module to be able to set config/data and load css
-			callback();
+			var moduleObject = Module.create(module.name);
+			if (moduleObject) {
+				bootstrapModule(module, moduleObject, function() {
+					callback();
+				});
+			} else {
+				callback();
+			}
 		};
 
 		if (loadedModuleFiles.indexOf(url) !== -1) {
