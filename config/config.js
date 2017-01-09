@@ -4,8 +4,8 @@ var config = {
     },
     plugins: {
       "domoticz": {
-        host: "192.168.0.39",
-        idx: [1, 13]
+        host: "192.168.1.127",
+        log: false
       }
     },
     modules: [
@@ -22,7 +22,7 @@ var config = {
         config: {
           title: "Fönster",
           plugin: "domoticz",
-          id: 13
+          id: 3
         }
       }
     ]

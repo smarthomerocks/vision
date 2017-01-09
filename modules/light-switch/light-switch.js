@@ -2,8 +2,8 @@ Module.register("light-switch",{
 
 	defaults: {
 		title: "Lampa",
-    plugin: "domoticz",
-    id: 1
+		plugin: "domoticz",
+		id: 1
 	},
 
 	start: function() {

@@ -1,5 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
+var _ = require('underscore');
 var mqtt = require('node-domoticz-mqtt');
 
 function Domoticz(Dashboard, app, io, config) {
@@ -7,13 +8,16 @@ function Domoticz(Dashboard, app, io, config) {
 
   this.type = 'home';
   this.start = function() {
+
+    var idx = _.map(_.filter(Dashboard.getConfig().modules, function(module){ return module.config.plugin == 'domoticz';}), function(module) { return module.config['id'] })
+
     var self = this,
         options = {
-          idx: config.idx,
+          idx: idx,
           host: config.host,
           status: 'remote/connected',
           request: true,
-          log: false
+          log: config.log
         };
 
     if (this.domoticz) {
