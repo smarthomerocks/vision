@@ -11,8 +11,6 @@ Module.register("light-switch",{
 
 		this.isStateOn = false;
 
-		this.getDom();
-
 		this.sendSocketNotification('LIGHT_SWITCH_CONNECT', { id: this.config.id, plugin: this.config.plugin });
 	},
 
@@ -31,12 +29,9 @@ Module.register("light-switch",{
 			self.sendSocketNotification('LIGHT_SWITCH_TOGGLE', { id: self.config.id, plugin: self.config.plugin, stateOn: !self.isStateOn });
 		});
 
-		$('.main').append(this.$el);
-
 		this.$el.css({
      'opacity' : 0.4
     });
-
 
 		return this.$el;
 	},

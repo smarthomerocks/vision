@@ -13,6 +13,8 @@ $(function() {
   window.setInterval( update_clock, 1000);
   update_clock();
 
+  NSR.renderSections();
+  NSR.initNavigation();
   Loader.loadModules();
 });
 
