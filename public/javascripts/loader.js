@@ -74,7 +74,7 @@ var Loader = (function() {
 				index: m,
 				identifier: "module_" + m + "_" + module,
 				name: moduleName,
-				path: moduleFolder + "/" ,
+				path: moduleFolder ,
 				file: moduleName + ".js",
 				config: moduleData.config,
 				classes: (typeof moduleData.classes !== "undefined") ? moduleData.classes + " " + module : module
@@ -146,7 +146,7 @@ var Loader = (function() {
 	 * argument callback function - Function called when done.
 	 */
 	var loadFile = function(fileName, callback) {
-
+		console.log(fileName);
 		var extension =  fileName.slice((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1);
 
 		switch (extension.toLowerCase()) {
