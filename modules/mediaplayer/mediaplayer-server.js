@@ -18,7 +18,6 @@ function Mediaplayer(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('Mediaplayer', command, data);
 
 				onSocketUpdate(command, data);
 			});
@@ -30,19 +29,18 @@ function Mediaplayer(Dashboard, app, io) {
 			socket.emit('connected');
 
 			function onSocketUpdate(command, data) {
-				console.log("onSocketUpdate", command)
 				if (command === 'MEDIAPLAYER_CONNECT') {
-					console.log('MEDIAPLAYER_CONNECT');
 					connectPlugin(data.plugin);
-			} else if (command === 'MEDIAPLAYER_STATUS') {
-				  console.log('MEDIAPLAYER_STATUS');
+				} else if (command === 'MEDIAPLAYER_STATUS') {
 		      Dashboard.mediaplayer.getStatus(data.plugin, data.device);
 				} else if (command === 'MEDIAPLAYER_PLAYSTATE_CHANGE') {
-				  console.log('MEDIAPLAYER_PLAYSTATE_CHANGE');
 		      Dashboard.mediaplayer.changePlayState(data.plugin, data.device, data.state);
 				} else if (command === 'MEDIAPLAYER_VOLUME_CHANGE') {
-				  console.log('MEDIAPLAYER_VOLUME_CHANGE');
 		      Dashboard.mediaplayer.changeVolume(data.plugin, data.device, data.volume);
+				}else if (command === 'MEDIAPLAYER_PLAYSTATE_PREV') {
+		      Dashboard.mediaplayer.prev(data.plugin, data.device);
+				}else if (command === 'MEDIAPLAYER_PLAYSTATE_NEXT') {
+		      Dashboard.mediaplayer.next(data.plugin, data.device);
 				}
 			}
 

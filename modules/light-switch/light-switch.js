@@ -7,7 +7,7 @@ Module.register("light-switch",{
 	},
 
 	start: function() {
-		console.log('Starting light-switch');
+		console.log('Starting light-switch ' + this.config.title);
 
 		this.isStateOn = false;
 
@@ -33,6 +33,11 @@ Module.register("light-switch",{
 
 		$('.main').append(this.$el);
 
+		this.$el.css({
+     'opacity' : 0.4
+    });
+
+
 		return this.$el;
 	},
 
@@ -40,6 +45,10 @@ Module.register("light-switch",{
 		if (command === 'LIGHT_SWITCH_CONNECTED') {
 			// Connected to plugin, get status
 			this.sendSocketNotification('LIGHT_SWITCH_STATUS', { id: this.config.id, plugin: this.config.plugin });
+
+			this.$el.css({
+				'opacity' : 1
+			});
 		} else if (command === 'LIGHT_SWITCH_STATUS' && data.id === this.config.id) {
 			this.isStateOn = data.isStateOn;
 

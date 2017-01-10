@@ -55,7 +55,9 @@ function Sonos(Dashboard, app, io, config) {
                 device.currentTrack(function (err, track) {
                   device.getVolume(function (err, volume) {
                     device.getCurrentState(function (err, state) {
-                      self.emit('change', {device: data.CurrentZoneName, currenttrack: track, volume: volume, state:state });
+                      device.getQueue(function (err, queue) {
+                        self.emit('change', {device: data.CurrentZoneName, currenttrack: track, volume: volume, state:state });
+                     })
                     })
                   })
                 })
@@ -140,28 +142,47 @@ this.getZoneCoordinator = function(zone, deviceList) {
 }
 
 this.changePlayState = function(devicename, state){
-   _.each(devices, function(device){
-     if (device.data.CurrentZoneName == devicename){
-       if(state === "playing"){
-         device.device.play(function (err, stopped) {
-        })
-       }else if(state === "paused"){
-         device.device.pause(function (err, stopped) {
-        })
-       }
-     }
-   });
+  _.each(devices, function(device){
+  if (device.data.CurrentZoneName == devicename){
+    if(state === "playing"){
+      device.device.play(function (err, stopped) {
+      });
+    }else if(state === "paused"){
+      device.device.pause(function (err, stopped) {
+      });
+    }
+    }
+  });
 },
 
 this.changeVolume = function(devicename, volume){
   console.log("changeVolume devicename " + devicename, volume);
-   _.each(devices, function(device){
-     if (device.data.CurrentZoneName == devicename){
-         device.device.setVolume(volume, function (err, stopped) {
-          console.log([err, stopped]);
-        })
-     }
-   });
+  _.each(devices, function(device){
+    if (device.data.CurrentZoneName == devicename){
+      device.device.setVolume(volume, function (err, stopped) {
+      });
+    }
+  });
+},
+
+this.prev = function(devicename){
+  console.log("prev devicename " + devicename);
+  _.each(devices, function(device){
+    if (device.data.CurrentZoneName == devicename){
+      device.device.previous(function (err, stopped) {
+      });
+    }
+  });
+},
+
+this.next = function(devicename){
+  console.log("next devicename " + devicename);
+  _.each(devices, function(device){
+    if (device.data.CurrentZoneName == devicename){
+      device.device.next(function (err, stopped) {
+      });
+    }
+  });
 },
 
  this.getStatus = function(devicename) {
@@ -173,9 +194,9 @@ this.changeVolume = function(devicename, volume){
         device.device.getVolume(function (err, volume) {
           device.device.getCurrentState(function (err, state) {
             self.emit('change', {device: device.data.CurrentZoneName, currenttrack: track, volume: volume, state:state });
-          })
-        })
-      })
+          });
+        });
+      });
     }
   });
 }; 
