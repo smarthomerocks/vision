@@ -6,6 +6,9 @@ var config = {
       "domoticz": {
         host: "192.168.1.127",
         log: false
+      },
+      "sonos": {
+        timeout: 2000
       }
     },
     modules: [
@@ -23,6 +26,14 @@ var config = {
           title: "Fönster",
           plugin: "domoticz",
           id: 3
+        }
+      },
+      {
+        module: "mediaplayer",
+        config: {
+          title: "Kontor",
+          plugin: "sonos",
+          devicename: "Kontor 2"
         }
       }
     ]

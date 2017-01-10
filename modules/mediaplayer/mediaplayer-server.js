@@ -1,0 +1,89 @@
+function Mediaplayer(Dashboard, app, io) {
+	var socketList = [];
+
+	function connectSocket() {
+		var nsp = io.of('/mediaplayer');
+
+		nsp.on('connection', function(socket) {
+			socketList.push(socket);
+
+			console.log('Mediaplayer connected');
+
+			var onevent = socket.onevent;
+			socket.onevent = function (packet) {
+			    var args = packet.data || [];
+			    onevent.call(this, packet);    	// original call
+			    packet.data = ["*"].concat(args);
+			    onevent.call(this, packet);     // additional call to catch-all
+			};
+
+			socket.on('*', function(command, data) {
+				console.log('Mediaplayer', command, data);
+
+				onSocketUpdate(command, data);
+			});
+
+			socket.on('close', function () {
+      	socketlist.splice(socketlist.indexOf(socket), 1);
+    	});
+
+			socket.emit('connected');
+
+			function onSocketUpdate(command, data) {
+				console.log("onSocketUpdate", command)
+				if (command === 'MEDIAPLAYER_CONNECT') {
+					console.log('MEDIAPLAYER_CONNECT');
+					connectPlugin(data.plugin);
+			} else if (command === 'MEDIAPLAYER_STATUS') {
+				  console.log('MEDIAPLAYER_STATUS');
+		      Dashboard.mediaplayer.getStatus(data.plugin, data.device);
+				} else if (command === 'MEDIAPLAYER_PLAYSTATE_CHANGE') {
+				  console.log('MEDIAPLAYER_PLAYSTATE_CHANGE');
+		      Dashboard.mediaplayer.changePlayState(data.plugin, data.device, data.state);
+				} else if (command === 'MEDIAPLAYER_VOLUME_CHANGE') {
+				  console.log('MEDIAPLAYER_VOLUME_CHANGE');
+		      Dashboard.mediaplayer.changeVolume(data.plugin, data.device, data.volume);
+				}
+			}
+
+			function sendStatus(device, data) {
+		    socket.emit('MEDIAPLAYER_STATUS', { device: device, data:data });
+		  }
+
+		  function connectPlugin(plugin) {
+		    Dashboard.mediaplayer.on(plugin, 'connect', function(data) {
+					socket.emit('MEDIAPLAYER_CONNECTED');
+		    });
+		   
+		    Dashboard.mediaplayer.on(plugin, 'change', function(data) {
+		      sendStatus(data.device, data);
+		    });
+
+		    Dashboard.mediaplayer.start(plugin);
+		  }
+
+		});
+	}
+
+	function exit() {
+		console.log('Exit sonos');
+		socketlist.forEach(function(socket) {
+			console.log('Closing mediaplayer socket');
+		  socket.close();
+		});
+	}
+
+	connectSocket();
+
+	console.log('mediaplayer started');
+
+	return {
+		exit: exit
+	}
+}
+
+module.exports = {
+	create: function(Dashboard, app, io) {
+		return new Mediaplayer(Dashboard, app, io);
+	}
+};

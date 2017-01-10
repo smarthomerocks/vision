@@ -77,8 +77,8 @@ process.on( "SIGINT", function() {
 	dashboard.exit();
 
   setTimeout(function() {
-		process.exit()
-  }, 500);
+		process.exit();
+  }, 1000);
 });
 
 module.exports = {app: app, server: server};
