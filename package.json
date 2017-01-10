@@ -17,6 +17,7 @@
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.3.7",
     "sonos": "^0.14.0",
-    "node-domoticz-mqtt": "1.2.2"
+    "node-domoticz-mqtt": "1.2.2",
+    "underscore": "^1.8.3"
   }
 }
