@@ -53,7 +53,9 @@ var config = {
         config: {
           title: "Energiförbrukning",
           plugin: "domoticz",
-          id: 4
+          id: 4,
+          section: "start",
+          column: 3
         }
       },
       {
