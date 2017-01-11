@@ -1,0 +1,60 @@
+Module.register("energy-meter",{
+
+	defaults: {
+		title: "Energiförbrukning",
+		plugin: "domoticz",
+		id: 4
+	},
+
+	start: function() {
+		console.log('Starting energy-meter ' + this.config.title);
+
+		this.isStateOn = false;
+
+		this.sendSocketNotification('ENERGY_METER_CONNECT', { id: this.config.id, plugin: this.config.plugin });
+	},
+
+	getDom: function() {
+		var self = this;
+
+		this.$el = $('<div class="box box-4 energy"><div class="heading">'+ this.config.title +'</div><div class="current"></div><div class="today"></div></div>');
+
+		$('.main').append(this.$el);
+
+		this.$el.css({
+     'opacity' : 0.4
+    });
+
+
+		return this.$el;
+	},
+
+	socketNotificationReceived: function(command, data) {
+		var self = this;
+		//console.log(data);
+		if (command === 'ENERGY_METER_CONNECTED') {
+
+			if (!this.$el) {
+				this.getDom();
+			}
+			// Connected to plugin, get status
+			this.sendSocketNotification('ENERGY_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });
+
+			this.$el.css({
+				'opacity' : 1
+			});
+		} else if (command === 'ENERGY_METER_STATUS' && data.id === this.config.id) {
+			self.lastdata = data;
+
+			this.updateDom();
+		}
+	},
+
+	updateDom: function() {
+		var self = this;
+		if (this.$el) {
+			this.$el.find('.current').html(self.lastdata.current +  " watt");
+			this.$el.find('.today').html(self.lastdata.today/100 +  " kWh idag");
+		}
+	}
+});

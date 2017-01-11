@@ -21,6 +21,14 @@ var config = {
         }
       },
       {
+        module: "energy-meter",
+        config: {
+          title: "Energiförbrukning",
+          plugin: "domoticz",
+          id: 4
+        }
+      },
+      {
         module: "light-switch",
         config: {
           title: "Fönster",
