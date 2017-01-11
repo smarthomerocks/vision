@@ -38,6 +38,9 @@ var Loader = (function() {
 			var module = moduleObjects[m];
 			module.start();
 		}
+
+		// Notifiy core of loded modules.
+		NSR.modulesStarted(moduleObjects);
 	};
 
 	/* getAllModules()

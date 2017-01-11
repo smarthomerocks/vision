@@ -9,8 +9,6 @@ Module.register("mediaplayer",{
 	start: function() {
 		console.log('Starting mediaplayer ' + this.config.devicename);
 
-		this.getDom();
-
 		this.sendSocketNotification('MEDIAPLAYER_CONNECT', { device: this.config.devicename, plugin: this.config.plugin });
 	},
 
@@ -34,8 +32,6 @@ Module.register("mediaplayer",{
 		this.$el.find('.volume').on('change', function() {
 			self.sendSocketNotification('MEDIAPLAYER_VOLUME_CHANGE', { device: self.config.devicename, plugin: self.config.plugin, volume: $(this).val() });
 		});
-
-		$('.main').append(this.$el);
 
 		this.$el.css({
      'opacity' : 0.4
@@ -63,7 +59,7 @@ Module.register("mediaplayer",{
 	updateDom: function() {
 		var self = this;
 		if (this.$el) {
-			
+
 			this.$el.find('.title').html(this.lastdata.currenttrack.artist +  " - " + this.lastdata.currenttrack.title);
 			this.$el.find('.albumart').attr('src',this.lastdata.currenttrack.albumArtURL);
 			this.$el.find('.volume').val(this.lastdata.volume);
