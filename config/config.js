@@ -35,6 +35,31 @@ var config = {
       },
       "sonos": {
         timeout: 2000
+      },
+      "itach": {
+        host: "192.168.0.112",
+        hardwares: {
+          tv: {
+            module: "1:3",
+            commands: "samsung-tv.json"
+          },
+          tvBox: {
+            module: "1:3",
+            commands: "motorola-vip-1003-iptv.json"
+          },
+          receiver: {
+            module: "1:2",
+            commands: "yamaha-rxv-main-zone-pre-2009.json"
+          },
+          appleTv: {
+            module: "1:2",
+            commands: "apple-tv.json"
+          },
+          nexa110: {
+            module: "1:1",
+            commands: "nexa-self-learn-110.json"
+          }
+        }
       }
     },
     modules: [
@@ -76,6 +101,45 @@ var config = {
           devicename: "Bärbar",
           section: "start",
           column: 1
+        }
+      },
+      {
+        module: "apple-tv-remote",
+        config: {
+          title: "Apple TV",
+          plugin: "itach",
+          section: "remotecontrol",
+          column: 1,
+          buttons: {
+            up: [{
+              hardware: "appleTv",
+              command: "CURSOR UP"
+            }],
+            down: [{
+              hardware: "appleTv",
+              command: "CURSOR DOWN"
+            }],
+            left: [{
+              hardware: "appleTv",
+              command: "CURSOR LEFT"
+            }],
+            right: [{
+              hardware: "appleTv",
+              command: "CURSOR RIGHT"
+            }],
+            enter: [{
+              hardware: "appleTv",
+              command: "CURSOR ENTER"
+            }],
+            menu: [{
+              hardware: "appleTv",
+              command: "MENU MAIN"
+            }],
+            play: [{
+              hardware: "appleTv",
+              command: "PLAY PAUSE TOGGLE"
+            }]
+          }
         }
       }
     ]

@@ -19,8 +19,6 @@ Module.register("energy-meter",{
 
 		this.$el = $('<div class="box box-4 energy"><div class="heading">'+ this.config.title +'</div><div class="current"></div><div class="today"></div></div>');
 
-		$('.main').append(this.$el);
-
 		this.$el.css({
      'opacity' : 0.4
     });

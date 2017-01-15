@@ -1,3 +1,5 @@
+@import "simplegrid.less";
+
 * {
   box-sizing: border-box;
 }
@@ -252,7 +254,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 
 .energy {
-  
+
   .current {
     position: absolute;
     top: 50%;
@@ -371,5 +373,34 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     height: 64px;
     font-size: 38px;
     line-height: 64px;
+  }
+}
+
+.apple-tv-remote {
+  .apple-tv-remote-container {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  [class*='mobile-'] {
+    padding: 0 5px;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 0 10px;
+    line-height: 42px;
+    font-size: 12px;
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+    border-radius: 5px;
+
+    .zmdi {
+      font-size: 22px;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
   }
 }
