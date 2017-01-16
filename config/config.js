@@ -30,7 +30,7 @@ var config = {
     ],
     plugins: {
       "domoticz": {
-        host: "192.168.0.39",
+        host: "192.168.1.127",
         log: false
       },
       "sonos": {
@@ -98,7 +98,7 @@ var config = {
         config: {
           title: "Bärbar",
           plugin: "sonos",
-          devicename: "Bärbar",
+          devicename: "Kontor 2",
           section: "start",
           column: 1
         }

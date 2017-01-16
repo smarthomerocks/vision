@@ -26,9 +26,10 @@ function Domoticz(Dashboard, app, io, config) {
       this.domoticz = new mqtt.domoticz(options);
 
       this.domoticz.on('data', function(data) {
-        console.log('Domoticz data', data);
 
         self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
+
+       console.log('Domoticz data', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
       });
 
       this.domoticz.on('connect', function() {

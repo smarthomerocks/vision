@@ -34,13 +34,15 @@ function Mediaplayer(Dashboard, app, io) {
 				} else if (command === 'MEDIAPLAYER_STATUS') {
 		      Dashboard.mediaplayer.getStatus(data.plugin, data.device);
 				} else if (command === 'MEDIAPLAYER_PLAYSTATE_CHANGE') {
-		      Dashboard.mediaplayer.changePlayState(data.plugin, data.device, data.state);
+		      Dashboard.mediaplayer.changePlayState(data.plugin, data.device, data.playbackState);
 				} else if (command === 'MEDIAPLAYER_VOLUME_CHANGE') {
 		      Dashboard.mediaplayer.changeVolume(data.plugin, data.device, data.volume);
 				}else if (command === 'MEDIAPLAYER_PLAYSTATE_PREV') {
 		      Dashboard.mediaplayer.prev(data.plugin, data.device);
 				}else if (command === 'MEDIAPLAYER_PLAYSTATE_NEXT') {
 		      Dashboard.mediaplayer.next(data.plugin, data.device);
+				} else if (command == 'MEDIAPLAYER_TRACK_SEEK'){
+  				Dashboard.mediaplayer.trackSeek(data.plugin, data.device, data.duration);
 				}
 			}
 
@@ -54,8 +56,8 @@ function Mediaplayer(Dashboard, app, io) {
 		    });
 		   
 		    Dashboard.mediaplayer.on(plugin, 'change', function(data) {
-		      sendStatus(data.device, data);
-		    });
+					sendStatus(data.device, data);
+				});
 
 		    Dashboard.mediaplayer.start(plugin);
 		  }

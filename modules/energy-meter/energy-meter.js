@@ -38,11 +38,13 @@ Module.register("energy-meter",{
 			// Connected to plugin, get status
 			this.sendSocketNotification('ENERGY_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
+		} else if (command === 'ENERGY_METER_STATUS' && data.id === this.config.id) {
+			self.lastdata = data;
+
+
 			this.$el.css({
 				'opacity' : 1
 			});
-		} else if (command === 'ENERGY_METER_STATUS' && data.id === this.config.id) {
-			self.lastdata = data;
 
 			this.updateDom();
 		}
