@@ -37,7 +37,7 @@ var config = {
         timeout: 2000
       },
       "itach": {
-        host: "192.168.0.112",
+        host: "192.168.1.127",
         hardwares: {
           tv: {
             module: "1:3",
