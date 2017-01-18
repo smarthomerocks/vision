@@ -27,8 +27,7 @@ function Sonos(Dashboard, app, io, config) {
     });
 
     this.discovery.on('transport-state', function (data) {
-
-      var playerDevice = self.discovery.getPlayerByUUID(data.uuid);
+        var playerDevice = self.discovery.getPlayerByUUID(data.uuid);
         var change = {
             device: data.roomName,
             currenttrack :{
@@ -36,14 +35,16 @@ function Sonos(Dashboard, app, io, config) {
 							album : data.state.currentTrack.album,
 							title : data.state.currentTrack.title,
 							duration : data.state.currentTrack.duration,
-							albumart : data.state.currentTrack.absoluteAlbumArtUri
+							albumart : data.state.currentTrack.absoluteAlbumArtUri,
+              type : data.state.currentTrack.type
 						},
 						nexttrack :{
 							artist : data.state.nextTrack.artist,
 							album : data.state.nextTrack.album,
 							title : data.state.nextTrack.title,
 							duration : data.state.nextTrack.duration,
-							albumart : data.state.nextTrack.absoluteAlbumArtUri
+							albumart : data.state.nextTrack.absoluteAlbumArtUri,
+              type : data.state.currentTrack.type
 						},
 						elapsedtime: data.state.elapsedTime,
 						playbackstate: data.state.playbackState,
@@ -62,7 +63,6 @@ function Sonos(Dashboard, app, io, config) {
         var playerDevice = self.discovery.getPlayerByUUID(data.uuid);
         
         if (!playerDevice) return;
-
         var change = {
             device: playerDevice.roomName,
             currenttrack :{
@@ -70,14 +70,16 @@ function Sonos(Dashboard, app, io, config) {
 							album : playerDevice.state.currentTrack.album,
 							title : playerDevice.state.currentTrack.title,
 							duration : playerDevice.state.currentTrack.duration,
-							albumart : playerDevice.state.currentTrack.absoluteAlbumArtUri
+							albumart : playerDevice.state.currentTrack.absoluteAlbumArtUri,
+              type : playerDevice.state.currentTrack.type
 						},
 						nexttrack :{
 							artist : playerDevice.state.nextTrack.artist,
 							album : playerDevice.state.nextTrack.album,
 							title : playerDevice.state.nextTrack.title,
 							duration : playerDevice.state.nextTrack.duration,
-							albumart : playerDevice.state.nextTrack.absoluteAlbumArtUri
+							albumart : playerDevice.state.nextTrack.absoluteAlbumArtUri,
+              type : playerDevice.state.nextTrack.type
 						},
 						elapsedtime: playerDevice.state.elapsedTime,
 						playbackstate: playerDevice.state.playbackState,
@@ -187,14 +189,16 @@ this.trackSeek = function(devicename, duration){
 							album : playerDevice.state.currentTrack.album,
 							title : playerDevice.state.currentTrack.title,
 							duration : playerDevice.state.currentTrack.duration,
-							albumart : playerDevice.state.currentTrack.absoluteAlbumArtUri
+							albumart : playerDevice.state.currentTrack.absoluteAlbumArtUri,
+              type : playerDevice.state.currentTrack.type
 						},
 						nexttrack :{
 							artist : playerDevice.state.nextTrack.artist,
 							album : playerDevice.state.nextTrack.album,
 							title : playerDevice.state.nextTrack.title,
 							duration : playerDevice.state.nextTrack.duration,
-							albumart : playerDevice.state.nextTrack.absoluteAlbumArtUri
+							albumart : playerDevice.state.nextTrack.absoluteAlbumArtUri,
+              type : playerDevice.state.nextTrack.type
 						},
 						elapsedtime: playerDevice.state.elapsedTime,
 						playbackstate: playerDevice.state.playbackState,

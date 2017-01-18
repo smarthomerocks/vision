@@ -113,6 +113,12 @@ Module.register("mediaplayer",{
 				this.$el.find('.buttons .play').html('<svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 			}
 
+			if(this.lastdata.currenttrack.type == 'radio'){
+				this.$el.find('.time').hide();	
+			}else {
+					this.$el.find('.time').show();	
+			}
+
 			if(this.lastdata.nexttrack && this.lastdata.nexttrack.title && this.lastdata.nexttrack.artist){
 				this.$el.find('.nexttrack').html("Nästa: " + this.lastdata.nexttrack.title + " - " + this.lastdata.nexttrack.artist);
 			}else {
