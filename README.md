@@ -11,6 +11,8 @@ Dashboard och fjärrkontroll för hela hemmet.
 
 # Install
 
+Create config file config/config.js. See config/config-sample.js
+
 1. npm install
 2. npm start
 3. Goto http://localhost:3003
