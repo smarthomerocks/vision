@@ -36,6 +36,9 @@ var config = {
       "sonos": {
         timeout: 2000
       },
+      "owntracks": {
+        host: "192.168.0.39"
+      },
       "itach": {
         host: "192.168.1.127",
         hardwares: {
@@ -101,6 +104,21 @@ var config = {
           devicename: "Kontor 2",
           section: "start",
           column: 1
+        }
+      },
+      {
+        module: "map",
+        config: {
+          plugin: "owntracks",
+          section: "start",
+          column: 1,
+          apiKey: "AIzaSyDLhANkVJDuBCpsZfOq8QJDsi17W36mMaQ",
+          markers: {
+            "emil_mob": {
+              title: "Emil",
+      				color: "255, 0, 0"
+            }
+          }
         }
       },
       {
