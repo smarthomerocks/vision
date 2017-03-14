@@ -5,6 +5,14 @@ Module.register("map",{
 		styles: [{"featureType":"all","elementType":"all","stylers":[{"invert_lightness":true},{"saturation":10},{"lightness":30},{"gamma":0.5},{"hue":"#435158"}]}]
 	},
 
+	getScripts: function() {
+		return ['google-maps.js'];
+	},
+
+	getStyles: function() {
+		return ['map.css'];
+	},
+
 	start: function() {
 		var self = this;
 

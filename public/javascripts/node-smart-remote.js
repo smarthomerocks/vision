@@ -1,5 +1,6 @@
 var NSR = (function() {
   var modules = [];
+  var sectionGridsters = {};
 
   var renderSections = function() {
     var navList = $('.js-nav-left-list'),
@@ -12,16 +13,18 @@ var NSR = (function() {
 
       navList.append(navSectionEl);
 
-      var sectionEl = $('<section class="section section-' + section.section + ' section-columns-' + section.columns + '" />');
-
-      for (var j = 0, columnLength = section.columns; j < columnLength; j++) {
-        var columnId = j + 1,
-            columnEl = $('<div />').addClass('section-column section-column-' + columnId + '');
-
-        sectionEl.append(columnEl);
-      }
+      var sectionEl = $('<section class="section section-' + section.section +'" />');
 
       main.append(sectionEl);
+
+      sectionGridsters[section.section] = sectionEl.gridster({
+        namespace: '.section-' + section.section,
+        widget_selector: '.box',
+        widget_margins: section.margins,
+        widget_base_dimensions: section.base_dimensions,
+        show_element: function($el, callback) { $el.show(); if (callback) { callback(); } },
+        hide_element: function($el, callback) { $el.hide(); if (callback) { callback(); } }
+      }).data('gridster').disable(); // Disable drag-and-drop
     }
   }
 
@@ -38,10 +41,9 @@ var NSR = (function() {
   var renderModules = function() {
     for (var i = 0, length = modules.length; i < length; i++) {
       var module = modules[i],
-          moduleEl = module.getDom(),
-          columnEl = $('.section-' + module.config.section + ' .section-column-' + module.config.column);
+          moduleEl = module.getDom();
 
-      columnEl.append(moduleEl);
+      sectionGridsters[module.config.section].add_widget(moduleEl, module.config.size_x || 1, module.config.size_y || 1, module.config.column || 1, module.config.row || 1);
     }
   }
 

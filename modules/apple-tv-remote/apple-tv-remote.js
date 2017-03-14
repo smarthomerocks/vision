@@ -5,6 +5,10 @@ Module.register("apple-tv-remote",{
 		plugin: "itach"
 	},
 
+	getStyles: function() {
+		return ['apple-tv-remote.css'];
+	},
+
 	start: function() {
 		console.log('Starting apple-tv-remote ' + this.config.title);
 
