@@ -71,6 +71,19 @@ var config = {
     },
     modules: [
       {
+        module: "announce", // Requires SSL
+        config: {
+          title: 'Hela huset',
+          path: '/home/pi/Downloads/node-sonos-http-api/static/clips',
+          url: 'http://192.168.0.39:5005', // node-sonos-http-api
+          volume: 80,
+          room: 'Bärbar',
+          section: "start",
+          column: 1,
+          row: 1
+        }
+      },
+      {
         module: "light-switch",
         config: {
           title: "Fasad",

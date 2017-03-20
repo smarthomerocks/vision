@@ -9,7 +9,7 @@ var NSRSocket = function(moduleName) {
 	self.moduleName = moduleName;
 
 	// Private Methods
-	self.socket = io("/" + self.moduleName);
+	self.socket = io("/" + self.moduleName, {secure: config.ssl});
 	var notificationCallback = function() {};
 
 	var onevent = self.socket.onevent;

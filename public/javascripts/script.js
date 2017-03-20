@@ -23,20 +23,3 @@ $(function() {
     }, 20);
   });
 });
-
-// TODO: Move to a clock module
-function initClock() {
-  var h = $("#h");
-  var m = $("#m");
-  var s = $("#s");
-  function update_clock(){
-  var date = new Date();
-  var ho = date.getHours();
-  if( ho > 12 ) ho=ho-12;
-  h.css("transform","rotate("+(360/12)*ho+"deg)");
-  m.css("transform","rotate("+(360/60)*date.getMinutes()+"deg)");
-  s.css("transform","rotate("+(360/60)*date.getSeconds()+"deg)");
-  }
-  window.setInterval( update_clock, 1000);
-  update_clock();
-}
