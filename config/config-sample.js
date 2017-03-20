@@ -1,4 +1,5 @@
 var config = {
+    ssl: false,
     paths: {
       modules: "/modules"
     },
@@ -81,6 +82,14 @@ var config = {
           section: "start",
           column: 1,
           row: 1
+        }
+      },
+      {
+        module: "clock",
+        config: {
+          section: "start",
+          column: 1,
+          row: 6
         }
       },
       {
