@@ -145,6 +145,20 @@ var config = {
         }
       },
       {
+        module: "mediaplayer-favorite",
+        config: {
+          title: "Pop",
+          plugin: "sonos",
+          devicename: "Bärbar",
+          favoriteName: "Trending Top 40",
+          section: "start",
+          column: 4,
+          row: 3,
+          size_x: 1,
+          size_y: 1
+        }
+      },
+      {
         module: "map",
         config: {
           plugin: "owntracks",
