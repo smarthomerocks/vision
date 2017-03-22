@@ -35,7 +35,7 @@ function TemperatureMeter(Dashboard, app, io) {
 					connectPlugin(data.plugin);
 				} else if (command === 'TEMP_METER_STATUS') {
 				  console.log('TEMP_METER_STATUS');
-		      Dashboard.energymeter.getStatus(data.plugin, data.id);
+		      Dashboard.tempmeter.getStatus(data.plugin, data.id);
 				}
 			}
 
@@ -44,15 +44,15 @@ function TemperatureMeter(Dashboard, app, io) {
 		  }
 
 		  function connectPlugin(plugin) {
-		    Dashboard.energymeter.on(plugin, 'connect', function(data) {
+		    Dashboard.tempmeter.on(plugin, 'connect', function(data) {
 					socket.emit('TEMP_METER_CONNECTED');
 		    });
 
-		    Dashboard.energymeter.on(plugin, 'change', function(data) {
+		    Dashboard.tempmeter.on(plugin, 'change', function(data) {
 		      sendStatus(data.id, data.value, data.value_extra);
 		    });
 
-		    Dashboard.energymeter.start(plugin);
+		    Dashboard.tempmeter.start(plugin);
 		  }
 		});
 	}
