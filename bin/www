@@ -12,8 +12,10 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3003');
+var port = normalizePort(process.env.PORT || '3003'),
+    securePort = normalizePort(process.env.SECUREPORT || '3444');
 app.set('port', port);
+app.set('port_https', securePort);
 
 /**
  * Create HTTP server.
@@ -21,11 +23,14 @@ app.set('port', port);
 
 var server = require('../app').server;
 
+var secureServer = require('../app').secureServer;
+
 /**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
+secureServer.listen(securePort);
 server.on('error', onError);
 server.on('listening', onListening);
 

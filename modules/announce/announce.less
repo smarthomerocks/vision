@@ -1,0 +1,36 @@
+.announce {
+  svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  .announce-content {
+    position: relative;
+  }
+
+  .announce-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    right: 0;
+    bottom: 0;
+    margin: -25px auto 0 auto;
+    opacity: 0;
+  }
+
+  svg,
+  .announce-animation {
+    transition: opacity 0.5s ease-out;
+  }
+
+  &.recording {
+    svg {
+      opacity: .2;
+    }
+
+    .announce-animation {
+      opacity: 1;
+    }
+  }
+}

@@ -1,4 +1,5 @@
 var config = {
+    ssl: false,
     paths: {
       modules: "/modules"
     },
@@ -71,6 +72,27 @@ var config = {
     },
     modules: [
       {
+        module: "announce", // Requires SSL
+        config: {
+          title: 'Hela huset',
+          path: '/home/pi/Downloads/node-sonos-http-api/static/clips',
+          url: 'http://192.168.0.39:5005', // node-sonos-http-api
+          volume: 80,
+          room: 'Bärbar',
+          section: "start",
+          column: 1,
+          row: 1
+        }
+      },
+      {
+        module: "clock",
+        config: {
+          section: "start",
+          column: 1,
+          row: 6
+        }
+      },
+      {
         module: "light-switch",
         config: {
           title: "Fasad",
@@ -120,6 +142,20 @@ var config = {
           row: 1,
           size_x: 2,
           size_y: 2
+        }
+      },
+      {
+        module: "mediaplayer-favorite",
+        config: {
+          title: "Pop",
+          plugin: "sonos",
+          devicename: "Bärbar",
+          favoriteName: "Trending Top 40",
+          section: "start",
+          column: 4,
+          row: 3,
+          size_x: 1,
+          size_y: 1
         }
       },
       {

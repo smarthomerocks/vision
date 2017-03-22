@@ -61,7 +61,7 @@ function Sonos(Dashboard, app, io, config) {
 
     this.discovery.on('volume-change', function (data) {
         var playerDevice = self.discovery.getPlayerByUUID(data.uuid);
-        
+
         if (!playerDevice) return;
         var change = {
             device: playerDevice.roomName,
@@ -96,7 +96,7 @@ function Sonos(Dashboard, app, io, config) {
     this.discovery.on('mute-change', function (data) {
       //socketServer.sockets.emit('mute', data);
     });
-    
+
     this.discovery.on('favorites', function (data) {
       //socketServer.sockets.emit('favorites', data);
     });
@@ -173,13 +173,30 @@ this.trackSeek = function(devicename, duration){
 
 },
 
+this.favorite = function(devicename, favoriteName){
+  var self = this;
+  _.each(this.players, function(device){
+    if (device.roomName == devicename){
+      var player = self.discovery.getPlayerByUUID(device.uuid);
+      if (!player) return;
+          player.replaceWithFavorite(favoriteName);
+
+          setTimeout(function() {
+            player.play(function (err, stopped) {
+            });
+          }, 500);
+    }
+  });
+
+},
+
  this.getStatus = function(devicename) {
 
     var self = this;
     _.each(self.players, function(player){
       if (player.roomName  == devicename){
         var playerDevice = self.discovery.getPlayerByUUID(player.uuid);
-        
+
         if (!playerDevice) return;
 
           var change = {
@@ -208,11 +225,11 @@ this.trackSeek = function(devicename, duration){
           self.emit('change', change);
       };
     });
-}; 
+};
 
   this.exit = function() {
     this.discovery.dispose();
-  }; 
+  };
 };
 
 util.inherits(Sonos, EventEmitter);

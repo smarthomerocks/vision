@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -7,13 +8,24 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-
 var plugins = require('./lib/plugins');
 var modules = require('./lib/modules');
 var Dashboard = require('./lib/dashboard');
+
+var dashboard = new Dashboard();
+
+dashboard.setConfig(dashboard.loadConfig());
+
+var app = express();
+var server = require('http').Server(app);
+
+// TODO: Add support for https://letsencrypt.org/
+var secureServer = require('https').createServer({
+  key: fs.readFileSync(__dirname + '/server.key'),
+  cert: fs.readFileSync(__dirname + '/server.pem')
+}, app);
+
+var io = require('socket.io')(dashboard.getConfig().ssl ? secureServer : server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,9 +46,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/modules', express.static(path.join(__dirname, 'modules')));
 app.use('/config', express.static(path.join(__dirname, 'config')));
 
-var dashboard = new Dashboard();
-
-dashboard.setConfig(dashboard.loadConfig());
 dashboard.setPlugins(plugins.init(dashboard, app, io));
 dashboard.setModules(modules.init(dashboard, app, io));
 
@@ -81,4 +90,4 @@ process.on( "SIGINT", function() {
   }, 1000);
 });
 
-module.exports = {app: app, server: server};
+module.exports = {app: app, server: server, secureServer: secureServer};
