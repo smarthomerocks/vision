@@ -30,6 +30,7 @@ function Camera(Dashboard, app, io) {
 
 			function onSocketUpdate(command, data) {
 				if (command === 'CAMERA_CONNECT') {
+					console.log('CAMERA_CONNECT')
 					connectPlugin(data.plugin);
 				} else if (command === 'CAMERA_STATUS') {
 		      Dashboard.camera.getStatus(data.plugin, data.id);

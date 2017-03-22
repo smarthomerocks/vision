@@ -10,14 +10,21 @@ var async = require('async');
 function Blink(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
+  if(config.username ==  null || config.username == "" || config.password ==  null || config.password == "" ){
+    console.log("Please check config. Could not found Blink username and/or password");
+  }
+
   this.start = function() {
 
   var idx = _.map(_.filter(Dashboard.getConfig().modules, function(module){ return module.config.plugin == 'blink';}), function(module) { return module.config['id'] })
-  
   var self = this;
+
+
    this.login(function(err){
       if(!err){
         self.emit('connect');
+      } else {
+        console.log("Blink login failed...");
       }
    });
   };
@@ -27,26 +34,39 @@ function Blink(Dashboard, app, io, config) {
     if(this.logintoken != null){
       callback(null);
     } else {
-      console.log('Logging in BLINK...')
       var options = {
           url: config.host + '/api/v2/login',
           headers: { 'Host': 'rest.prde.immedia-semi.com', 'Content-Type': 'application/json', 'APP_BUILD': 'IOS_1844'},
           useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 
           method: 'POST',
-          data: {"password":config.password,"app_version":"2.9.19 (1844) #433f34e","os_version":"10.2.1","email":config.username,"client_type":"ios","device_identifier":"iPhone9,3"}
+          form: {"password":config.password,"app_version":"2.9.19 (1844) #433f34e","os_version":"10.2.1","email":config.username,"client_type":"ios","device_identifier":"iPhone9,3"}
       };
 
-      curl.postJSON(options.url, options.data, options,function(err, data){
-        if(err){
-          callback(err);
-        }
-        var obj = JSON.parse(data.body);
-        if(obj.authtoken && obj.authtoken.authtoken){
-          self.logintoken = obj.authtoken.authtoken;
-          self.networks = obj.networks;
-          callback(null);
-        }
-      });
+        request({
+          headers: { 'Host': 'rest.prde.immedia-semi.com', 'Content-Type': 'application/json', 'APP_BUILD': 'IOS_1844'},
+          useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 
+          uri: config.host + '/api/v2/login',
+          method: 'POST',
+          formData: {"password":config.password,"app_version":"2.9.19 (1844) #433f34e","os_version":"10.2.1","email":config.username,"client_type":"ios","device_identifier":"iPhone9,3"}
+        }, function (err, response, body) {
+          
+          if(err){
+            callback(err);
+          }
+
+          if(response.statusCode == 200){
+            var obj = JSON.parse(body);
+            if(obj.authtoken && obj.authtoken.authtoken){
+              self.logintoken = obj.authtoken.authtoken;
+              self.networks = obj.networks;
+              callback(null);
+            } else {
+              callback('Error while logging in ' + obj.message);
+            }
+          }else {
+            callback('Error while logging in');
+          }
+        });
     }
   };
 
@@ -81,9 +101,8 @@ this.getStatus = function(name) {
 
                     var hash = crypto.createHash('md5').update(device.thumbnail).digest('hex');
 
-                    var filename = 'images/camera_' + hash;
+                    var filename = 'images/camera/thumbnail' + name;
 
-                    if(!fs.existsSync("public/" + filename +  ".jpg")){
                       request({
                         headers: { 'Host': 'rest.prde.immedia-semi.com', 'APP_BUILD': 'IOS_1844', 'TOKEN-AUTH': self.logintoken},
                         useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 
@@ -97,7 +116,6 @@ this.getStatus = function(name) {
                               if(err)
                                 callback(err);
                               else
-                                console.log("The image file was saved!");
                                 self.emit('change', {id: name, thumbnail:  '/' +filename +  ".jpg", lastUpdate: device.updated_at });
                                 callback();
                           }); 
@@ -106,10 +124,6 @@ this.getStatus = function(name) {
                           callback();
                         }
                       });
-                    } else {
-                      self.emit('change', {id: name, thumbnail: '/' + filename + '.jpg', lastUpdate: device.updated_at });
-                      callback();
-                    }
                 } else {
                   callback();
                 }
@@ -144,7 +158,6 @@ this.getStatus = function(name) {
               } else {
                  var obj = JSON.parse(response.body);
                   var commandid = obj.id;
-                  console.log('Got response ', obj);
 
                   if(obj.message){
                     callback(obj.code, tries);
@@ -161,11 +174,11 @@ this.getStatus = function(name) {
                           uri: config.host + '/network/'+ networkid +'/command/'+ commandid,
                           method: 'GET'
                         }, function (err, response, body) {
-
+                          var objCommand = JSON.parse(response.body);
 
                           if(response.statusCode ==  200){
 
-                            var objCommand = JSON.parse(response.body);
+                            
                             var command = _.find(objCommand.commands, function(num){ return num.id == commandid});
                             var commandStatus = command.state_condition;
                             var commandStage = command.state_stage;
@@ -176,7 +189,7 @@ this.getStatus = function(name) {
                         
                                   var hash = crypto.createHash('md5').update(command.updated_at).digest('hex');
 
-                                  var filename = 'images/camera_' + hash + '.mp4';
+                                  var filename = 'images/camera/live_' + name + '.mp4';
 
                                   var ffmpegBin = require('ffmpeg-static'),
                                       progressStream = require('ffmpeg-progress-stream'),
@@ -224,11 +237,11 @@ this.getStatus = function(name) {
 
                                         setTimeout(function() {
                                           self.emit('change', {id: name, liveview: filename, lastUpdate: new Date()});
-                                        }, 1000);
+                                        }, 2000);
 
 
                                         callback(null, 5);
-                                    }, 17000);
+                                    }, config.livelength);
                                   
 
                             } else {
@@ -236,6 +249,8 @@ this.getStatus = function(name) {
                                   callback(null, tries);
                               }, 1000);
                             }
+                          } else {
+                            callback(objCommand.message, tries);
                           }
                           
                           

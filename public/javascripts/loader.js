@@ -212,13 +212,13 @@ var Loader = (function() {
 				return;
 			}
 
-			if (vendor[fileName] !== undefined) {
+			/*if (vendor[fileName] !== undefined) {
 				// This file is available in the vendor folder.
 				// Load it from this vendor folder.
 				loadedFiles.push(fileName.toLowerCase());
 				loadFile(config.paths.vendor + "/" + vendor[fileName], callback);
 				return;
-			}
+			}*/
 
 			// File not loaded yet.
 			// Load it based on the module path.
