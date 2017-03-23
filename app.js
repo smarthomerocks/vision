@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var constants = require('constants');
 
 var routes = require('./routes/index');
 
@@ -22,7 +23,9 @@ var server = require('http').Server(app);
 // TODO: Add support for https://letsencrypt.org/
 var secureServer = require('https').createServer({
   key: fs.readFileSync(__dirname + '/server.key'),
-  cert: fs.readFileSync(__dirname + '/server.pem')
+  cert: fs.readFileSync(__dirname + '/server.pem'),
+  secureProtocol: 'SSLv23_method',
+  secureOptions: constants.SSL_OP_NO_SSLv3 | constants.SSL_OP_NO_SSLv2
 }, app);
 
 var io = require('socket.io')(dashboard.getConfig().ssl ? secureServer : server);
@@ -43,7 +46,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/modules', require('less-middleware')(path.join(__dirname, 'modules')));
 app.use('/modules', express.static(path.join(__dirname, 'modules')));
 app.use('/config', express.static(path.join(__dirname, 'config')));
 

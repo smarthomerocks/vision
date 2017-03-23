@@ -1,8 +1,8 @@
-function AppleTVRemote(Dashboard, app, io) {
+function TemperatureMeter(Dashboard, app, io) {
 	var socketList = [];
 
 	function connectSocket() {
-		var nsp = io.of('/apple-tv-remote');
+		var nsp = io.of('/temperature-meter');
 
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
@@ -18,7 +18,7 @@ function AppleTVRemote(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('Apple-tv-remote', command, data);
+				console.log('Temperature meter', command, data);
 
 				onSocketUpdate(command, data);
 			});
@@ -30,36 +30,44 @@ function AppleTVRemote(Dashboard, app, io) {
 			socket.emit('connected');
 
 			function onSocketUpdate(command, data) {
-				if (command === 'APPLE_TV_REMOTE_CONNECT') {
-					console.log('APPLE_TV_REMOTE_CONNECT');
+				if (command === 'TEMP_METER_CONNECT') {
+					console.log('TEMP_METER_CONNECT');
 					connectPlugin(data.plugin);
-				} else if (command === 'APPLE_TV_REMOTE_SEND_COMMAND') {
-		      console.log('APPLE_TV_REMOTE_SEND_COMMAND');
-		      Dashboard.remotecontrol.sendCommand(data.plugin, data.commands);
+				} else if (command === 'TEMP_METER_STATUS') {
+				  console.log('TEMP_METER_STATUS');
+		      Dashboard.tempmeter.getStatus(data.plugin, data.id);
 				}
 			}
 
+		  function sendStatus(id, value, value_extra) {
+		    socket.emit('TEMP_METER_STATUS', { id: id, current:value, today:value_extra });
+		  }
+
 		  function connectPlugin(plugin) {
-		    Dashboard.remotecontrol.on(plugin, 'connect', function(data) {
-					socket.emit('APPLE_TV_REMOTE_CONNECT');
+		    Dashboard.tempmeter.on(plugin, 'connect', function(data) {
+					socket.emit('TEMP_METER_CONNECTED');
 		    });
 
-		    Dashboard.remotecontrol.start(plugin);
+		    Dashboard.tempmeter.on(plugin, 'change', function(data) {
+		      sendStatus(data.id, data.value, data.value_extra);
+		    });
+
+		    Dashboard.tempmeter.start(plugin);
 		  }
 		});
 	}
 
 	function exit() {
-		console.log('Exit apple-tv-remote');
+		console.log('Exit TEMP-meter');
 		socketlist.forEach(function(socket) {
-			console.log('Closing apple-tv-remote socket');
+			console.log('Closing TEMP-meter socket');
 		  socket.close();
 		});
 	}
 
 	connectSocket();
 
-	console.log('AppleTVRemote started');
+	console.log('TEMP started');
 
 	return {
 		exit: exit
@@ -68,6 +76,6 @@ function AppleTVRemote(Dashboard, app, io) {
 
 module.exports = {
 	create: function(Dashboard, app, io) {
-		return new AppleTVRemote(Dashboard, app, io);
+		return new TemperatureMeter(Dashboard, app, io);
 	}
 };

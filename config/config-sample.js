@@ -182,7 +182,7 @@ var config = {
           column: 1,
           row: 1,
           size_x: 1,
-          size_y: 2
+          size_y: 2,
           apiKey: "AIzaSyDLhANkVJDuBCpsZfOq8QJDsi17W36mMaQ",
           markers: {
             "emil_mob": {
@@ -201,7 +201,7 @@ var config = {
           column: 1,
           row: 1,
           size_x: 1,
-          size_y: 2
+          size_y: 2,
           buttons: {
             up: [{
               hardware: "appleTv",

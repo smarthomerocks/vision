@@ -20,6 +20,14 @@ var NSRSocket = function(moduleName) {
 		onevent.call(this, packet);      // additional call to catch-all
 	};
 
+	self.socket.on('error', function (err) {
+    console.log("SOCKET ERROR", err);
+	});
+
+	self.socket.on('connect_error', function(){
+    console.log('Connection Failed');
+	});
+
 	// register catch all.
 	self.socket.on("*", function(notification, payload) {
 		if (notification !== "*") {

@@ -1,7 +1,7 @@
-.energy .current {
+.temperature .current {
   font-size: 20px;
 }
-.energy svg {
+.temperature svg {
   width: 64px;
   height: 64px;
 }

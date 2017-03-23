@@ -1,7 +1,10 @@
 $(function() {
+
   NSR.renderSections();
   NSR.initNavigation();
   Loader.loadModules();
+
+  moment.lang("sv")
 
   FastClick.attach(document.body);
 
