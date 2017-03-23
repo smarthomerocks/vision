@@ -179,7 +179,7 @@ this.favorite = function(devicename, favoriteName){
     if (device.roomName == devicename){
       var player = self.discovery.getPlayerByUUID(device.uuid);
       if (!player) return;
-          player.replaceWithFavorite(favoriteName;
+          player.replaceWithFavorite(favoriteName);
 
           setTimeout(function() {
             player.play(function (err, stopped) {

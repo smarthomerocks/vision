@@ -21,6 +21,8 @@
     "node-domoticz-mqtt": "1.2.2",
     "itach": "1.0.0",
     "mqtt": "2.2.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "googleapis": "18.0.0",
+    "google-auth-library": "0.10.0"
   }
 }

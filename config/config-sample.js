@@ -44,6 +44,9 @@ var config = {
       "owntracks": {
         host: "192.168.0.39"
       },
+      "google-calendar": {
+        pollingInterval: 60000
+      },
       "itach": {
         host: "192.168.1.127",
         hardwares: {
@@ -142,6 +145,19 @@ var config = {
           row: 1,
           size_x: 2,
           size_y: 2
+        }
+      },
+      {
+        module: "calendar",
+        config: {
+          title: "Kalender",
+          plugin: "google-calendar",
+          numberOfEvents: 5,
+          section: "start",
+          column: 3,
+          row: 3,
+          size_x: 1,
+          size_y: 1
         }
       },
       {
