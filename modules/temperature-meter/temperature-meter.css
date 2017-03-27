@@ -1,7 +1,1 @@
-.temperature .current {
-  font-size: 20px;
-}
-.temperature svg {
-  width: 64px;
-  height: 64px;
-}
+.temperature .current{font-size:40px;line-height:1}.temperature svg{width:64px;height:64px}

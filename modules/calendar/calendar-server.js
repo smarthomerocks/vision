@@ -33,7 +33,7 @@ function Calendar(Dashboard, app, io) {
 				if (command === 'CALENDAR_CONNECT') {
 					connectPlugin(data.plugin);
 				} else if (command === 'CALENDAR_EVENTS') {
-		      Dashboard.calendar.getEvents(data.plugin, data.calendarId, data.numberOfEvents);
+		      Dashboard.calendar.getEvents(data.plugin, data.url, data.fetchInterval, data.maximumEntries, data.maximumNumberOfDays, data.user, data.pass);
 				}
 			}
 
@@ -43,7 +43,7 @@ function Calendar(Dashboard, app, io) {
 		    });
 
         Dashboard.calendar.on(plugin, 'change', function(data) {
-          socket.emit('CALENDAR_EVENTS', { calendarId: data.calendarId, events: data.events });
+          socket.emit('CALENDAR_EVENTS', { url: data.url, events: data.events });
 		    });
 
 		    Dashboard.calendar.start(plugin);

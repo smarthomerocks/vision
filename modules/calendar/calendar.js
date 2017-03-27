@@ -2,9 +2,13 @@ Module.register("calendar",{
 
 	defaults: {
 		title: "Kalender",
-		plugin: "google-calendar",
-		numberOfEvents: 10,
-    calendarId: 'primary'
+		plugin: "iCal",
+		url: null,
+		fetchInterval: 5 * 60 * 1000, // Update every 5 minutes.
+		maximumEntries: 10,
+		maximumNumberOfDays: 365,
+		user: null,
+		pass: null
 	},
 
 	getStyles: function() {
@@ -16,7 +20,7 @@ Module.register("calendar",{
 
 		this.isStateOn = false;
 
-		this.sendSocketNotification('CALENDAR_CONNECT', { calendarId: this.config.calendarId, plugin: this.config.plugin });
+		this.sendSocketNotification('CALENDAR_CONNECT', { plugin: this.config.plugin });
 	},
 
 	getDom: function() {
@@ -45,27 +49,22 @@ Module.register("calendar",{
         'opacity' : 1
       });
 
-      this.sendSocketNotification('CALENDAR_EVENTS', { calendarId: this.config.calendarId, numberOfEvents: this.config.numberOfEvents, plugin: this.config.plugin });
+      this.sendSocketNotification('CALENDAR_EVENTS', { plugin: this.config.plugin, url: this.config.url, fetchInterval: this.config.fetchInterval, maximumEntries: this.config.maximumEntries, maximumNumberOfDays: this.config.maximumNumberOfDays, user: this.config.user, pass: this.config.pass });
 
 		} else if (command === 'CALENDAR_EVENTS') {
       var eventsEl = this.$el.find('.calendar-events').html(''),
-          hasTomorrowTitle = false;
+          lastDate = data.events.length > 0 ? new Date(parseInt(data.events[0].startDate)) : null;
 
       for (var i = 0, length = data.events.length; i < length; i++) {
         var event = data.events[i],
-            startDate = new Date(event.start),
-            tomorrow = new Date();
+						currentDate = new Date(parseInt(event.startDate));
 
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        if (startDate.toDateString() === new Date().toDateString() || startDate.toDateString() === tomorrow.toDateString()) {
-          if (!hasTomorrowTitle && startDate.toDateString() !== new Date().toDateString()) {
-            eventsEl.append('<div class="heading tomorrow">' + startDate.getDate() + '/' + (startDate.getMonth() + 1) + '</div>');
-            hasTomorrowTitle = true;
-          }
-
-          eventsEl.append('<div class="event"><div class="time">' + (event.isAllDay ? 'Heldag' : getTime(event.start)) + '</div><div class="description">' + event.description + '</div></div>');
+        if (lastDate.toDateString() !== currentDate.toDateString()) {
+          eventsEl.append('<div class="heading tomorrow">' + currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '</div>');
+          lastDate = currentDate;
         }
+
+        eventsEl.append('<div class="event"><div class="time">' + (event.fullDayEvent ? 'Heldag' : getTime(parseInt(event.startDate))) + '</div><div class="description">' + event.title + '</div></div>');
       }
     }
 	}
