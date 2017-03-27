@@ -175,6 +175,19 @@ var config = {
         }
       },
       {
+        module: "calendar",
+        config: {
+          title: "Kalender",
+          plugin: "ical",
+          url: 'https://calendar.google.com/calendar/ical/.../basic.ics',
+          section: "start",
+          column: 5,
+          row: 1,
+          size_x: 1,
+          size_y: 2
+        }
+      },
+      {
         module: "map",
         config: {
           plugin: "owntracks",
