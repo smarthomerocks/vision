@@ -67,7 +67,7 @@ Module.register("camera",{
 	socketNotificationReceived: function(command, data) {
 		var self = this;
 		if (command === 'CAMERA_CONNECTED') {
-			console.log('CAMERA_CONNECTED.... ' + self.config.id);	
+			//console.log('CAMERA_CONNECTED.... ' + self.config.id);	
 			if (!this.$el) {
 				this.getDom();
 			}
@@ -75,7 +75,7 @@ Module.register("camera",{
 			this.sendSocketNotification('CAMERA_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
 		} else if (command === 'CAMERA_STATUS' && data.id === this.config.id) {
-			console.log("CAMERA_STATUS " + this.config.id, data)
+			//console.log("CAMERA_STATUS " + this.config.id, data)
 			self.lastdata = data;
 
 			this.$el.css({
@@ -89,7 +89,7 @@ Module.register("camera",{
 	updateDom: function() {
 
 		var self = this;
-				console.log("updateDom", self.lastdata)
+				//console.log("updateDom", self.lastdata)
 				if (this.$el) {
 					if(self.lastdata.thumbnail){
 						self.isStateUpdating = false;
