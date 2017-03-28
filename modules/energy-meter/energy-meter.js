@@ -22,7 +22,7 @@ Module.register("energy-meter",{
 	getDom: function() {
 		var self = this;
 
-		this.$el = $('<div class="box box-4 energy"><div class="box-content"><div class="heading">'+ this.config.title +'</div><div class="current"></div><div class="today"></div></div></div>');
+		this.$el = $('<div class="box energy"><div class="box-content"><div class="heading">'+ this.config.title +'</div><div class="current">0 W</div><div class="today"></div></div></div>');
 
 		this.$el.css({
      'opacity' : 0.4
@@ -58,8 +58,11 @@ Module.register("energy-meter",{
 	updateDom: function() {
 		var self = this;
 		if (this.$el) {
-			this.$el.find('.current').html(self.lastdata.current +  " watt");
-			this.$el.find('.today').html(self.lastdata.today/100 +  " kWh idag");
+			this.$el.find('.current').html(self.lastdata.current +  " W");
+
+			if (self.lastdata.today) {
+				this.$el.find('.today').html(self.lastdata.today/100 +  " kWh idag");
+			}
 		}
 	}
 });
