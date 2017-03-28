@@ -23,7 +23,9 @@ var NSR = (function() {
         widget_margins: section.margins,
         widget_base_dimensions: section.base_dimensions,
         show_element: function($el, callback) { $el.show(); if (callback) { callback(); } },
-        hide_element: function($el, callback) { $el.hide(); if (callback) { callback(); } }
+        hide_element: function($el, callback) { $el.hide(); if (callback) { callback(); } },
+        shift_widgets_up: false,
+        shift_larger_widgets_down: false,
       }).data('gridster').disable(); // Disable drag-and-drop
     }
   }
