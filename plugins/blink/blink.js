@@ -70,9 +70,21 @@ function Blink(Dashboard, app, io, config) {
     }
   };
 
+this.statusQueue = [];
 
 this.getStatus = function(name) {
+
     var self = this;
+
+    var pending = _.find(self.statusQueue, function(n){ return n == name; });
+
+    if(pending){
+      // Call already pending
+      return;
+    }
+
+    self.statusQueue.push(name);
+
     async.series([
     function(callback) { 
       self.login(function(err){
@@ -134,7 +146,7 @@ this.getStatus = function(name) {
         });
      }
     ], function(err, results) {
-        
+        self.statusQueue = _.without(self.statusQueue, _.findWhere(self.statusQueue, name));
     });
   };
 
