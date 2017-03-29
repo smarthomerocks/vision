@@ -57,10 +57,15 @@ Module.register("calendar",{
 
       for (var i = 0, length = data.events.length; i < length; i++) {
         var event = data.events[i],
-						currentDate = new Date(parseInt(event.startDate));
+						currentDate = new Date(parseInt(event.startDate)),
+						momentDate = new moment(currentDate);
 
         if (lastDate.toDateString() !== currentDate.toDateString()) {
-          eventsEl.append('<div class="heading tomorrow">' + currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '</div>');
+          eventsEl.append('<div class="heading tomorrow">' + momentDate.calendar(new Date(),{        sameDay: '[Idag] LT',
+        nextDay: '[Imorgon]',
+        lastDay: '[Igår]',
+        nextWeek: '[På] dddd',
+        sameElse: 'dddd do MMM'})+ '</div>');
           lastDate = currentDate;
         }
 
