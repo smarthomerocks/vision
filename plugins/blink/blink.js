@@ -34,14 +34,6 @@ function Blink(Dashboard, app, io, config) {
     if(this.logintoken != null){
       callback(null);
     } else {
-      var options = {
-          url: config.host + '/api/v2/login',
-          headers: { 'Host': 'rest.prde.immedia-semi.com', 'Content-Type': 'application/json', 'APP_BUILD': 'IOS_1844'},
-          useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 
-          method: 'POST',
-          form: {"password":config.password,"app_version":"2.9.19 (1844) #433f34e","os_version":"10.2.1","email":config.username,"client_type":"ios","device_identifier":"iPhone9,3"}
-      };
-
         request({
           headers: { 'Host': 'rest.prde.immedia-semi.com', 'Content-Type': 'application/json', 'APP_BUILD': 'IOS_1844'},
           useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 

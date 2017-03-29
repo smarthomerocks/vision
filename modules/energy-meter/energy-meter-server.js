@@ -18,7 +18,6 @@ function EnergyMeter(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('Energy meter', command, data);
 
 				onSocketUpdate(command, data);
 			});
@@ -31,10 +30,8 @@ function EnergyMeter(Dashboard, app, io) {
 
 			function onSocketUpdate(command, data) {
 				if (command === 'ENERGY_METER_CONNECT') {
-					console.log('ENERGY_METER_CONNECT');
 					connectPlugin(data.plugin);
 				} else if (command === 'ENERGY_METER_STATUS') {
-				  console.log('ENERGY_METER_STATUS');
 		      Dashboard.energymeter.getStatus(data.plugin, data.id);
 				}
 			}

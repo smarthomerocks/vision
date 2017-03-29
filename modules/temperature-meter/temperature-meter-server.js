@@ -3,11 +3,12 @@ function TemperatureMeter(Dashboard, app, io) {
 
 	function connectSocket() {
 		var nsp = io.of('/temperature-meter');
+		var colors = require('colors');
 
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Connected');
+			console.log('Module ' + 'temperature-meter '.yellow.bold + 'connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -18,8 +19,6 @@ function TemperatureMeter(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('Temperature meter', command, data);
-
 				onSocketUpdate(command, data);
 			});
 
@@ -31,10 +30,8 @@ function TemperatureMeter(Dashboard, app, io) {
 
 			function onSocketUpdate(command, data) {
 				if (command === 'TEMP_METER_CONNECT') {
-					console.log('TEMP_METER_CONNECT');
 					connectPlugin(data.plugin);
 				} else if (command === 'TEMP_METER_STATUS') {
-				  console.log('TEMP_METER_STATUS');
 		      Dashboard.tempmeter.getStatus(data.plugin, data.id);
 				}
 			}
@@ -67,7 +64,7 @@ function TemperatureMeter(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('TEMP started');
+	console.log('Module ' + 'temperature-meter '.yellow.bold + 'started');
 
 	return {
 		exit: exit

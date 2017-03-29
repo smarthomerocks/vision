@@ -4,10 +4,12 @@ function Camera(Dashboard, app, io) {
 	function connectSocket() {
 		var nsp = io.of('/camera');
 
+		var colors = require('colors');
+
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Camera Connected');
+			console.log('Module ' + 'camera '.yellow.bold + 'connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -30,7 +32,6 @@ function Camera(Dashboard, app, io) {
 
 			function onSocketUpdate(command, data) {
 				if (command === 'CAMERA_CONNECT') {
-					console.log('CAMERA_CONNECT')
 					connectPlugin(data.plugin);
 				} else if (command === 'CAMERA_STATUS') {
 		      Dashboard.camera.getStatus(data.plugin, data.id);
@@ -69,7 +70,7 @@ function Camera(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('CAMERA started');
+	console.log('Module ' + 'camera '.yellow.bold + 'started');
 
 	return {
 		exit: exit

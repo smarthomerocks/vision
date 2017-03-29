@@ -5,24 +5,32 @@ var sonosdevice = require('sonos');
 var Listener = require('sonos/lib/events/listener');
 var async = require('async');
 var SonosDiscovery = require('sonos-discovery');
+var colors = require('colors');
 
 function Sonos(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
   this.discovery = new SonosDiscovery();
+  this.connected = false;
 
   this.timeout = config.timeout;
   var devices = [];
 
   this.type = 'home';
   this.start = function() {
-    var self = this;
-    console.log("Sonos plugin start. Scanning for devices");
 
-    this.players = self.discovery.players;
+    var self = this;
+
+    if(self.connected) {
+      // Only update player list
+      this.players = self.discovery.players;
+      self.emit('connect');
+      return;
+    }
+
+    console.log('Plugin ' + 'sonos'.yellow.bold + ' start. Scanning for devices...');
 
     this.discovery.on('topology-change', function (data) {
-      console.log("topology-change", data);
       //socketServer.sockets.emit('topology-change', discovery.players);
     });
 
@@ -55,7 +63,6 @@ function Sonos(Dashboard, app, io, config) {
     });
 
     this.discovery.on('group-volume', function (data) {
-      console.log("group-volume", data);
       //socketServer.sockets.emit('group-volume', data);
     });
 
@@ -85,7 +92,7 @@ function Sonos(Dashboard, app, io, config) {
 						playbackstate: playerDevice.state.playbackState,
 						volume: playerDevice.state.volume
 					}
-
+          
           self.emit('change', change);
     });
 
@@ -104,6 +111,7 @@ function Sonos(Dashboard, app, io, config) {
     this.discovery.on('queue-change', function (player) {
       console.log('queue-changed', player.roomName);
     });
+    self.connected = true;
     self.emit('connect');
   },
   this.changePlayState = function(devicename, state){
