@@ -84,7 +84,7 @@ Module.register("camera",{
 				self.isConnected = true;
 			}
 			
-		} else if (command === 'CAMERA_STATUS' && data.id === this.config.id) {
+		} else if (command === 'CAMERA_STATUS' && (data.id === this.config.id || data.state)) {
 			//console.log("CAMERA_STATUS " + this.config.id, data)
 			self.lastdata = data;
 
@@ -99,7 +99,6 @@ Module.register("camera",{
 	updateDom: function() {
 
 		var self = this;
-				//console.log("updateDom", self.lastdata)
 				if (this.$el) {
 					if(self.lastdata.thumbnail){
 						self.isStateUpdating = false;
@@ -109,6 +108,10 @@ Module.register("camera",{
 							self.lastupdate = self.lastdata.lastUpdate;
 							self.updateLastUpdate();
 						}
+				}
+
+				if(self.lastdata.state){
+					self.toggleButtonState(self.lastdata.state != 'busy');
 				}
 
 				if(self.lastdata.clip){

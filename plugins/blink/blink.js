@@ -93,6 +93,8 @@ this.getStatus = function(name) {
     var self = this;
     console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' ' + name);
 
+    self.emit('change', {state: 'busy'});
+
     var camera = blink.cameras[name];
 
     if(camera && camera.thumbnail && camera._header){
@@ -120,10 +122,12 @@ this.getStatus = function(name) {
 	          if(err) {
               console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error'.red + name, err);
             } 
+            self.emit('change', {state: 'idle'});
             self.getStatus(name);
           });
           
         }, (error) => {
+          self.emit('change', {state: 'idle'});
           console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error'.red + name, error);
       });
     }

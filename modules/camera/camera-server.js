@@ -41,8 +41,8 @@ function Camera(Dashboard, app, io) {
 				}
 			}
 
-		  function sendStatus(id, thumbnail, videothumbnail, lastUpdate, liveview, clip) {
-		    socket.emit('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview});
+		  function sendStatus(id, thumbnail, videothumbnail, lastUpdate, liveview, clip, state) {
+		    socket.emit('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview, state:state});
 		  }
 
 		  function connectPlugin(plugin) {
@@ -51,7 +51,7 @@ function Camera(Dashboard, app, io) {
 		    });
 
 		    Dashboard.camera.on(plugin, 'change', function(data) {
-		      sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip);
+		      sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip, data.state);
 		    });
 
 		    Dashboard.camera.start(plugin);
