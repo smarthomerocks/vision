@@ -4,6 +4,7 @@ var async = require('async');
 var ical = require('ical');
 var moment = require('moment');
 var CalendarFetcher = require("./calendarfetcher.js");
+var colors = require('colors');
 
 function ICal(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -15,12 +16,13 @@ function ICal(Dashboard, app, io, config) {
 
     this.emit('connect');
 
-    console.log('ICal connected');
+    console.log('Plugin ' + 'ical '.yellow.bold + 'connected');
+
+		var colors = require('colors');
   };
 
   this.getEvents = function(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass) {
-    console.log('ICal getEvents: ', url);
-
+		console.log('Plugin ' + 'ical '.yellow.bold + 'getEvents ' + url );
     var self = this,
         fetchInterval,
         maximumNumberOfDays,
@@ -29,7 +31,9 @@ function ICal(Dashboard, app, io, config) {
         fetcher;
 
 		if (typeof self.fetchers[url] === "undefined") {
-			console.log("Create new calendar fetcher for url: " + url + " - Interval: " + fetchInterval || 10000);
+
+			console.log('Plugin ' + 'ical '.yellow.bold + 'fething ' + url );
+
 			fetcher = new CalendarFetcher(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass);
 
 			fetcher.onReceive(function(fetcher) {
@@ -48,7 +52,8 @@ function ICal(Dashboard, app, io, config) {
 			fetcher.broadcastEvents();
 		}
 
-		fetcher.startFetch();
+			fetcher.startFetch();
+		
   };
 
 };

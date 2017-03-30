@@ -9,7 +9,8 @@ var ical = require("ical");
 var moment = require("moment");
 
 var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass) {
-  console.log(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass);
+
+  //console.log(url, reloadInterval, maximumEntries, maximumNumberOfDays, user, pass);
 	var self = this;
 
 	var reloadTimer = null;

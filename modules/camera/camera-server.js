@@ -3,7 +3,6 @@ function Camera(Dashboard, app, io) {
 
 	function connectSocket() {
 		var nsp = io.of('/camera');
-
 		var colors = require('colors');
 
 		nsp.on('connection', function(socket) {
@@ -42,8 +41,8 @@ function Camera(Dashboard, app, io) {
 				}
 			}
 
-		  function sendStatus(id, thumbnail, videothumbnail, lastUpdate, liveview) {
-		    socket.emit('CAMERA_STATUS', { id: id, thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview});
+		  function sendStatus(id, thumbnail, videothumbnail, lastUpdate, liveview, clip) {
+		    socket.emit('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview});
 		  }
 
 		  function connectPlugin(plugin) {
@@ -52,7 +51,7 @@ function Camera(Dashboard, app, io) {
 		    });
 
 		    Dashboard.camera.on(plugin, 'change', function(data) {
-		      sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview);
+		      sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip);
 		    });
 
 		    Dashboard.camera.start(plugin);

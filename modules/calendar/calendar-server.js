@@ -19,8 +19,6 @@ function Calendar(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-        console.log('Calendar', command, data);
-
 				onSocketUpdate(command, data);
 			});
 
