@@ -50,6 +50,8 @@ this.getStatus = function(name) {
 
     if(camera && camera.thumbnail){
 
+      self.emit('change', {state: 'busy'});
+
       if(camera.thumbnaildata) {
         self.emit('change', {id: name, thumbnail: camera.thumbnaildata, lastUpdate: camera.updated_at});
       }
@@ -72,6 +74,9 @@ this.getStatus = function(name) {
             encoding: null,
             method: 'GET'
           }, function (err, response, body) {
+
+            self.emit('change', {state: 'idle'});
+
             if(response.statusCode == 200){
               camera.thumbnaildata = body.toString('base64');
               self.emit('change', {id: name, thumbnail: camera.thumbnaildata, lastUpdate: camera.updated_at});
@@ -93,15 +98,15 @@ this.getStatus = function(name) {
     var self = this;
     console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' ' + name);
 
-    self.emit('change', {state: 'busy'});
-
     var camera = blink.cameras[name];
 
     if(camera && camera.thumbnail && camera._header){
 
+      self.emit('change', {state: 'busy'});
+
       camera.snapPicture()
         .then((res) => {
-          async.retry({times: 5, interval: 4000}, function(callback){
+          async.retry({times: 10, interval: 3000}, function(callback){
             request({
                 headers: camera._header,
                 useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 
@@ -120,7 +125,7 @@ this.getStatus = function(name) {
               });
           }, function(err, result) {
 	          if(err) {
-              console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error'.red + name, err);
+              console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error '.red + name, err);
             } 
             self.emit('change', {state: 'idle'});
             self.getStatus(name);
@@ -128,7 +133,7 @@ this.getStatus = function(name) {
           
         }, (error) => {
           self.emit('change', {state: 'idle'});
-          console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error'.red + name, error);
+          console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error '.red + name, error);
       });
     }
   };
