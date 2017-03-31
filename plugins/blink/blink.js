@@ -101,7 +101,7 @@ this.getStatus = function(name) {
 
       camera.snapPicture()
         .then((res) => {
-          async.retry({times: 5, interval: 2000}, function(callback){
+          async.retry({times: 5, interval: 4000}, function(callback){
             request({
                 headers: camera._header,
                 useragent: "blink/1844 CFNetwork/808.3 Darwin/16.3.0", 
