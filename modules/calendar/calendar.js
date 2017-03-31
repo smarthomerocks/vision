@@ -53,7 +53,7 @@ Module.register("calendar",{
 
 		} else if (command === 'CALENDAR_EVENTS') {
       var eventsEl = this.$el.find('.calendar-events').html(''),
-          lastDate = data.events.length > 0 ? new Date(parseInt(data.events[0].startDate)) : null;
+          lastDate = data.events.length > 0 ? new Date(new Date().setDate(new Date().getDate()-1)) : null;
 
       for (var i = 0, length = data.events.length; i < length; i++) {
         var event = data.events[i],
