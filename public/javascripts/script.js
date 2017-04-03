@@ -4,7 +4,7 @@ $(function() {
   NSR.initNavigation();
   Loader.loadModules();
 
-  moment.lang("sv")
+  moment.locale("sv")
 
   FastClick.attach(document.body);
 

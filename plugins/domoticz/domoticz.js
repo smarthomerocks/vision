@@ -29,28 +29,27 @@ function Domoticz(Dashboard, app, io, config) {
 
         self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
 
-       console.log('Domoticz data', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
+
+            console.log('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
       });
 
       this.domoticz.on('connect', function() {
-        console.log('Domoticz connected');
+        console.log('Plugin ' + 'domoticz '.yellow.bold + 'connected'.blue + ' with MQTT');
 
         self.emit('connect');
       });
     }
   };
   this.getStatus = function(id) {
-    console.log('getStatus', id);
+    console.log('Plugin ' + 'domoticz '.yellow.bold + 'getStatus'.blue, id);
     this.domoticz.request(id);
   };
   this.switch = function(id, level) {
-    console.log('swith', id, level);
-
+    console.log('Plugin ' + 'domoticz '.yellow.bold + 'switch'.blue, id, level);
     this.domoticz.switch(id, level);
   };
   this.toggle = function(id, state) {
-    console.log('toggle', id, state);
-
+    console.log('Plugin ' + 'domoticz '.yellow.bold + 'toggle'.blue, id, state);
     this.domoticz.switch(id, state ? 255 : 0);
   };
 };

@@ -3,11 +3,14 @@ function Mediaplayer(Dashboard, app, io) {
 
 	function connectSocket() {
 		var nsp = io.of('/mediaplayer');
+		var colors = require('colors');
 
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Mediaplayer connected');
+			console.log('Module ' + 'mediaplayer '.yellow.bold + 'connected');
+
+			var colors = require('colors');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -75,7 +78,7 @@ function Mediaplayer(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('mediaplayer started');
+	console.log('Module ' + 'mediaplayer '.yellow.bold + 'started');
 
 	return {
 		exit: exit

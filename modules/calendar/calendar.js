@@ -53,14 +53,20 @@ Module.register("calendar",{
 
 		} else if (command === 'CALENDAR_EVENTS') {
       var eventsEl = this.$el.find('.calendar-events').html(''),
-          lastDate = data.events.length > 0 ? new Date(parseInt(data.events[0].startDate)) : null;
+          lastDate = data.events.length > 0 ? new Date(new Date().setDate(new Date().getDate()-1)) : null;
 
       for (var i = 0, length = data.events.length; i < length; i++) {
         var event = data.events[i],
-						currentDate = new Date(parseInt(event.startDate));
+						currentDate = new Date(parseInt(event.startDate)),
+						momentDate = new moment(currentDate);
 
         if (lastDate.toDateString() !== currentDate.toDateString()) {
-          eventsEl.append('<div class="heading tomorrow">' + currentDate.getDate() + '/' + (currentDate.getMonth() + 1) + '</div>');
+          eventsEl.append('<div class="heading tomorrow">' + momentDate.calendar(new Date(),{        
+						sameDay: '[Idag] LT',
+        		nextDay: '[Imorgon]',
+        		lastDay: '[Igår]',
+        		nextWeek: '[På] dddd',
+        		sameElse: 'dddd do MMM'})+ '</div>');
           lastDate = currentDate;
         }
 

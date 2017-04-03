@@ -1,5 +1,6 @@
 function Calendar(Dashboard, app, io) {
 	var socketList = [];
+	var colors = require('colors');
 
 	function connectSocket() {
 		var nsp = io.of('/calendar');
@@ -7,7 +8,7 @@ function Calendar(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Calendar connected');
+			console.log('Module ' + 'calendar '.yellow.bold + 'connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -18,8 +19,6 @@ function Calendar(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-        console.log('Calendar', command, data);
-
 				onSocketUpdate(command, data);
 			});
 
@@ -60,7 +59,7 @@ function Calendar(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('calendar started');
+	console.log('Module ' + 'calendar '.yellow.bold + 'started');
 
 	return {
 		exit: exit

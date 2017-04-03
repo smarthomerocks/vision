@@ -1,5 +1,6 @@
 function LightSwitch(Dashboard, app, io) {
 	var socketList = [];
+	var colors = require('colors');
 
 	function connectSocket() {
 		var nsp = io.of('/light-switch');
@@ -7,7 +8,7 @@ function LightSwitch(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Connected');
+			console.log('Module ' + 'light-switch '.yellow.bold + 'connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -18,7 +19,6 @@ function LightSwitch(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('LightSwitch', command, data);
 
 				onSocketUpdate(command, data);
 			});
@@ -31,13 +31,10 @@ function LightSwitch(Dashboard, app, io) {
 
 			function onSocketUpdate(command, data) {
 				if (command === 'LIGHT_SWITCH_CONNECT') {
-					console.log('LIGHT_SWITCH_CONNECT');
 					connectPlugin(data.plugin);
 				} else if (command === 'LIGHT_SWITCH_TOGGLE') {
-		      console.log('LIGHT_SWITCH_TOGGLE');
 		      Dashboard.lights.toggle(data.plugin, data.id, data.stateOn);
 				} else if (command === 'LIGHT_SWITCH_STATUS') {
-				  console.log('LIGHT_SWITCH_STATUS');
 		      Dashboard.lights.getStatus(data.plugin, data.id);
 				}
 			}
@@ -70,7 +67,7 @@ function LightSwitch(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('LIGHTSWITCH started');
+	console.log('Module ' + 'light-switch '.yellow.bold + 'started');
 
 	return {
 		exit: exit
