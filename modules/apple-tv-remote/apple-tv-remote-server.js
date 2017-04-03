@@ -7,7 +7,7 @@ function AppleTVRemote(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Connected');
+			console.log('Module ' + 'apple-tv-remote'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -18,8 +18,6 @@ function AppleTVRemote(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('Apple-tv-remote', command, data);
-
 				onSocketUpdate(command, data);
 			});
 
@@ -59,7 +57,7 @@ function AppleTVRemote(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('AppleTVRemote started');
+	console.log('Module ' + 'apple-tv-remote'.yellow.bold + ' started');
 
 	return {
 		exit: exit

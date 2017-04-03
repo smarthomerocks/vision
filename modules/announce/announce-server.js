@@ -12,7 +12,7 @@ function Announce(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Connected');
+			console.log('Module ' + 'announce'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -23,8 +23,6 @@ function Announce(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				console.log('Announce', command, data);
-
 				onSocketUpdate(command, data);
 			});
 
@@ -88,7 +86,7 @@ function Announce(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('ANNOUNCE started');
+	console.log('Module ' + 'announce'.yellow.bold + ' started');
 
 	return {
 		exit: exit

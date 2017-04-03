@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var async = require('async');
 var APIFetcher = require("./apifetcher.js");
+var colors = require('colors');
 
 function SMHI(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -11,11 +12,11 @@ function SMHI(Dashboard, app, io, config) {
 
     this.emit('connect');
 
-    console.log('SMHI connected');
+    console.log('Plugin ' + 'smhi '.yellow.bold + 'connected'.blue);
   };
 
   this.getCurrent = function(lat, lon) {
-    console.log('SMHI getCurrent: ', lat, lon);
+    console.log('Plugin ' + 'smhi '.yellow.bold + 'getCurrent'.blue, lat, lon);
 
     var self = this,
         fetcher,
@@ -25,16 +26,20 @@ function SMHI(Dashboard, app, io, config) {
 			fetcher = new APIFetcher(lat, lon, config.fetchInterval || 60000);
 
 			fetcher.onReceive(function(fetcher) {
-        self.emit('change', { lat: fetcher.lat(), lon: fetcher.lon(), currentWeather: fetcher.currentWeather()});
+        var data = { lat: fetcher.lat(), lon: fetcher.lon(), currentWeather: fetcher.currentWeather()};
+
+        console.log('Plugin ' + 'smhi '.yellow.bold + 'data'.blue, data);
+
+        self.emit('change', data);
 			});
 
 			fetcher.onError(function(fetcher, error) {
-        console.log('Fetch error: ', error);
+        console.log('Plugin ' + 'smhi '.yellow.bold + 'Fetch error'.blue, error);
 			});
 
 			self.fetchers[id] = fetcher;
 		} else {
-			console.log('Use existing fetcher for lat: ' + lat + ' lon: ' + lon);
+      console.log('Plugin ' + 'smhi '.yellow.bold + 'Use existing fetcher for lat: ' + lat + ' lon: ' + lon);
 			fetcher = self.fetchers[id];
 			fetcher.broadcastCurrentWeather();
 		}

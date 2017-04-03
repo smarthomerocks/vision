@@ -48,8 +48,6 @@ var APIFetcher = function(lat, lon, fetchInterval) {
               }
             }
 
-      			console.log(currentWeather);
-
       			self.broadcastCurrentWeather();
       			scheduleTimer();
           });

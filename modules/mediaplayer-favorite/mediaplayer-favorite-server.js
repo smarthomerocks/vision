@@ -7,7 +7,7 @@ function MediaplayerFavorite(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Mediaplayer-favorite connected');
+			console.log('Module ' + 'mediaplayer-favorite'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -56,7 +56,7 @@ function MediaplayerFavorite(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('mediaplayer-favorite started');
+	console.log('Module ' + 'mediaplayer-favorite'.yellow.bold + ' started');
 
 	return {
 		exit: exit

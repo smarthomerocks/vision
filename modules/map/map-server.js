@@ -7,7 +7,7 @@ function Map(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Connected');
+			console.log('Module ' + 'map'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -60,7 +60,7 @@ function Map(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('LIGHTSWITCH started');
+	console.log('Module ' + 'map'.yellow.bold + ' started');
 
 	return {
 		exit: exit

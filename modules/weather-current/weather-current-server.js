@@ -7,7 +7,7 @@ function WeatherCurrent(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Weather-current connected');
+      console.log('Module ' + 'Weather-current'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -18,9 +18,7 @@ function WeatherCurrent(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-        console.log('Weather-current', command, data);
-
-				onSocketUpdate(command, data);
+        onSocketUpdate(command, data);
 			});
 
 			socket.on('close', function () {
@@ -60,7 +58,7 @@ function WeatherCurrent(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('weather-current started');
+  console.log('Module ' + 'Weather-current'.yellow.bold + ' started');
 
 	return {
 		exit: exit
