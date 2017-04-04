@@ -7,7 +7,7 @@ function EnergyMeter(Dashboard, app, io) {
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Connected');
+			console.log('Module ' + 'energy-meter'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -64,7 +64,7 @@ function EnergyMeter(Dashboard, app, io) {
 
 	connectSocket();
 
-	console.log('ENERGYMETER started');
+	console.log('Module ' + 'energy-meter'.yellow.bold + ' started');
 
 	return {
 		exit: exit

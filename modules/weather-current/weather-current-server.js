@@ -1,13 +1,13 @@
-function AppleTVRemote(Dashboard, app, io) {
+function WeatherCurrent(Dashboard, app, io) {
 	var socketList = [];
 
 	function connectSocket() {
-		var nsp = io.of('/apple-tv-remote');
+		var nsp = io.of('/weather-current');
 
 		nsp.on('connection', function(socket) {
 			socketList.push(socket);
 
-			console.log('Module ' + 'apple-tv-remote'.yellow.bold + ' connected');
+      console.log('Module ' + 'Weather-current'.yellow.bold + ' connected');
 
 			var onevent = socket.onevent;
 			socket.onevent = function (packet) {
@@ -18,7 +18,7 @@ function AppleTVRemote(Dashboard, app, io) {
 			};
 
 			socket.on('*', function(command, data) {
-				onSocketUpdate(command, data);
+        onSocketUpdate(command, data);
 			});
 
 			socket.on('close', function () {
@@ -28,36 +28,37 @@ function AppleTVRemote(Dashboard, app, io) {
 			socket.emit('connected');
 
 			function onSocketUpdate(command, data) {
-				if (command === 'APPLE_TV_REMOTE_CONNECT') {
-					console.log('APPLE_TV_REMOTE_CONNECT');
+				if (command === 'WEATHER_CURRENT_CONNECT') {
 					connectPlugin(data.plugin);
-				} else if (command === 'APPLE_TV_REMOTE_SEND_COMMAND') {
-		      console.log('APPLE_TV_REMOTE_SEND_COMMAND');
-		      Dashboard.remotecontrol.sendCommand(data.plugin, data.commands);
+				} else if (command === 'WEATHER_CURRENT_STATUS') {
+		      Dashboard.weather.getCurrent(data.plugin, data.lat, data.lon);
 				}
 			}
 
 		  function connectPlugin(plugin) {
-		    Dashboard.remotecontrol.on(plugin, 'connect', function(data) {
-					socket.emit('APPLE_TV_REMOTE_CONNECT');
+		    Dashboard.weather.on(plugin, 'connect', function(data) {
+					socket.emit('WEATHER_CURRENT_CONNECTED');
 		    });
 
-		    Dashboard.remotecontrol.start(plugin);
+        Dashboard.weather.on(plugin, 'change', function(data) {
+          socket.emit('WEATHER_CURRENT_STATUS', { lat: data.lat, lon: data.lon, currentWeather: data.currentWeather });
+		    });
+
+		    Dashboard.weather.start(plugin);
 		  }
+
 		});
 	}
 
 	function exit() {
-		console.log('Exit apple-tv-remote');
 		socketlist.forEach(function(socket) {
-			console.log('Closing apple-tv-remote socket');
 		  socket.close();
 		});
 	}
 
 	connectSocket();
 
-	console.log('Module ' + 'apple-tv-remote'.yellow.bold + ' started');
+  console.log('Module ' + 'Weather-current'.yellow.bold + ' started');
 
 	return {
 		exit: exit
@@ -66,6 +67,6 @@ function AppleTVRemote(Dashboard, app, io) {
 
 module.exports = {
 	create: function(Dashboard, app, io) {
-		return new AppleTVRemote(Dashboard, app, io);
+		return new WeatherCurrent(Dashboard, app, io);
 	}
 };
