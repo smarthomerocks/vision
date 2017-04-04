@@ -22,12 +22,19 @@ Module.register("energy-meter",{
 	getDom: function() {
 		var self = this;
 
-		this.$el = $('<div class="box energy"><div class="box-content"><div class="heading">'+ this.config.title +'</div><div class="current">0 W</div><div class="total"></div></div></div>');
+		this.$el = $('<div class="box energy">'+
+		'<div class="box-content">'+
+		'<div class="heading">'+ this.config.title +'</div>'+
+		'<div class="current">0 W</div>'+
+		'<div class="today"></div>'+
+		'<div class="highest history"></div>'+
+		'<div class="lowest history"></div>'+
+		'</div>'+
+		'</div>');
 
 		this.$el.css({
      'opacity' : 0.4
     });
-
 
 		return this.$el;
 	},
@@ -57,11 +64,20 @@ Module.register("energy-meter",{
 
 	updateDom: function() {
 		var self = this;
+
 		if (this.$el) {
-			this.$el.find('.current').html(Math.round(self.lastdata.current) +  " W");
+			this.$el.find('.current').html((self.lastdata.current / 1000) >= 1 ? Math.round(self.lastdata.current/100,1)/10 + ' kW' : self.lastdata.current + ' W' );
 
 			if (self.lastdata.today) {
-				this.$el.find('.total').html(Math.round(self.lastdata.today/1000) +  " kWh totalt");
+				this.$el.find('.today').html(Math.round(self.lastdata.today*10)/10 +  "kWh idag");
+			}
+
+			if(self.lastdata.lowest){
+				this.$el.find('.lowest').html('Lägsta ' + Math.round(self.lastdata.lowest*10)/10 +  'kWh ('+ self.lastdata.lowestdate+ ')');
+			}
+
+			if(self.lastdata.highest){
+				this.$el.find('.highest').html('Högsta ' + Math.round(self.lastdata.highest*10)/10 +  'kWh ('+ self.lastdata.highestdate + ')');
 			}
 		}
 	}

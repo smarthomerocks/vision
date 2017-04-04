@@ -36,8 +36,8 @@ function EnergyMeter(Dashboard, app, io) {
 				}
 			}
 
-		  function sendStatus(id, value, value_extra) {
-		    socket.emit('ENERGY_METER_STATUS', { id: id, current:value, today:value_extra });
+		  function sendStatus(id, value, value_extra, lowest, lowestdate, highest, highestdate, today) {
+		    socket.emit('ENERGY_METER_STATUS', { id: id, current:value, today:today, lowest:lowest, lowestdate: lowestdate, highest:highest, highestdate: highestdate });
 		  }
 
 		  function connectPlugin(plugin) {
@@ -46,7 +46,7 @@ function EnergyMeter(Dashboard, app, io) {
 		    });
 
 		    Dashboard.energymeter.on(plugin, 'change', function(data) {
-		      sendStatus(data.id, data.value, data.value_extra);
+		      sendStatus(data.id, data.value, data.value_extra, data.lowest, data.lowestdate, data.highest, data.highestdate, data.today);
 		    });
 
 		    Dashboard.energymeter.start(plugin);

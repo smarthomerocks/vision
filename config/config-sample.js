@@ -36,6 +36,7 @@ var config = {
     plugins: {
       "domoticz": {
         host: "192.168.1.127",
+        httpport: 8080,
         log: false
       },
       "sonos": {

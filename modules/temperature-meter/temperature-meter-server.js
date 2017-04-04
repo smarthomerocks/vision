@@ -36,8 +36,8 @@ function TemperatureMeter(Dashboard, app, io) {
 				}
 			}
 
-		  function sendStatus(id, value, value_extra) {
-		    socket.emit('TEMP_METER_STATUS', { id: id, current:value, today:value_extra });
+		  function sendStatus(id, value, value_extra, lowest, lowestdate, highest, highestdate) {
+		    socket.emit('TEMP_METER_STATUS', { id: id, current:value, today:value_extra, lowest:lowest, lowestdate: lowestdate, highest:highest, highestdate: highestdate  });
 		  }
 
 		  function connectPlugin(plugin) {
@@ -46,7 +46,7 @@ function TemperatureMeter(Dashboard, app, io) {
 		    });
 
 		    Dashboard.tempmeter.on(plugin, 'change', function(data) {
-		      sendStatus(data.id, data.value, data.value_extra);
+		      sendStatus(data.id, data.value, data.value_extra, data.lowest, data.lowestdate, data.highest, data.highestdate);
 		    });
 
 		    Dashboard.tempmeter.start(plugin);
