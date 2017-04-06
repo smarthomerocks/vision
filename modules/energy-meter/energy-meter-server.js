@@ -1,78 +1,29 @@
-function EnergyMeter(Dashboard, app, io) {
-	var socketList = [];
+var ModuleServer = require("../../lib/module-server.js");
 
-	function connectSocket() {
-		var nsp = io.of('/energy-meter');
+module.exports = ModuleServer.create({
+	socketNotificationReceived: function(command, data) {
+		if (command === 'ENERGY_METER_CONNECT') {
+			this.connectPlugin(data.plugin);
+		} else if (command === 'ENERGY_METER_STATUS') {
+			this.dashboard.energymeter.getStatus(data.plugin, data.id);
+		}
+	},
 
-		nsp.on('connection', function(socket) {
-			socketList.push(socket);
+	connectPlugin: function(plugin) {
+		var self = this;
 
-			console.log('Module ' + 'energy-meter'.yellow.bold + ' connected');
-
-			var onevent = socket.onevent;
-			socket.onevent = function (packet) {
-			    var args = packet.data || [];
-			    onevent.call(this, packet);    	// original call
-			    packet.data = ["*"].concat(args);
-			    onevent.call(this, packet);     // additional call to catch-all
-			};
-
-			socket.on('*', function(command, data) {
-
-				onSocketUpdate(command, data);
-			});
-
-			socket.on('close', function () {
-      	socketlist.splice(socketlist.indexOf(socket), 1);
-    	});
-
-			socket.emit('connected');
-
-			function onSocketUpdate(command, data) {
-				if (command === 'ENERGY_METER_CONNECT') {
-					connectPlugin(data.plugin);
-				} else if (command === 'ENERGY_METER_STATUS') {
-		      Dashboard.energymeter.getStatus(data.plugin, data.id);
-				}
-			}
-
-		  function sendStatus(id, value, value_extra, lowest, lowestdate, highest, highestdate, today) {
-		    socket.emit('ENERGY_METER_STATUS', { id: id, current:value, today:today, lowest:lowest, lowestdate: lowestdate, highest:highest, highestdate: highestdate });
-		  }
-
-		  function connectPlugin(plugin) {
-		    Dashboard.energymeter.on(plugin, 'connect', function(data) {
-					socket.emit('ENERGY_METER_CONNECTED');
-		    });
-
-		    Dashboard.energymeter.on(plugin, 'change', function(data) {
-		      sendStatus(data.id, data.value, data.value_extra, data.lowest, data.lowestdate, data.highest, data.highestdate, data.today);
-		    });
-
-		    Dashboard.energymeter.start(plugin);
-		  }
+		this.dashboard.energymeter.on(plugin, 'connect', function(data) {
+			self.sendSocketNotification('ENERGY_METER_CONNECTED');
 		});
-	}
 
-	function exit() {
-		console.log('Exit energy-meter');
-		socketlist.forEach(function(socket) {
-			console.log('Closing energy-meter socket');
-		  socket.close();
+		this.dashboard.energymeter.on(plugin, 'change', function(data) {
+			self.sendStatus(data.id, data.value, data.value_extra, data.lowest, data.lowestdate, data.highest, data.highestdate, data.today);
 		});
+
+		this.dashboard.energymeter.start(plugin);
+	},
+
+	sendStatus: function(id, value, value_extra, lowest, lowestdate, highest, highestdate, today) {
+		this.sendSocketNotification('ENERGY_METER_STATUS', { id: id, current:value, today:today, lowest:lowest, lowestdate: lowestdate, highest:highest, highestdate: highestdate });
 	}
-
-	connectSocket();
-
-	console.log('Module ' + 'energy-meter'.yellow.bold + ' started');
-
-	return {
-		exit: exit
-	}
-}
-
-module.exports = {
-	create: function(Dashboard, app, io) {
-		return new EnergyMeter(Dashboard, app, io);
-	}
-};
+});

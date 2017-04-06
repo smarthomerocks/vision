@@ -1,83 +1,33 @@
-function Camera(Dashboard, app, io) {
-	var socketList = [];
+var ModuleServer = require("../../lib/module-server.js");
 
-	function connectSocket() {
-		var nsp = io.of('/camera');
-		var colors = require('colors');
+module.exports = ModuleServer.create({
+	socketNotificationReceived: function(command, data) {
+		if (command === 'CAMERA_CONNECT') {
+			this.connectPlugin(data.plugin);
+		} else if (command === 'CAMERA_STATUS') {
+			this.dashboard.camera.getStatus(data.plugin, data.id);
+		} else if (command === 'CAMERA_SNAPSHOT'){
+			this.dashboard.camera.getSnapshot(data.plugin, data.id);
+		} else if (command === 'CAMERA_LIVEVIDEO'){
+			this.dashboard.camera.getLiveliew(data.plugin, data.id);
+		}
+	},
 
-		nsp.on('connection', function(socket) {
-			socketList.push(socket);
+	connectPlugin: function(plugin) {
+		var self = this;
 
-			console.log('Module ' + 'camera '.yellow.bold + 'connected');
-
-			var onevent = socket.onevent;
-			socket.onevent = function (packet) {
-			    var args = packet.data || [];
-			    onevent.call(this, packet);    	// original call
-			    packet.data = ["*"].concat(args);
-			    onevent.call(this, packet);     // additional call to catch-all
-			};
-
-			socket.on('*', function(command, data) {
-
-				onSocketUpdate(command, data);
-			});
-
-			socket.on('close', function () {
-      	socketlist.splice(socketlist.indexOf(socket), 1);
-    	});
-
-			socket.emit('connected');
-
-			function onSocketUpdate(command, data) {
-				if (command === 'CAMERA_CONNECT') {
-					connectPlugin(data.plugin);
-				} else if (command === 'CAMERA_STATUS') {
-		      Dashboard.camera.getStatus(data.plugin, data.id);
-				} else if (command === 'CAMERA_SNAPSHOT'){
-				  Dashboard.camera.getSnapshot(data.plugin, data.id);
-				}else if (command === 'CAMERA_LIVEVIDEO'){
-				  Dashboard.camera.getLiveliew(data.plugin, data.id);
-				}
-			}
-
-		  function sendStatus(id, thumbnail, videothumbnail, lastUpdate, liveview, clip, state) {
-		    socket.emit('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview, state:state});
-		  }
-
-		  function connectPlugin(plugin) {
-		    Dashboard.camera.on(plugin, 'connect', function(data) {
-					socket.emit('CAMERA_CONNECTED');
-		    });
-
-		    Dashboard.camera.on(plugin, 'change', function(data) {
-		      sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip, data.state);
-		    });
-
-		    Dashboard.camera.start(plugin);
-		  }
+		this.dashboard.camera.on(plugin, 'connect', function(data) {
+			self.sendSocketNotification('CAMERA_CONNECTED');
 		});
-	}
 
-	function exit() {
-		console.log('Exit camera');
-		socketlist.forEach(function(socket) {
-			console.log('Closing camera socket');
-		  socket.close();
+		this.dashboard.camera.on(plugin, 'change', function(data) {
+			self.sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip, data.state);
 		});
+
+		this.dashboard.camera.start(plugin);
+	},
+
+	sendStatus: function(id, thumbnail, videothumbnail, lastUpdate, liveview, clip, state) {
+		this.sendSocketNotification('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview, state:state});
 	}
-
-	connectSocket();
-
-	console.log('Module ' + 'camera '.yellow.bold + 'started');
-
-	return {
-		exit: exit
-	}
-}
-
-module.exports = {
-	create: function(Dashboard, app, io) {
-		return new Camera(Dashboard, app, io);
-	}
-};
+});

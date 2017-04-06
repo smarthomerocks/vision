@@ -80,3 +80,6 @@ function cloneObject(obj) {
 
 	return temp;
 }
+
+/*************** DO NOT EDIT THE LINE BELOW ***************/
+if (typeof module !== "undefined") {module.exports = Class;}

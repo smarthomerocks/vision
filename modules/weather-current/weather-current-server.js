@@ -1,72 +1,25 @@
-function WeatherCurrent(Dashboard, app, io) {
-	var socketList = [];
+var ModuleServer = require("../../lib/module-server.js");
 
-	function connectSocket() {
-		var nsp = io.of('/weather-current');
+module.exports = ModuleServer.create({
+	socketNotificationReceived: function(command, data) {
+		if (command === 'WEATHER_CURRENT_CONNECT') {
+			this.connectPlugin(data.plugin);
+		} else if (command === 'WEATHER_CURRENT_STATUS') {
+			this.dashboard.weather.getCurrent(data.plugin, data.lat, data.lon);
+		}
+	},
 
-		nsp.on('connection', function(socket) {
-			socketList.push(socket);
+	connectPlugin: function(plugin) {
+		var self = this;
 
-      console.log('Module ' + 'Weather-current'.yellow.bold + ' connected');
-
-			var onevent = socket.onevent;
-			socket.onevent = function (packet) {
-			    var args = packet.data || [];
-			    onevent.call(this, packet);    	// original call
-			    packet.data = ["*"].concat(args);
-			    onevent.call(this, packet);     // additional call to catch-all
-			};
-
-			socket.on('*', function(command, data) {
-        onSocketUpdate(command, data);
-			});
-
-			socket.on('close', function () {
-      	socketlist.splice(socketlist.indexOf(socket), 1);
-    	});
-
-			socket.emit('connected');
-
-			function onSocketUpdate(command, data) {
-				if (command === 'WEATHER_CURRENT_CONNECT') {
-					connectPlugin(data.plugin);
-				} else if (command === 'WEATHER_CURRENT_STATUS') {
-		      Dashboard.weather.getCurrent(data.plugin, data.lat, data.lon);
-				}
-			}
-
-		  function connectPlugin(plugin) {
-		    Dashboard.weather.on(plugin, 'connect', function(data) {
-					socket.emit('WEATHER_CURRENT_CONNECTED');
-		    });
-
-        Dashboard.weather.on(plugin, 'change', function(data) {
-          socket.emit('WEATHER_CURRENT_STATUS', { lat: data.lat, lon: data.lon, currentWeather: data.currentWeather });
-		    });
-
-		    Dashboard.weather.start(plugin);
-		  }
-
+		this.dashboard.weather.on(plugin, 'connect', function(data) {
+			self.sendSocketNotification('WEATHER_CURRENT_CONNECTED');
 		});
-	}
 
-	function exit() {
-		socketlist.forEach(function(socket) {
-		  socket.close();
+		this.dashboard.weather.on(plugin, 'change', function(data) {
+			self.sendSocketNotification('WEATHER_CURRENT_STATUS', { lat: data.lat, lon: data.lon, currentWeather: data.currentWeather });
 		});
+
+		this.dashboard.weather.start(plugin);
 	}
-
-	connectSocket();
-
-  console.log('Module ' + 'Weather-current'.yellow.bold + ' started');
-
-	return {
-		exit: exit
-	}
-}
-
-module.exports = {
-	create: function(Dashboard, app, io) {
-		return new WeatherCurrent(Dashboard, app, io);
-	}
-};
+});
