@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var _ = require('underscore');
 var mqtt = require('node-domoticz-mqtt');
+var request = require('request');
 
 function Domoticz(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -27,10 +28,48 @@ function Domoticz(Dashboard, app, io, config) {
 
       this.domoticz.on('data', function(data) {
 
+        // Try to get more info by polling Domoticz thru http 
+        if(data.stype == 'kWh' || data.dtype == 'kWh'){
+          // Energy meter
+          request({
+            uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=counter&idx='+data.idx+'&range=month'
+          }, function (err, response, body) {
+            var result = JSON.parse(body);
+
+            if(result.status == 'OK'){
+
+                var todayDate = new Date();
+                var lowest = _.min(result.result, function(o){return o.c;});
+                var highest = _.max(result.result, function(o){return o.c;});
+                var today = _.find(result.result, function(o){ return o.d == todayDate.toISOString().substring(0, 10)});
+
+                if(lowest && highest){
+                  self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.v, lowestdate: lowest.d, highest: highest.v, highestdate: highest.d, today: today ? today.v : null  });
+                }
+            }
+          });
+        }
+
+        if(data.stype == 'Temp' || data.dtype == 'Temp'){
+          // Temperature
+          request({
+            uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
+          }, function (err, response, body) {
+            var result = JSON.parse(body);
+            if(result.status == 'OK'){
+                var lowest = _.min(result.result, function(o){return o.tm;});
+                var highest = _.max(result.result, function(o){return o.te;});
+
+                if(lowest && highest){
+                  self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d   });
+                }
+            }
+          });
+        }
+        
         self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
 
-
-            console.log('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
+        console.log('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
       });
 
       this.domoticz.on('connect', function() {

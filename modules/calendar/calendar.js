@@ -62,7 +62,7 @@ Module.register("calendar",{
 
         if (lastDate.toDateString() !== currentDate.toDateString()) {
           eventsEl.append('<div class="heading tomorrow">' + momentDate.calendar(new Date(),{        
-						sameDay: '[Idag] LT',
+						sameDay: '[Idag]',
         		nextDay: '[Imorgon]',
         		lastDay: '[Igår]',
         		nextWeek: '[På] dddd',

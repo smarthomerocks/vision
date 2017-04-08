@@ -36,6 +36,7 @@ var config = {
     plugins: {
       "domoticz": {
         host: "192.168.1.127",
+        httpport: 8080,
         log: false
       },
       "sonos": {
@@ -46,6 +47,9 @@ var config = {
       },
       "google-calendar": {
         pollingInterval: 60000
+      },
+      "smhi": {
+        fetchInterval: 300000
       },
       "itach": {
         host: "192.168.1.127",
@@ -205,6 +209,20 @@ var config = {
           row: 1,
           size_x: 1,
           size_y: 2
+        }
+      },
+      {
+        module: "weather-current",
+        config: {
+          title: "Visby",
+          plugin: "smhi",
+          lat: '57.634800',
+          lon: '18.294840',
+          section: "start",
+          column: 5,
+          row: 3,
+          size_x: 1,
+          size_y: 1
         }
       },
       {
