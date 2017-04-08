@@ -69,9 +69,14 @@ var NSR = (function() {
     });
   }
 
+  var setTheme = function() {
+    $('html').addClass(config.theme ? 'theme-' + config.theme : 'theme-default');
+  }
+
   return {
     renderSections: renderSections,
     modulesStarted: modulesStarted,
-    initNavigation: initNavigation
+    initNavigation: initNavigation,
+    setTheme: setTheme
   }
 })();

@@ -1,5 +1,6 @@
 var config = {
     ssl: false,
+    theme: 'default',
     paths: {
       modules: "/modules"
     },
