@@ -71,7 +71,14 @@ var config = {
             commands: "nexa-self-learn-110.json"
           }
         }
-      }
+    },
+    "electricity-spot-price": {
+      // 'DKK', 'NOK', 'SEK', 'EUR'
+      currency: 'SEK',
+      // http://www.nordpoolspot.com/globalassets/download-center/day-ahead/elspot-area-change-log.pdf
+      // Sweden: http://www.natomraden.se/
+      area: 'SE3'
+    }
     },
     modules: [
       {
@@ -119,6 +126,19 @@ var config = {
           row: 3,
           size_x: 1,
           size_y: 1
+        }
+      },
+      {
+      module: "electricity-spot-price",
+        config: {
+          title: "Elpris",
+          plugin: "electricity-spot-price",
+          id: 4,
+          section: "start",
+          column: 3,
+          row: 4,
+          size_x: 1,
+        size_y: 1
         }
       },
       {
