@@ -1,0 +1,6 @@
+bin/*
+hosting/*
+node_modules/*
+public/*
+**/*.md
+
