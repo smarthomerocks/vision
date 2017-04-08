@@ -9,7 +9,7 @@ var NSR = (function() {
     for (var i = 0, sectionLength = config.sections.length; i < sectionLength; i++) {
       var section = config.sections[i];
 
-      var navSectionEl = $('<li class="nav-left-item js-nav-left-item" data-section="' + section.section + '">' + section.icon + section.title + '</li>');
+      var navSectionEl = $('<li class="nav-left-item js-nav-left-item" data-section="' + section.section + '"><i class="material-icons md-36">' + section.icon + '</i>' + section.title + '</li>');
 
       navList.append(navSectionEl);
 
