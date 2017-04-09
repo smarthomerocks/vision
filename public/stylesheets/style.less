@@ -9,8 +9,10 @@
      -moz-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-html, body {
+@media (min-width: 480px) {
+  html, body {
     overflow: hidden;
+  }
 }
 
 body {
@@ -70,6 +72,7 @@ body {
 .box {
   position: absolute;
   display: table;
+  table-layout: fixed;
   padding: 10px;
   overflow: hidden;
   cursor: pointer;

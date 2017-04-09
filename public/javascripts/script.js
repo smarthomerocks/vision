@@ -7,12 +7,14 @@ moment.locale("sv")
 
 FastClick.attach(document.body);
 
-// Disable scroll on the page, add more exceptions here that should be scrollable
-$(document).on('touchmove', function(e) {
-  if (e.target.nodeName !== 'INPUT') {
-    e.preventDefault();
-  }
-});
+if ((window).width() > 480) {
+  // Disable scroll on the page, add more exceptions here that should be scrollable
+  $(document).on('touchmove', function(e) {
+    if (e.target.nodeName !== 'INPUT') {
+      e.preventDefault();
+    }
+  });
+}
 
 // Add click effect on modules that are clickable
 $(document).on('click', '.box-clickable', function(e) {
