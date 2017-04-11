@@ -1,0 +1,13 @@
+[Unit]
+Description=Smart remote dashboard for home automation.
+After=syslog.target network.target 
+
+[Service]
+WorkingDirectory=/opt/node-smart-remote
+ExecStart=NODE_ENV=production node ./bin/www
+Restart=on-failure
+RestartSec=5
+TimeoutSec=30
+
+[Install]
+WantedBy=multi-user.target
