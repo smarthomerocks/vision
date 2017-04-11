@@ -131,19 +131,19 @@ var config = {
           size_y: 1
         }
       },
-      {
-      module: "electricity-spot-price",
+    {
+    module: "electricity-spot-price",
         config: {
-          title: "Elpris",
-          plugin: "electricity-spot-price",
-          id: 4,
-          section: "start",
-          column: 3,
-          row: 4,
-          size_x: 1,
-        size_y: 1
+        title: "Elpris (SEK)",
+            plugin: "electricity-spot-price",
+            id: 4,
+            section: "start",
+            column: 1,
+            row: 1,
+            size_x: 2,
+            size_y: 1
         }
-      },
+    }
       {
         module: "light-switch",
         config: {

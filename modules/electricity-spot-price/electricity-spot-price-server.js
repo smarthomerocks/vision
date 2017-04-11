@@ -12,7 +12,14 @@ module.exports = ModuleServer.create({
   connectPlugin: function(plugin) {
     var self = this;
 
-    this.dashboard.electricity_spot_price.on(plugin, 'connect', function(data) {
+    if (this.isConnected) {
+      self.sendSocketNotification('SPOT_PRICE_CONNECTED');
+      return;
+    }
+
+    this.isConnected = true;
+
+    this.dashboard.electricity_spot_price.once(plugin, 'connect', function(data) {
       self.sendSocketNotification('SPOT_PRICE_CONNECTED');
     });
 

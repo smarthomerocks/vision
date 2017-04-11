@@ -25,32 +25,44 @@ function Electricity_spot_price(Dashboard, app, io, config) {
 
   };
 
+  function getPricePerDay(day) {
+    return new Promise((resolve, reject) => {
+      self.prices.hourly({
+        startDate: day,
+        endDate: day,
+        currency: config.currency,
+        area: config.area
+      },
+          function(error, results) {
+            error ? reject(error) : resolve(results);
+          });
+    });
+  }
+
   self.getPriceList = function(id) {
 
     console.log("Electricity_spot_price: getting price list.");
 
-    self.prices.hourly({
-      startDate: moment().subtract(1, 'days'),
-      endDate: moment().add(1, 'days'),
-      currency: config.currency,
-      area: config.area
-    },
-        function(error, results) {
-          if (error) {
-            console.err('Electricity_spot_price: get price list error: ' + error.message);
-            return;
-          }
+    let requests = [
+      getPricePerDay(moment().subtract(1, 'days')),
+      getPricePerDay(moment()),
+      getPricePerDay(moment().add(1, 'days'))
+    ];
 
-          let pricelist = results.map(entry => {
+    Promise.all(requests)
+        .then(results => {
+          let pricelist = [].concat.apply([], results).map(entry => {
             return {
-              date: entry.date,
+              date: entry.date.toISOString(),
               price: entry.value / 1000 // Mega Watt to Kilo Watt divider.
             };
           });
 
           self.emit('change', {hourly: pricelist});
+        })
+        .catch(error => {
+          console.err('Electricity_spot_price: get price list error: ' + error.message);
         });
-
   };
 }
 

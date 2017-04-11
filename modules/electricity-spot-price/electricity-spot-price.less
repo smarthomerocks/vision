@@ -1,10 +1,22 @@
 .spot-price {
+    .keyframes(@name; @arguments) {
+        @-moz-keyframes @name {@arguments();}
+        @-webkit-keyframes @name {@arguments();}
+        @-ms-keyframes @name {@arguments();}
+        @keyframes @name {@arguments();}
+    }
+
+    .graph {
+        width: 100%;
+        height: auto;
+    }
+
     .bar {
         fill: #275070;
     }
 
     .label {
-        font-size: 8px;
+        font-size: 10px;
         fill: #fff;
     }
 
@@ -14,6 +26,16 @@
 
     .highprice {
         fill: #f11;
+    }
+
+    .currentTime {
+        .keyframes(colorFade;{
+            0% {fill:#477090}
+            50% {fill:#073050}
+            100% {fill:#477090}
+        });
+
+        animation: colorFade 3s infinite;
     }
 }
 
