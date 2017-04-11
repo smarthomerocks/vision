@@ -14,7 +14,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.remotecontrol.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('APPLE_TV_REMOTE_CONNECT');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.remotecontrol.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('APPLE_TV_REMOTE_CONNECT');
 		});
 

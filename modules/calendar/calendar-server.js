@@ -12,7 +12,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.calendar.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('CALENDAR_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.calendar.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('CALENDAR_CONNECTED');
 		});
 

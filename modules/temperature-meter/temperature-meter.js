@@ -13,8 +13,6 @@ Module.register("temperature-meter",{
 	start: function() {
 		console.log('Starting TEMP-meter ' + this.config.title);
 
-		this.isStateOn = false;
-
 		this.sendSocketNotification('TEMP_METER_CONNECT', { id: this.config.id, plugin: this.config.plugin });
 	},
 
@@ -34,7 +32,6 @@ Module.register("temperature-meter",{
      'opacity' : 0.4
     });
 
-
 		return this.$el;
 	},
 
@@ -42,16 +39,11 @@ Module.register("temperature-meter",{
 		var self = this;
 		//console.log(data);
 		if (command === 'TEMP_METER_CONNECTED') {
-
-			if (!this.$el) {
-				this.getDom();
-			}
 			// Connected to plugin, get status
 			this.sendSocketNotification('TEMP_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
 		} else if (command === 'TEMP_METER_STATUS' && data.id === this.config.id) {
 			self.lastdata = data;
-
 
 			this.$el.css({
 				'opacity' : 1

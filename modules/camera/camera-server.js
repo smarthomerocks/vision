@@ -16,7 +16,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.camera.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('CAMERA_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.camera.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('CAMERA_CONNECTED');
 		});
 

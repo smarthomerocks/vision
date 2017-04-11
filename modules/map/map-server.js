@@ -10,7 +10,15 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.location.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('MAP_CONNECTED');
+			self.dashboard.location.start(plugin);
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.location.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('MAP_CONNECTED');
 		});
 

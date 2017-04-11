@@ -12,7 +12,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.tempmeter.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('TEMP_METER_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.tempmeter.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('TEMP_METER_CONNECTED');
 		});
 
