@@ -39,8 +39,8 @@ function Domoticz(Dashboard, app, io, config) {
             if(result.status == 'OK'){
 
                 var todayDate = new Date();
-                var lowest = _.min(result.result, function(o){return o.c;});
-                var highest = _.max(result.result, function(o){return o.c;});
+                var lowest = _.min(result.result, function(o){return o.v;});
+                var highest = _.max(result.result, function(o){return o.v;});
                 var today = _.find(result.result, function(o){ return o.d == todayDate.toISOString().substring(0, 10)});
 
                 if(lowest && highest){
