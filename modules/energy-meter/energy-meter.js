@@ -59,7 +59,7 @@ Module.register("energy-meter",{
 		var self = this;
 
 		if (this.$el) {
-			this.$el.find('.current').html((self.lastdata.current / 1000) >= 1 ? Math.round(self.lastdata.current/100,1)/10 + ' kW' : self.lastdata.current + ' W' );
+			this.$el.find('.current').html((self.lastdata.current / 1000) >= 1 ? Math.round(self.lastdata.current/100)/10 + ' kW' : Math.round(self.lastdata.current) + ' W' );
 
 			if (self.lastdata.today) {
 				this.$el.find('.today').html(Math.round(self.lastdata.today*10)/10 +  "kWh idag");
