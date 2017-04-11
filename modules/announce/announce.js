@@ -151,15 +151,17 @@ Module.register("announce",{
   },
 
 	initAnimation: function() {
-		this.animation = new SiriWave({
-	    container: this.$el.find('.announce-animation')[0],
-	    width: 160,
-	    height: 120,
-			style: 'ios9',
-			speed: 0.1,
-			amplitude: 0,
-			speedInterpolationSpeed: 0
-		});
+		if (this.$el.find('.announce-animation').is(':empty')) {
+			this.animation = new SiriWave({
+		    container: this.$el.find('.announce-animation')[0],
+		    width: 160,
+		    height: 120,
+				style: 'ios9',
+				speed: 0.1,
+				amplitude: 0,
+				speedInterpolationSpeed: 0
+			});
+		}
 	}
 
 });
