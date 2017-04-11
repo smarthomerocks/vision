@@ -22,7 +22,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.mediaplayer.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('MEDIAPLAYER_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.mediaplayer.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('MEDIAPLAYER_CONNECTED');
 		});
 

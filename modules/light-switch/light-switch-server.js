@@ -14,7 +14,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.lights.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('LIGHT_SWITCH_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.lights.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('LIGHT_SWITCH_CONNECTED');
 		});
 

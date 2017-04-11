@@ -12,7 +12,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.energymeter.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('ENERGY_METER_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.energymeter.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('ENERGY_METER_CONNECTED');
 		});
 

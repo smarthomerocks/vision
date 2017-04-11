@@ -20,10 +20,10 @@ Module.register("apple-tv-remote",{
 
 		this.$el = $('<div class="box box-4 apple-tv-remote"><div class="heading">'+ this.config.title +'</div><div class="apple-tv-remote-container"></div></div>');
 
-    var row1 = $('<div class="grid"><div class="col-1-3 mobile-col-1-3"></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-up"><i class="zmdi zmdi-chevron-up"></i></button></div></div>');
-    var row2 = $('<div class="grid"><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-left"><i class="zmdi zmdi-chevron-left"></i></button></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-enter">OK</button></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-right"><i class="zmdi zmdi-chevron-right"></i></button></div></div>');
-    var row3 = $('<div class="grid"><div class="col-1-3 mobile-col-1-3"></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-down"><i class="zmdi zmdi-chevron-down"></i></button></div></div>');
-    var row4 = $('<div class="grid"><div class="col-1-2 mobile-col-1-2"><button class="js-apple-tv-remote-menu">Meny</button></div><div class="col-1-2 mobile-col-1-2"><button class="js-apple-tv-remote-play"><i class="zmdi zmdi-pause"></i><i class="zmdi zmdi-play"></i></button></div></div>');
+    var row1 = $('<div class="grid"><div class="col-1-3 mobile-col-1-3"></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-up"><i class="material-icons">expand_less</i></button></div></div>');
+    var row2 = $('<div class="grid"><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-left"><i class="material-icons">chevron_left</i></button></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-enter">OK</button></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-right"><i class="material-icons">chevron_right</i></button></div></div>');
+    var row3 = $('<div class="grid"><div class="col-1-3 mobile-col-1-3"></div><div class="col-1-3 mobile-col-1-3"><button class="js-apple-tv-remote-down"><i class="material-icons">expand_more</i></button></div></div>');
+    var row4 = $('<div class="grid"><div class="col-1-2 mobile-col-1-2"><button class="js-apple-tv-remote-menu">Meny</button></div><div class="col-1-2 mobile-col-1-2"><button class="js-apple-tv-remote-play"><i class="material-icons">play_arrow</i></button></div></div>');
 
     this.$el.find('.apple-tv-remote-container').append(row1).append(row2).append(row3).append(row4);
 

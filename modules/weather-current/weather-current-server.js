@@ -12,7 +12,14 @@ module.exports = ModuleServer.create({
 	connectPlugin: function(plugin) {
 		var self = this;
 
-		this.dashboard.weather.on(plugin, 'connect', function(data) {
+		if (this.isConnected) {
+			self.sendSocketNotification('WEATHER_CURRENT_CONNECTED');
+			return;
+		}
+
+		this.isConnected = true;
+
+		this.dashboard.weather.once(plugin, 'connect', function(data) {
 			self.sendSocketNotification('WEATHER_CURRENT_CONNECTED');
 		});
 

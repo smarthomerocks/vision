@@ -24,10 +24,6 @@ function ICal(Dashboard, app, io, config) {
   this.getEvents = function(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass) {
 		console.log('Plugin ' + 'ical '.yellow.bold + 'getEvents ' + url );
     var self = this,
-        fetchInterval,
-        maximumNumberOfDays,
-        user,
-        pass,
         fetcher;
 
 		if (typeof self.fetchers[url] === "undefined") {
@@ -53,7 +49,7 @@ function ICal(Dashboard, app, io, config) {
 		}
 
 			fetcher.startFetch();
-		
+
   };
 
 };
