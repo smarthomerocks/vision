@@ -14,8 +14,6 @@ Module.register("energy-meter",{
 	start: function() {
 		console.log('Starting energy-meter ' + this.config.title);
 
-		this.isStateOn = false;
-
 		this.sendSocketNotification('ENERGY_METER_CONNECT', { id: this.config.id, plugin: this.config.plugin });
 	},
 
@@ -43,16 +41,11 @@ Module.register("energy-meter",{
 		var self = this;
 		//console.log(data);
 		if (command === 'ENERGY_METER_CONNECTED') {
-
-			if (!this.$el) {
-				this.getDom();
-			}
 			// Connected to plugin, get status
 			this.sendSocketNotification('ENERGY_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
 		} else if (command === 'ENERGY_METER_STATUS' && data.id === this.config.id) {
 			self.lastdata = data;
-
 
 			this.$el.css({
 				'opacity' : 1

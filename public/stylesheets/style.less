@@ -1,4 +1,5 @@
 @import "simplegrid.less";
+@import "themes/light.less";
 
 * {
   box-sizing: border-box;
@@ -8,8 +9,10 @@
      -moz-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-html, body {
+@media (min-width: 480px) {
+  html, body {
     overflow: hidden;
+  }
 }
 
 body {
@@ -50,11 +53,9 @@ body {
     opacity: 1;
   }
 
-  svg {
+  .material-icons {
     display: block;
     margin: 0 auto 5px auto;
-    height: 36px;
-    width: 36px;
   }
 }
 
@@ -71,11 +72,12 @@ body {
 .box {
   position: absolute;
   display: table;
+  table-layout: fixed;
   padding: 10px;
   overflow: hidden;
   cursor: pointer;
   background: #1a2126;
-  box-shadow: 0 0 20px 0 rgba(0,0,0,.4);
+  //box-shadow: 0 0 20px 0 rgba(0,0,0,.4);
   transition: opacity 0.3s ease, background 0.3s;
 }
 
@@ -129,27 +131,9 @@ input[type=range]:focus::-webkit-slider-runnable-track {
   background: #f1f1f1;
 }
 
-/* ========================= */
-// TODO: Move code below to seperate module
-
-.weather {
-  svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -32px 0 0 -64px;
-    width: 64px;
-    height: 64px;
-  }
-
-  .temp {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -32px 0 0 16px;
-    width: 64px;
-    height: 64px;
-    font-size: 38px;
-    line-height: 64px;
-  }
-}
+// Icon sizes
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-64 { font-size: 64px; }

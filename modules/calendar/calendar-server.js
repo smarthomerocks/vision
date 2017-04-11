@@ -1,73 +1,32 @@
-function Calendar(Dashboard, app, io) {
-	var socketList = [];
-	var colors = require('colors');
+var ModuleServer = require("../../lib/module-server.js");
 
-	function connectSocket() {
-		var nsp = io.of('/calendar');
+module.exports = ModuleServer.create({
+	socketNotificationReceived: function(command, data) {
+		if (command === 'CALENDAR_CONNECT') {
+			this.connectPlugin(data.plugin);
+		} else if (command === 'CALENDAR_EVENTS') {
+			this.dashboard.calendar.getEvents(data.plugin, data.url, data.fetchInterval, data.maximumEntries, data.maximumNumberOfDays, data.user, data.pass);
+		}
+	},
 
-		nsp.on('connection', function(socket) {
-			socketList.push(socket);
+	connectPlugin: function(plugin) {
+		var self = this;
 
-			console.log('Module ' + 'calendar '.yellow.bold + 'connected');
+		if (this.isConnected) {
+			self.sendSocketNotification('CALENDAR_CONNECTED');
+			return;
+		}
 
-			var onevent = socket.onevent;
-			socket.onevent = function (packet) {
-			    var args = packet.data || [];
-			    onevent.call(this, packet);    	// original call
-			    packet.data = ["*"].concat(args);
-			    onevent.call(this, packet);     // additional call to catch-all
-			};
+		this.isConnected = true;
 
-			socket.on('*', function(command, data) {
-				onSocketUpdate(command, data);
-			});
-
-			socket.on('close', function () {
-      	socketlist.splice(socketlist.indexOf(socket), 1);
-    	});
-
-			socket.emit('connected');
-
-			function onSocketUpdate(command, data) {
-				if (command === 'CALENDAR_CONNECT') {
-					connectPlugin(data.plugin);
-				} else if (command === 'CALENDAR_EVENTS') {
-		      Dashboard.calendar.getEvents(data.plugin, data.url, data.fetchInterval, data.maximumEntries, data.maximumNumberOfDays, data.user, data.pass);
-				}
-			}
-
-		  function connectPlugin(plugin) {
-		    Dashboard.calendar.on(plugin, 'connect', function(data) {
-					socket.emit('CALENDAR_CONNECTED');
-		    });
-
-        Dashboard.calendar.on(plugin, 'change', function(data) {
-          socket.emit('CALENDAR_EVENTS', { url: data.url, events: data.events });
-		    });
-
-		    Dashboard.calendar.start(plugin);
-		  }
-
+		this.dashboard.calendar.once(plugin, 'connect', function(data) {
+			self.sendSocketNotification('CALENDAR_CONNECTED');
 		});
-	}
 
-	function exit() {
-		socketlist.forEach(function(socket) {
-		  socket.close();
+		this.dashboard.calendar.on(plugin, 'change', function(data) {
+			self.sendSocketNotification('CALENDAR_EVENTS', { url: data.url, events: data.events });
 		});
+
+		this.dashboard.calendar.start(plugin);
 	}
-
-	connectSocket();
-
-	console.log('Module ' + 'calendar '.yellow.bold + 'started');
-
-	return {
-		exit: exit
-	}
-}
-
-module.exports = {
-	create: function(Dashboard, app, io) {
-		return new Calendar(Dashboard, app, io);
-	}
-};
+});

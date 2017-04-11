@@ -1,74 +1,31 @@
-function Map(Dashboard, app, io) {
-	var socketList = [];
+var ModuleServer = require("../../lib/module-server.js");
 
-	function connectSocket() {
-		var nsp = io.of('/map');
+module.exports = ModuleServer.create({
+	socketNotificationReceived: function(command, data) {
+		if (command === 'MAP_CONNECT') {
+			this.connectPlugin(data.plugin);
+		}
+	},
 
-		nsp.on('connection', function(socket) {
-			socketList.push(socket);
+	connectPlugin: function(plugin) {
+		var self = this;
 
-			console.log('Module ' + 'map'.yellow.bold + ' connected');
+		if (this.isConnected) {
+			self.sendSocketNotification('MAP_CONNECTED');
+			self.dashboard.location.start(plugin);
+			return;
+		}
 
-			var onevent = socket.onevent;
-			socket.onevent = function (packet) {
-			    var args = packet.data || [];
-			    onevent.call(this, packet);    	// original call
-			    packet.data = ["*"].concat(args);
-			    onevent.call(this, packet);     // additional call to catch-all
-			};
+		this.isConnected = true;
 
-			socket.on('*', function(command, data) {
-				console.log('Map', command, data);
-
-				onSocketUpdate(command, data);
-			});
-
-			socket.on('close', function () {
-      	socketlist.splice(socketlist.indexOf(socket), 1);
-    	});
-
-			socket.emit('connected');
-
-			function onSocketUpdate(command, data) {
-				if (command === 'MAP_CONNECT') {
-					console.log('MAP_CONNECT');
-					connectPlugin(data.plugin);
-				}
-			}
-
-		  function connectPlugin(plugin) {
-		    Dashboard.location.on(plugin, 'connect', function(data) {
-					socket.emit('MAP_CONNECTED');
-		    });
-
-		    Dashboard.location.on(plugin, 'change', function(data) {
-		      socket.emit('MAP_STATUS', data);
-		    });
-
-		    Dashboard.location.start(plugin);
-		  }
+		this.dashboard.location.once(plugin, 'connect', function(data) {
+			self.sendSocketNotification('MAP_CONNECTED');
 		});
-	}
 
-	function exit() {
-		console.log('Exit map');
-		socketlist.forEach(function(socket) {
-			console.log('Closing map socket');
-		  socket.close();
+		this.dashboard.location.on(plugin, 'change', function(data) {
+			self.sendSocketNotification('MAP_STATUS', data);
 		});
+
+		this.dashboard.location.start(plugin);
 	}
-
-	connectSocket();
-
-	console.log('Module ' + 'map'.yellow.bold + ' started');
-
-	return {
-		exit: exit
-	}
-}
-
-module.exports = {
-	create: function(Dashboard, app, io) {
-		return new Map(Dashboard, app, io);
-	}
-};
+});

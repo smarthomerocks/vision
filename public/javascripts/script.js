@@ -1,28 +1,28 @@
-$(function() {
+NSR.setTheme();
+NSR.renderSections();
+NSR.initNavigation();
+Loader.loadModules();
 
-  NSR.renderSections();
-  NSR.initNavigation();
-  Loader.loadModules();
+moment.locale("sv")
 
-  moment.locale("sv")
+FastClick.attach(document.body);
 
-  FastClick.attach(document.body);
-
+if ($(window).width() > 480) {
   // Disable scroll on the page, add more exceptions here that should be scrollable
   $(document).on('touchmove', function(e) {
     if (e.target.nodeName !== 'INPUT') {
       e.preventDefault();
     }
   });
+}
 
-  // Add click effect on modules that are clickable
-  $(document).on('click', '.box-clickable', function(e) {
-    var target = $(this);
+// Add click effect on modules that are clickable
+$(document).on('click', '.box-clickable', function(e) {
+  var target = $(this);
 
-    target.addClass('box-clickable-active');
+  target.addClass('box-clickable-active');
 
-    setTimeout(function() {
-      target.removeClass('box-clickable-active');
-    }, 20);
-  });
+  setTimeout(function() {
+    target.removeClass('box-clickable-active');
+  }, 20);
 });
