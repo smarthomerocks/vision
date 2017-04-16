@@ -22,3 +22,7 @@ Create config file config/config.js. See config/config-sample.js
 1. Install MQTT Broker (apt-get install mosquitto or brew install mosquitto) 
 2. Configure MQTT Hardware in Domoticz (Setup -> Hardware -> Type: MQTT Client Gateway)
 3. Update options /plugins/domoticz/domoticz.js to fit your setup (host and idx)
+
+## Hosting the application on a Raspberry Pi
+
+[Hosting node-smart-remote](hosting/README.md)
