@@ -41,6 +41,23 @@ function Blink(Dashboard, app, io, config) {
 
 this.statusQueue = [];
 
+this.setArmStatus = function(name, armState = false){
+    console.log('Plugin ' + 'blink '.yellow.bold + 'setArmStatus'.blue + ' state: ' + armState);
+    var camera = blink.cameras[name];
+    if(camera){
+      self.emit('change', {state: 'busy'});
+      camera.setArmed(armState)
+        .then((res) => {
+          self.emit('change', {state: 'idle'});
+          self.getStatus(name);
+        }, (error) => {
+          console.log('Plugin ' + 'blink '.yellow.bold + ' setArmStatus '.blue + ' error'.red + name, error);
+      });
+    } else {
+      console.log('Plugin ' + 'blink '.yellow.bold + ' setArmStatus '.blue + ' error'.red + name + ' camera not found.');
+    }
+};
+
 this.getStatus = function(name) {
 
     var self = this;
@@ -76,10 +93,10 @@ this.getStatus = function(name) {
           }, function (err, response, body) {
 
             self.emit('change', {state: 'idle'});
-
+                    console.log(camera);
             if(response.statusCode == 200){
               camera.thumbnaildata = body.toString('base64');
-              self.emit('change', {id: name, thumbnail: camera.thumbnaildata, lastUpdate: camera.updated_at});
+              self.emit('change', {id: name, thumbnail: camera.thumbnaildata, lastUpdate: camera.updated_at, armed: camera.armed});
             } else {
               console.log('Plugin ' + 'blink '.yellow.bold + 'getStatus'.blue + 'camera ' + name.blue + ' error while fething thumbnail image'.red, err);
               self.emit('change', {id: name, lastUpdate: new Date()});

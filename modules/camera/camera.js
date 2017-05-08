@@ -104,6 +104,10 @@ Module.register("camera",{
 					if(self.lastdata.state){
 						self.viewdata.busyclass = self.lastdata.state;
 					}
+
+					if(self.lastdata.armed){
+						self.viewdata.armed = self.lastdata.armed;
+					}
 					
 					if(self.lastdata.thumbnail){
 						// Keep state to busy while plugin is busy
@@ -116,6 +120,8 @@ Module.register("camera",{
 							self.viewdata.updatedformatted = "Uppdaterad " + date.fromNow();
 						}
 				}
+
+				console.log()
 
 				self.render();
 		}

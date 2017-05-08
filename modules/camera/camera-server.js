@@ -27,13 +27,13 @@ module.exports = ModuleServer.create({
 		});
 
 		this.dashboard.camera.on(plugin, 'change', function(data) {
-			self.sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip, data.state);
+			self.sendStatus(data.id, data.thumbnail, data.videothumbnail, data.lastUpdate, data.liveview, data.clip, data.state, data.armed);
 		});
 
 		this.dashboard.camera.start(plugin);
 	},
 
-	sendStatus: function(id, thumbnail, videothumbnail, lastUpdate, liveview, clip, state) {
-		this.sendSocketNotification('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview, state:state});
+	sendStatus: function(id, thumbnail, videothumbnail, lastUpdate, liveview, clip, state, armed) {
+		this.sendSocketNotification('CAMERA_STATUS', { id: id,clip: clip ,thumbnail: thumbnail, videothumbnail:videothumbnail, lastUpdate: lastUpdate, liveview: liveview, state:state, armed:armed});
 	}
 });
