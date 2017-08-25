@@ -84,9 +84,9 @@ var NSR = (function() {
       var section = $(this).data('section'),
           sectionEl = $('.section-' + section);
 
-      // TODO: Add some fancy animation
-      sections.hide();
-      sectionEl.show();
+      // TODO: Add some FANCY animation
+      sections.hide(200);
+      sectionEl.show(300);
 
       navItems.removeClass('active');
       $(this).addClass('active');

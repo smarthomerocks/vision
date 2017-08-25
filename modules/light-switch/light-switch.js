@@ -3,7 +3,9 @@ Module.register("light-switch",{
 	defaults: {
 		title: "Lampa",
 		plugin: "domoticz",
-		id: 1
+		id: 1,
+		readonly:false,
+		icon: "lightbulb_outline"
 	},
 
 		getStyles: function() {
@@ -21,7 +23,7 @@ Module.register("light-switch",{
 	getDom: function() {
 		var self = this;
 
-		this.$el = $('<div class="box box-clickable light-switch"><div class="box-content"><div class="heading">'+ this.config.title +'</div><i class="material-icons md-64">lightbulb_outline</i></div></div>');
+		this.$el = $('<div class="box'+ (this.config.readonly ? '' : ' box-clickable') +'  light-switch"><div class="box-content"><div class="heading">'+ this.config.title +'</div><i class="material-icons md-64">' + this.config.icon +  '</i></div></div>');
 
 		if (this.isStateOn) {
 			this.$el.addClass('light-switch-on');
@@ -29,10 +31,12 @@ Module.register("light-switch",{
 			this.$el.addClass('light-switch-off');
 		}
 
-		this.$el.on('click', function() {
-			self.sendSocketNotification('LIGHT_SWITCH_TOGGLE', { id: self.config.id, plugin: self.config.plugin, stateOn: !self.isStateOn });
-		});
-
+		if(!this.config.readonly){
+		 this.$el.on('click', function() {
+				self.sendSocketNotification('LIGHT_SWITCH_TOGGLE', { id: self.config.id, plugin: self.config.plugin, stateOn: !self.isStateOn });
+			});
+		}
+		
 		this.$el.css({
      'opacity' : 0.4
     });

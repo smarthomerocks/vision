@@ -93,7 +93,6 @@ this.getStatus = function(name) {
           }, function (err, response, body) {
 
             self.emit('change', {state: 'idle'});
-                    console.log(camera);
             if(response.statusCode == 200){
               camera.thumbnaildata = body.toString('base64');
               self.emit('change', {id: name, thumbnail: camera.thumbnaildata, lastUpdate: camera.updated_at, armed: camera.armed});

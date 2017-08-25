@@ -48,9 +48,7 @@ function Domoticz(Dashboard, app, io, config) {
                 }
             }
           });
-        }
-
-        if(data.stype == 'Temp' || data.dtype == 'Temp'){
+        } else if(data.stype == 'Temp' || data.dtype == 'Temp'){
           // Temperature
           request({
             uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
@@ -65,11 +63,26 @@ function Domoticz(Dashboard, app, io, config) {
                 }
             }
           });
-        }
-        
-        self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
+        } else if(data.stype == 'RFXMeter counter' || data.dtype == 'RFXMeter'){
+          // Counter
+          request({
+            uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
+          }, function (err, response, body) {
+            var result = JSON.parse(body);
+            if(result.status == 'OK'){
+                var lowest = _.min(result.result, function(o){return o.tm;});
+                var highest = _.max(result.result, function(o){return o.te;});
 
-        console.log('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
+                if(lowest && highest){
+                  self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d, unit: data.ValueUnits   });
+                }
+            }
+          });
+        } else {
+          self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, unit: data.ValueUnits  });
+        }
+
+        //console.log('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
       });
 
       this.domoticz.on('connect', function() {
