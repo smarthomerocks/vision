@@ -35,7 +35,7 @@ var config = {
       }
     ],
     plugins: {
-      "domoticz": {
+      /*"domoticz": {
         host: "192.168.1.127",
         httpport: 8080,
         log: false
@@ -46,11 +46,11 @@ var config = {
       "owntracks": {
         host: "192.168.0.39"
       },
-      "ical": {},
+      "ical": {},*/
       "smhi": {
         fetchInterval: 300000
       },
-      "itach": {
+      /*"itach": {
         host: "192.168.1.127",
         hardwares: {
           tv: {
@@ -81,10 +81,10 @@ var config = {
         // http://www.nordpoolspot.com/globalassets/download-center/day-ahead/elspot-area-change-log.pdf
         // Sweden: http://www.natomraden.se/
         area: 'SE3'
-      }
+      }*/
     },
     modules: [
-      {
+      /*{
         module: "announce", // Requires SSL
         config: {
           title: 'Hela huset',
@@ -94,18 +94,18 @@ var config = {
           room: 'Bärbar',
           section: "start",
           column: 1,
-          row: 1
+          row: 6
         }
-      },
+      },*/
       {
         module: "clock",
         config: {
           section: "start",
           column: 1,
-          row: 6
+          row: 1
         }
       },
-      {
+      /*{
         module: "light-switch",
         config: {
           title: "Fasad",
@@ -131,8 +131,8 @@ var config = {
           size_y: 1
         }
       },
-    {
-    module: "electricity-spot-price",
+      {
+    	module: "electricity-spot-price",
         config: {
         title: "Elpris (SEK)",
             plugin: "electricity-spot-price",
@@ -143,7 +143,7 @@ var config = {
             size_x: 2,
             size_y: 1
         }
-    }
+      },
       {
         module: "light-switch",
         config: {
@@ -196,7 +196,7 @@ var config = {
           size_x: 1,
           size_y: 2
         }
-      },
+      },*/
       {
         module: "weather-current",
         config: {
@@ -205,12 +205,12 @@ var config = {
           lat: '57.634800',
           lon: '18.294840',
           section: "start",
-          column: 5,
-          row: 3,
+          column: 3,
+          row: 1,
           size_x: 1,
           size_y: 1
         }
-      },
+      }/*,
       {
         module: "map",
         config: {
@@ -228,7 +228,7 @@ var config = {
             }
           }
         }
-      }
+      }*/
     ]
   };
 
