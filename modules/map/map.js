@@ -56,6 +56,22 @@ Module.register("map",{
 		}
 
 		this.markers[data.id] = this.createMarker(data.id, data.lat, data.lon);
+
+		this.setCenterPoint();
+	},
+
+	setCenterPoint: function() {
+		var bound = new google.maps.LatLngBounds(),
+				marker;
+
+		for (markerId in this.markers) {
+			if (this.markers.hasOwnProperty(markerId)) {
+				marker = this.markers[markerId];
+		  	bound.extend( new google.maps.LatLng(marker.position.lat(), marker.position.lng()) );
+			}
+		}
+
+		this.map.setCenter(bound.getCenter());
 	},
 
 	initMap: function() {
@@ -64,7 +80,6 @@ Module.register("map",{
         streetViewControl: false,
         mapTypeControl: false,
         zoomControl: false,
-        center: new google.maps.LatLng(57.635146, 18.291594), // TODO Center map based on markers
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: this.config.styles
     });
