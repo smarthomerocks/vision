@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 WorkingDirectory=/opt/node-smart-remote
-ExecStart=NODE_ENV=production PORT=80 npm start
+ExecStart=NODE_ENV=production PORT=80 /usr/local/bin/npm start
 Restart=on-failure
 RestartSec=5
 TimeoutSec=30

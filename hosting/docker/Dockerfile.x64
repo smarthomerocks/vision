@@ -1,6 +1,7 @@
 FROM node:6.10.0
 
 ENV NODE_ENV production
+ENV USING_DOCKER true
 RUN mkdir -p /opt/node-smart-remote
 WORKDIR /opt/node-smart-remote
 
