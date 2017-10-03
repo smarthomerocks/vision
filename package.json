@@ -37,7 +37,8 @@
     "ical": "0.5.0",
     "moment": "2.18.1",
     "underscore": "^1.8.3",
-    "nordpool": "1.1.0"
+    "nordpool": "1.1.0",
+    "verisure": "^1.2.0"
   },
   "devDependencies": {
     "eslint": "3.11.0",
