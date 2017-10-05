@@ -115,7 +115,7 @@
     "node": true,
     "mocha": true
   },
-    "globals": {   
+    "globals": {
     "Handlebars": false,
     "moment": false,
         "_": false,    

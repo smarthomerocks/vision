@@ -1,7 +1,6 @@
 var express = require('express');
 var fs = require('fs');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -36,7 +35,7 @@ app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   res.io = io;
   next();
 });
@@ -86,11 +85,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
-process.on( "SIGINT", function() {
-	dashboard.exit();
+process.on('SIGINT', function() {
+  dashboard.exit();
 
   setTimeout(function() {
-		process.exit();
+    process.exit();
   }, 1000);
 });
 

@@ -2,12 +2,12 @@ var config = {
   ssl: false,
   theme: 'default',
   paths: {
-    modules: "/modules"
+    modules: '/modules'
   },
   sections: [
     {
-      section: "start",
-      title: "Start",
+      section: 'start',
+      title: 'Start',
       margins: [10, 10],
       base_dimensions: [180, 140],
       icon: 'home'
@@ -17,13 +17,13 @@ var config = {
 
   },
   modules: [
-      {
-        module: "clock",
-        config: {
-          section: "start",
-          column: 1,
-          row: 1
-        }
+    {
+      module: 'clock',
+      config: {
+        section: 'start',
+        column: 1,
+        row: 1
+      }
     }
   ]
 };

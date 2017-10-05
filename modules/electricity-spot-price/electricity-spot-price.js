@@ -1,8 +1,9 @@
-Module.register("electricity-spot-price", {
+/*global Module*/
+Module.register('electricity-spot-price', {
 
   defaults: {
-    title: "Elpris",
-    plugin: "electricity-spot-price",
+    title: 'Elpris',
+    plugin: 'electricity-spot-price',
     id: 4,
     SCALE: 100, // scale of bars in graphs.
     NUMBER_OF_BARS: 23 // to fit in on the x-axis, an uneven number would be nice.
@@ -116,7 +117,7 @@ Module.register("electricity-spot-price", {
       minHourPrice: minHourPrice,
       hourPrices: pricelist.map((entry, index) => {
         return {
-          price: +(Math.round(entry.price + "e+3") + "e-3"), // round to three digits.
+          price: +(Math.round(entry.price + 'e+3') + 'e-3'), // round to three digits.
           time: entry.date,
           height: (entry.price - minHourPrice) / (maxHourPrice - minHourPrice) * this.config.SCALE + 1, // +1 for preventing minHourPrice from being invisible.
           x: index * 15,

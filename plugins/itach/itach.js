@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var async = require('async');
-var itach = require("itach");
+var itach = require('itach');
 
 function ITach(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -23,7 +23,7 @@ function ITach(Dashboard, app, io, config) {
     if (this.isConnected) {
       this.emit('connect');
     } else {
-      itach.on("connect", function () {
+      itach.on('connect', function() {
         console.log('ITach connected');
 
         self.isConnected = true;
@@ -41,12 +41,12 @@ function ITach(Dashboard, app, io, config) {
 
     async.eachSeries(commands, function(command, callback) {
       var options = {
-            repeat: command.repeat || 1,
-            module: config.hardwares[command.hardware].module,
-            ir: self.commands[command.hardware][command.command]
-          };
+        repeat: command.repeat || 1,
+        module: config.hardwares[command.hardware].module,
+        ir: self.commands[command.hardware][command.command]
+      };
 
-      itach.sendir(options, function (err, data) {
+      itach.sendir(options, function(err, data) {
         if (err) {
           hasError = true;
         }
@@ -59,12 +59,12 @@ function ITach(Dashboard, app, io, config) {
       }
     });
   };
-};
+}
 
 util.inherits(ITach, EventEmitter);
 
 module.exports = {
-	create: function(Dashboard, app, io, config) {
-		return new ITach(Dashboard, app, io, config);
-	}
+  create: function(Dashboard, app, io, config) {
+    return new ITach(Dashboard, app, io, config);
+  }
 };

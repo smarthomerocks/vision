@@ -1,30 +1,30 @@
 const EventEmitter = require('events').EventEmitter,
-    util = require('util'),
-    onvif = require('onvif');
+      util = require('util'),
+      onvif = require('onvif');
 
 function Onvif(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
   let self = this,
-      cameras = new Map(),
-      probeInterval;
+      cameras = new Map();
+      //probeInterval;
 
 // https://www.reddit.com/r/raspberry_pi/comments/5677qw/hardware_accelerated_x264_encoding_with_ffmpeg/
 
 
-  /*if (!config.username || !config.password) {
+  /*if (!config.username || !config.password) {
    console.log('Plugin "' + 'onvif'.yellow.bold + '", please check config. Could not find username and/or password.'.red);
    return;
-  }*/
+}*/
 
   /**
    * Scan network for onvif-enabled cameras.
-   * @returns {Promise}
+   *
    */
   function scan4Cams() {
     onvif.Discovery.probe(function(err, cams) {
       if (err) {
-        console.warn("Got an error when scanning network for available onvif-compatible cameras. Error=" + err.message);
+        console.warn('Got an error when scanning network for available onvif-compatible cameras. Error=' + err.message);
       } else {
         let tmpCameras = new Map();
 

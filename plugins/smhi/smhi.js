@@ -1,8 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
-var async = require('async');
-var APIFetcher = require("./apifetcher.js");
-var colors = require('colors');
+var APIFetcher = require('./apifetcher.js');
+var colors = require('colors'); //eslint-disable-line no-unused-vars
 
 function SMHI(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -22,37 +21,37 @@ function SMHI(Dashboard, app, io, config) {
         fetcher,
         id = lat + lon;
 
-		if (typeof self.fetchers[id] === "undefined") {
-			fetcher = new APIFetcher(lat, lon, config.fetchInterval || 60000);
+    if (typeof self.fetchers[id] === 'undefined') {
+      fetcher = new APIFetcher(lat, lon, config.fetchInterval || 60000);
 
-			fetcher.onReceive(function(fetcher) {
+      fetcher.onReceive(function(fetcher) {
         var data = { lat: fetcher.lat(), lon: fetcher.lon(), currentWeather: fetcher.currentWeather()};
 
         console.log('Plugin ' + 'smhi '.yellow.bold + 'data'.blue, data);
 
         self.emit('change', data);
-			});
+      });
 
-			fetcher.onError(function(fetcher, error) {
+      fetcher.onError(function(fetcher, error) {
         console.log('Plugin ' + 'smhi '.yellow.bold + 'Fetch error'.blue, error);
-			});
+      });
 
-			self.fetchers[id] = fetcher;
-		} else {
+      self.fetchers[id] = fetcher;
+    } else {
       console.log('Plugin ' + 'smhi '.yellow.bold + 'Use existing fetcher for lat: ' + lat + ' lon: ' + lon);
-			fetcher = self.fetchers[id];
-			fetcher.broadcastCurrentWeather();
-		}
+      fetcher = self.fetchers[id];
+      fetcher.broadcastCurrentWeather();
+    }
 
-		fetcher.startFetch();
+    fetcher.startFetch();
   };
 
-};
+}
 
 util.inherits(SMHI, EventEmitter);
 
 module.exports = {
-	create: function(Dashboard, app, io, config) {
-		return new SMHI(Dashboard, app, io, config);
-	}
+  create: function(Dashboard, app, io, config) {
+    return new SMHI(Dashboard, app, io, config);
+  }
 };

@@ -1,4 +1,4 @@
-var ModuleServer = require("../../lib/module-server.js");
+var ModuleServer = require('../../lib/module-server.js');
 
 module.exports = ModuleServer.create({
   socketNotificationReceived: function(command, data) {

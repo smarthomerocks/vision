@@ -1,7 +1,7 @@
-const EventEmitter = require('events').EventEmitter
-util = require('util'),
-    electricity = require('nordpool'),
-    moment = require('moment');
+const EventEmitter = require('events').EventEmitter,
+      util = require('util'),
+      electricity = require('nordpool'),
+      moment = require('moment');
 
 function Electricity_spot_price(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -41,7 +41,7 @@ function Electricity_spot_price(Dashboard, app, io, config) {
 
   self.getPriceList = function(id) {
 
-    console.log("Electricity_spot_price: getting price list.");
+    console.log('Electricity_spot_price: getting price list.');
 
     let requests = [
       getPricePerDay(moment().subtract(1, 'days')),
