@@ -1,4 +1,4 @@
-Module.register("doorlock",{
+Module.register("security-alarm",{
   
     defaults: {
       title: "Ytterdörr",
@@ -6,21 +6,21 @@ Module.register("doorlock",{
     },
   
     getStyles: function() {
-      return ['doorlock.css'];
+      return ['security-alarm.css'];
     },
   
     start: function() {
-      console.log('Starting doorlock ' + this.config.title);
+      console.log('Starting security-alarm ' + this.config.title);
 
       this.isConnected = false;
       
-      this.sendSocketNotification('DOORLOCK_CONNECT', { plugin: this.config.plugin});
+      this.sendSocketNotification('SECURITYALARM_CONNECT', { plugin: this.config.plugin});
     },
   
     getDom: function() {
       var self = this;
   
-      this.$el = $('<div class="box doorlock">'+
+      this.$el = $('<div class="box security-alarm">'+
       '<div class="box-content">'+
         '<div class="heading">'+ this.config.title +'</div>'+
           '<div class="state"></div>'+
@@ -38,7 +38,7 @@ Module.register("doorlock",{
   
     socketNotificationReceived: function(command, data) {
       var self = this;
-      if (command === 'DOORLOCK_CONNECTED') {
+      if (command === 'SECURITYALARM_CONNECTED') {
         // Connected to plugin, get status
 
         this.$el.css({
@@ -47,12 +47,12 @@ Module.register("doorlock",{
 
         if(!self.isConnected){
           // Connected to plugin, get status if we did not recieve any update
-          this.sendSocketNotification('DOORLOCK_STATUS', { alias: this.config.alias, plugin: this.config.plugin, area: this.config.area });
+          this.sendSocketNotification('SECURITYALARM_STATUS', { alias: this.config.alias, plugin: this.config.plugin, area: this.config.area });
           self.isConnected = true;
         }
 
   
-      } else if (command === 'DOORLOCK_STATUS' && data.area === this.config.area && data.alias === this.config.alias) {
+      } else if (command === 'SECURITYALARM_STATUS' && data.alias === this.config.alias) {
         self.lastdata = data;
   
         this.updateDom();
@@ -62,9 +62,11 @@ Module.register("doorlock",{
     updateDom: function() {
       var self = this;
       if (this.$el) {
-        this.$el.find('.state').html(self.lastdata.lockstate ? '<i class="material-icons md-48">lock</i>' : '<i class="material-icons md-48">lock_open</i>');
-        this.$el.find('.date').html(moment(self.lastdata.lockdate).calendar());
-        this.$el.find('.user').html(self.lastdata.user ? self.lastdata.user : "");
+        this.$el.find('.state').html(
+          (self.lastdata.alarm_state === 'ARMED_AWAY' ? 'Larmat' : (self.lastdata.alarm_state === 'ARMED_HOME' ? 'Skalskyddat' : 'Avlarmat'))
+        );
+        
+        this.$el.find('.date').html(moment(self.lastdata.armdate).calendar());
       }
     }
   });

@@ -6,22 +6,22 @@ module.exports = ModuleServer.create({
 			this.connectPlugin(data.plugin);
 		} else if (command === 'DOORLOCK_STATUS') {
 			this.dashboard.doorlock.getStatus(data.plugin, data.alias, data.area);
-			
 		}
 	},
 
 	connectPlugin: function(plugin) {
-		var self = this;
+		let self = this;
+			
 
-		if (this.isConnected) {
-			self.sendSocketNotification('DOORLOCK_CONNECTED');
+		if(this.isConnected) {
+			self.sendSocketNotification('DOORLOCK_CONNECTED');	
 			return;
 		}
 
 		this.isConnected = true;
 
 		this.dashboard.doorlock.once(plugin, 'connect', function(data) {
-			self.sendSocketNotification('DOORLOCK_CONNECTED');
+				self.sendSocketNotification('DOORLOCK_CONNECTED');	
 		});
 
 		this.dashboard.doorlock.on(plugin, 'doorlock_change', function(data) {
