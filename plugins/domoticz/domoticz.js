@@ -7,10 +7,14 @@ var request = require('request');
 function Domoticz(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
+  let modulesConfig;
   this.type = 'home';
+
   this.start = function() {
 
-    var idx = _.map(_.filter(Dashboard.getConfig().modules, function(module){ return module.config.plugin == 'domoticz';}), function(module) { return module.config['id'] })
+    modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'domoticz').map(module => module.config);
+
+    let idx = modulesConfig.map(config => config['id']);
 
     var self = this,
         options = {
@@ -87,6 +91,13 @@ function Domoticz(Dashboard, app, io, config) {
 
       this.domoticz.on('connect', function() {
         console.log('Plugin ' + 'domoticz '.yellow.bold + 'connected'.blue + ' with MQTT');
+
+        // Momentary buttons should all be off to start with.
+        for (let module of modulesConfig) {
+          if (module.type === 'button momentary') {
+            self.client.publish(module.setTopic, 0);
+          }
+        }
 
         self.emit('connect');
       });
