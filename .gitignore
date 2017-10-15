@@ -8,3 +8,4 @@ nbproject
 node_modules
 config/config.js
 public/images/camera/
+modules/**/*.css

@@ -69,7 +69,7 @@ function MQTT(Dashboard, app, io, config) {
   self.switch = function(id, level) {
     console.log('Plugin ' + 'mqtt '.yellow.bold + 'switch'.blue, id, level);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
-    self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', string(level)));
+    self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)));
   };
 
   self.toggle = function(id, state) {
