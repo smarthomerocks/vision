@@ -33,6 +33,6 @@ module.exports = ModuleServer.create({
 	},
 
 	sendStatus: function(id, level) {
-    this.sendSocketNotification('DIMMER_LEVEL', {id: id, level: level});
+    this.sendSocketNotification('DIMMER_STATUS', {id: id, level: level});
 	}
 });
