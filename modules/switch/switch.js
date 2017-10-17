@@ -12,7 +12,6 @@ Module.register("switch", {
     size_x: 1,
     size_y: 1
 	},
-  self: undefined,
 
   getStyles: function() {
 		return ['switch.css'];
@@ -22,7 +21,6 @@ Module.register("switch", {
 		console.log('Starting switch ' + this.config.title);
 
 		this.isStateOn = false;
-    self = this;
 
 		this.sendSocketNotification('SWITCH_CONNECT', {id: this.config.id, plugin: this.config.plugin});
 	},
@@ -38,10 +36,10 @@ Module.register("switch", {
 		}
 
 		if (!this.config.readonly) {
-      this.$el.on('touchstart', this.onPress);
-      this.$el.on('mousedown', this.onPress);
-      this.$el.on('touchend', this.onRelease);
-      this.$el.on('mouseup', this.onRelease);
+      this.$el.on('touchstart', this.onPress.bind(this));
+      this.$el.on('mousedown', this.onPress.bind(this));
+      this.$el.on('touchend', this.onRelease.bind(this));
+      this.$el.on('mouseup', this.onRelease.bind(this));
     }
 		
 		this.$el.css({
@@ -52,16 +50,16 @@ Module.register("switch", {
 	},
 
   onPress: function() {
-    if (self.config.type === 'button momentary') {
-      self.sendSocketNotification('SWITCH_TOGGLE', {id: self.config.id, plugin: self.config.plugin, stateOn: true});
+    if (this.config.type === 'button momentary') {
+      this.sendSocketNotification('SWITCH_TOGGLE', {id: this.config.id, plugin: this.config.plugin, stateOn: true});
     }
   },
 
   onRelease: function() {
-    if (self.config.type === 'button momentary') {
-      self.sendSocketNotification('SWITCH_TOGGLE', {id: self.config.id, plugin: self.config.plugin, stateOn: false});
+    if (this.config.type === 'button momentary') {
+      this.sendSocketNotification('SWITCH_TOGGLE', {id: this.config.id, plugin: this.config.plugin, stateOn: false});
     } else {
-      self.sendSocketNotification('SWITCH_TOGGLE', {id: self.config.id, plugin: self.config.plugin, stateOn: !self.isStateOn});
+      this.sendSocketNotification('SWITCH_TOGGLE', {id: this.config.id, plugin: this.config.plugin, stateOn: !this.isStateOn});
     }
   },
 

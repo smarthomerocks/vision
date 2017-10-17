@@ -42,9 +42,20 @@ function MQTT(Dashboard, app, io, config) {
       });
 
       self.client.on('message', function(topic, message) {
-        json = JSON.parse(message);
+        let asString = String(message).toLowerCase(),
+          result = {};
 
-        self.emit('change', {id: json.id, level: json.level, isStateOn: !!json.level});
+        if (asString === 'on') {
+          asString = '100';
+        } else if (asString === 'off') {
+          asString = '0';
+        }
+
+        result.level = Number(asString);
+        result.isStateOn = !!result.level;
+        result.id = modulesConfig.find(mod => mod.statusTopic === topic).id;
+
+        self.emit('change', result);
       });
 
       self.client.on('error', function(error) {
@@ -63,7 +74,10 @@ function MQTT(Dashboard, app, io, config) {
   self.getStatus = function(id) {
     console.log('Plugin ' + 'mqtt '.yellow.bold + 'getStatus'.blue, id);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
-    self.client.publish(moduleConfig.getTopic, '{}');
+
+    if (moduleConfig && moduleConfig.getTopic && moduleConfig.getTopic.length > 0) {
+      self.client.publish(moduleConfig.getTopic, '');
+    }
   };
 
   self.switch = function(id, level) {

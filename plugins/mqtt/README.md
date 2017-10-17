@@ -6,6 +6,12 @@ Plugin name: mqtt
 
 Generic plugin for communicating with devices through a MQTT broker, for example [Mosquitto](https://mosquitto.org/).
 
+## Tested hardware
+
+[Sonoff 4CH](https://www.itead.cc/wiki/Sonoff_4CH)
+
+[Homebuilt LED-controller](https://github.com/trycoon/ledstripe-controller)
+
 
 ## Config
 
