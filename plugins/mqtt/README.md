@@ -30,7 +30,7 @@ Generic plugin for communicating with devices through a MQTT broker, for example
         port: 1883,
         username: "my username",
         password: "my password"
-
+    }
 
 ## Author
 

@@ -53,8 +53,6 @@ Module.register("dimmer", {
 		if (command === 'DIMMER_CONNECTED') {
 			// Connected to plugin, get status
 			this.sendSocketNotification('DIMMER_STATUS', {id: this.config.id, plugin: this.config.plugin});
-
-
 		} else if (command === 'DIMMER_STATUS' && data.id === this.config.id) {
 			this.level = data.level;
 

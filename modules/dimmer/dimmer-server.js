@@ -19,10 +19,9 @@ module.exports = ModuleServer.create({
 			return;
 		}
 
-		this.isConnected = true;
-
 		this.dashboard.dimmer.once(plugin, 'connect', function(data) {
-			self.sendSocketNotification('DIMMER_CONNECTED');
+      this.isConnected = true;
+      self.sendSocketNotification('DIMMER_CONNECTED');
 		});
 
 		this.dashboard.dimmer.on(plugin, 'change', function(data) {
