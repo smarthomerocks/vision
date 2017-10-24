@@ -2,10 +2,13 @@
 
 Pluginname: verisure
 
-
 ## Description
 
-Plugin for communicating with Versiure alarm system thru (non)public API. Currently only support for digital doorlock (Yale Doorman).
+Plugin for communicating with Versiure alarm system thru (non)public API. Currently support for digital doorlock (Yale Doorman) and alarm status.
+
+Create a new user with read-only rights on [Verisure My Pages](https://mypages.verisure.com)
+
+More info about Verisure can be found at [Verisure](https:/www.verisure.com)
 
 ## Config
 

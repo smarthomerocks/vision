@@ -48,7 +48,7 @@ Due to web browser restrictions you have to run this dashboard over the HTTPS pr
 
 ## Screenshots
 
-![announcement with dark theme](doc/announce-dark.png "Announce - dark theme") &nbsp; ![ recording announcement with dark theme](doc/announce-dark-recording.png "Announce - recording announcement") &nbsp; ![announcement with dark theme](doc/announce-light.png "Announce - light theme")
+![announcement with dark theme](doc/announce-dark.png "Announce - dark theme") &nbsp; ![ recording announcement with dark theme](doc/announce-dark-recording.png "Announce - recording announcement") &nbsp; ![announcement with light theme](doc/announce-light.png "Announce - light theme")
 
 
 ## Author

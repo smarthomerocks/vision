@@ -1,9 +1,9 @@
 # node-smart-remote
 
-Dashboard och fjärrkontroll för hela hemmet.
+Easy to use Dashboard for Home automation
 
-* [Bakgrund till projektet](https://gitlab.com/emilohman/node-smart-remote/wikis/background)
-* [Förslag på arkitektur](https://gitlab.com/emilohman/node-smart-remote/wikis/arkitektur)
+* [Background to application](https://gitlab.com/emilohman/node-smart-remote/wikis/background)
+* [Application architecture](https://gitlab.com/emilohman/node-smart-remote/wikis/arkitektur)
 
 
 ![Screenshot](/uploads/6393dba9bc6b6b5734e5ef5fbc2433b0/Screenshot.png)
@@ -11,11 +11,12 @@ Dashboard och fjärrkontroll för hela hemmet.
 
 # Install
 
-Create config file config/config.js. See config/config-sample.js
-
-1. npm install
-2. npm start
-3. Goto http://localhost:3003
+1. Download and install [Node.js](https://nodejs.org)
+2. Run "npm install" in the application folder
+3. Copy "config/config-sample.js" to "config/config.js"
+4. Edit "config/config.js" and make your required settings. See the "README.md" files of the modules and plugins you want to use for example configurations
+5. Run "npm start"
+6. Point your web browser to [http://localhost:3003](http://localhost:3003)
 
 ## Domoticz and MQTT
 

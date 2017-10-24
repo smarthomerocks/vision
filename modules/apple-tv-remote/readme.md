@@ -25,19 +25,49 @@ Modulename: <TBD>
 
 ### Config example
 
-{
-        module: "light-switch",
+    {
+        module: "apple-tv-remote",
         config: {
-          title: "Fasad",
-          plugin: "domoticz",
-          id: 1,
-          section: "start",
-          column: 2,
-          row: 1,
-          size_x: 1,
-          size_y: 1
+            title: "Apple TV",
+            section: "remotecontrol",
+            plugin: "itach",
+            column: 1,
+            row: 1,
+            size_x: 1,
+            size_y: 2,
+            buttons: {
+              up: [{
+                hardware: "appleTv",
+                command: "CURSOR UP"
+              }],
+              down: [{
+                hardware: "appleTv",
+                command: "CURSOR DOWN"
+              }],
+              left: [{
+                hardware: "appleTv",
+                command: "CURSOR LEFT"
+              }],
+              right: [{
+                hardware: "appleTv",
+                command: "CURSOR RIGHT"
+              }],
+              enter: [{
+                hardware: "appleTv",
+                command: "CURSOR ENTER"
+              }],
+              menu: [{
+                hardware: "appleTv",
+                command: "MENU MAIN"
+              }],
+              play: [{
+                hardware: "appleTv",
+                command: "PLAY PAUSE TOGGLE"
+              }]
+            }
         }
-      }
+    }
+
 
 ## Screenshots
 
