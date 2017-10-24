@@ -23,18 +23,9 @@ Module.register("announce",{
     if (!navigator.getUserMedia)
         return;
 
-    navigator.getUserMedia(
-    {
-        "audio": {
-            "mandatory": {
-                "googEchoCancellation": "false",
-                "googAutoGainControl": "false",
-                "googNoiseSuppression": "false",
-                "googHighpassFilter": "false"
-            },
-            "optional": []
-        }
-    }, $.proxy(this.gotStream, this), function(e) {});
+		window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+    navigator.getUserMedia({"audio": true}, $.proxy(this.gotStream, this), function(e) {});
 
 		this.sendSocketNotification('ANNOUNCE_CONNECT');
 	},
@@ -105,25 +96,14 @@ Module.register("announce",{
   },
 
   gotStream: function(stream) {
-		var self = this;
-
-		window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
-    var audioContext = new AudioContext(),
+		var self = this,
+				audioContext = new AudioContext();
 				inputPoint = audioContext.createGain(),
-				audioInput = audioContext.createMediaStreamSource(stream);
+				audioInput = audioContext.createMediaStreamSource(stream),
+				analyser = audioContext.createAnalyser(),
+				processor = audioContext.createScriptProcessor(2048, 1, 1);
 
-		audioInput.connect(inputPoint);
-
-		this.audioRecorder = new Recorder(inputPoint);
-
-		// Create analyzer for the animation
-
-		var analyser = audioContext.createAnalyser();
-		analyser.connect(audioContext.destination);
 		analyser.fftSize = 2048;
-
-		var bufferLength = analyser.frequencyBinCount;
 
 		function getAverageVolume(data) {
 			var values = 0;
@@ -132,12 +112,13 @@ Module.register("announce",{
 				values += data[i];
 			}
 			return values / data.length;
-		}
+		};
 
 		audioInput.connect(analyser);
-
-		var processor = audioContext.createScriptProcessor(2048, 1, 1);
+		analyser.connect(inputPoint);
 		processor.connect(audioContext.destination);
+
+		this.audioRecorder = new Recorder(inputPoint);
 
 		processor.onaudioprocess = function() {
 			var array =  new Uint8Array(analyser.frequencyBinCount);
