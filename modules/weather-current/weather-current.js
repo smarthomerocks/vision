@@ -1,53 +1,53 @@
-Module.register("weather-current",{
+/*global Module*/
+Module.register('weather-current', {
 
-	defaults: {
-		title: "Visby",
-		plugin: "smhi",
+  defaults: {
+    title: 'Visby',
+    plugin: 'smhi',
     lat: '57.634800',
     lon: '18.294840'
-	},
+  },
 
-	getStyles: function() {
-		return ['weather-current.css'];
-	},
+  getStyles: function() {
+    return ['weather-current.css'];
+  },
 
-	start: function() {
-		console.log('Starting weather-current ' + this.config.title);
+  start: function() {
+    console.log('Starting weather-current ' + this.config.title);
 
-		this.isStateOn = false;
+    this.isStateOn = false;
 
-		this.sendSocketNotification('WEATHER_CURRENT_CONNECT', { plugin: this.config.plugin });
-	},
+    this.sendSocketNotification('WEATHER_CURRENT_CONNECT', { plugin: this.config.plugin });
+  },
 
-	getDom: function() {
-		var self = this;
+  getDom: function() {
 
-		this.$el = $('<div class="box wheater-current"><div class="box-content"><div class="heading">'+ this.config.title +'</div><div class="weather-current-content"><span class="temp hidden"></span><br /><i class="wi wi-day-sunny hidden"></i></div></div></div>');
+    this.$el = $('<div class="box wheater-current"><div class="box-content"><div class="heading">'+ this.config.title +'</div><div class="weather-current-content"><span class="temp hidden"></span><br /><i class="wi wi-day-sunny hidden"></i></div></div></div>');
 
-		this.$el.css({
-     'opacity' : 0.4
+    this.$el.css({
+      'opacity' : 0.4
     });
 
-		return this.$el;
-	},
+    return this.$el;
+  },
 
-	socketNotificationReceived: function(command, data) {
-    function getTime(dateTime) {
-      var date = new Date(dateTime),
-          hours = String(date.getHours()),
-          minutes = String(date.getMinutes());
+  socketNotificationReceived: function(command, data) {
+    // function getTime(dateTime) {
+    //   var date = new Date(dateTime),
+    //       hours = String(date.getHours()),
+    //       minutes = String(date.getMinutes());
+    //
+    //   return (hours.length < 2 ? '0' : '') + hours + ':' + (minutes.length < 2 ? '0' : '') + minutes;
+    // }
 
-      return (hours.length < 2 ? '0' : '') + hours + ':' + (minutes.length < 2 ? '0' : '') + minutes;
-    }
-
-		if (command === 'WEATHER_CURRENT_CONNECTED') {
+    if (command === 'WEATHER_CURRENT_CONNECTED') {
       this.$el.css({
         'opacity' : 1
       });
 
       this.sendSocketNotification('WEATHER_CURRENT_STATUS', { plugin: this.config.plugin, lat: this.config.lat, lon: this.config.lon });
 
-		} else if (command === 'WEATHER_CURRENT_STATUS' && this.config.lat === data.lat && this.config.lon === data.lon) {
+    } else if (command === 'WEATHER_CURRENT_STATUS' && this.config.lat === data.lat && this.config.lon === data.lon) {
       var currentWeather = data.currentWeather,
           weatherIconMap = {
             '1': 'wi-day-sunny',
@@ -69,5 +69,5 @@ Module.register("weather-current",{
 
       this.$el.find('.weather-current-content').html('<i class="wi ' + weatherIconMap[currentWeather.icon] + '"></i><br /><span class="temp"> ' + Math.round(currentWeather.temp, 10) + ' &deg;C</span>');
     }
-	}
+  }
 });

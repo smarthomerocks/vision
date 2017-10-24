@@ -1,7 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
-var async = require('async');
-var mqtt = require("mqtt");
+var mqtt = require('mqtt');
 
 function Owntracks(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -21,7 +20,7 @@ function Owntracks(Dashboard, app, io, config) {
     } else {
       this.mqttConnection = mqtt.connect('mqtt://' + config.host);
 
-      this.mqttConnection.on('message', function (topic, message) {
+      this.mqttConnection.on('message', function(topic, message) {
         var deviceId = topic.split('/')[2],
             data = JSON.parse(message),
             owntracksData = {id: deviceId, lat: data.lat, lon: data.lon};
@@ -32,7 +31,7 @@ function Owntracks(Dashboard, app, io, config) {
         console.log('Owntracks data: ' + JSON.stringify(owntracksData));
       });
 
-      this.mqttConnection.on("connect", function () {
+      this.mqttConnection.on('connect', function() {
         console.log('Owntracks connected');
 
         self.mqttConnection.subscribe('owntracks/#');
@@ -42,12 +41,12 @@ function Owntracks(Dashboard, app, io, config) {
     }
   };
 
-};
+}
 
 util.inherits(Owntracks, EventEmitter);
 
 module.exports = {
-	create: function(Dashboard, app, io, config) {
-		return new Owntracks(Dashboard, app, io, config);
-	}
+  create: function(Dashboard, app, io, config) {
+    return new Owntracks(Dashboard, app, io, config);
+  }
 };

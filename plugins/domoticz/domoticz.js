@@ -33,57 +33,57 @@ function Domoticz(Dashboard, app, io, config) {
       this.domoticz.on('data', function(data) {
 
         // Try to get more info by polling Domoticz thru http 
-        if(data.stype == 'kWh' || data.dtype == 'kWh'){
+        if(data.stype === 'kWh' || data.dtype === 'kWh') {
           // Energy meter
           request({
-            uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=counter&idx='+data.idx+'&range=month'
-          }, function (err, response, body) {
+            uri: 'http://' + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=counter&idx='+data.idx+'&range=month'
+          }, function(err, response, body) {
             var result = JSON.parse(body);
 
-            if(result.status == 'OK'){
+            if(result.status === 'OK') {
 
-                var todayDate = new Date();
-                var lowest = _.min(result.result, function(o){return o.v;});
-                var highest = _.max(result.result, function(o){return o.v;});
-                var today = _.find(result.result, function(o){ return o.d == todayDate.toISOString().substring(0, 10)});
+              var todayDate = new Date();
+              var lowest = _.min(result.result, function(o) {return o.v;});
+              var highest = _.max(result.result, function(o) {return o.v;});
+              var today = _.find(result.result, function(o) { return o.d === todayDate.toISOString().substring(0, 10);});
 
-                if(lowest && highest){
-                  self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.v, lowestdate: lowest.d, highest: highest.v, highestdate: highest.d, today: today ? today.v : null  });
-                }
+              if(lowest && highest) {
+                self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.v, lowestdate: lowest.d, highest: highest.v, highestdate: highest.d, today: today ? today.v : null });
+              }
             }
           });
-        } else if(data.stype == 'Temp' || data.dtype == 'Temp'){
+        } else if(data.stype === 'Temp' || data.dtype === 'Temp') {
           // Temperature
           request({
-            uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
-          }, function (err, response, body) {
+            uri: 'http://' + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
+          }, function(err, response, body) {
             var result = JSON.parse(body);
-            if(result.status == 'OK'){
-                var lowest = _.min(result.result, function(o){return o.tm;});
-                var highest = _.max(result.result, function(o){return o.te;});
+            if(result.status === 'OK') {
+              var lowest = _.min(result.result, function(o) {return o.tm;});
+              var highest = _.max(result.result, function(o) {return o.te;});
 
-                if(lowest && highest){
-                  self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d   });
-                }
+              if(lowest && highest) {
+                self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d });
+              }
             }
           });
-        } else if(data.stype == 'RFXMeter counter' || data.dtype == 'RFXMeter'){
+        } else if(data.stype === 'RFXMeter counter' || data.dtype === 'RFXMeter') {
           // Counter
           request({
-            uri: "http://" + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
-          }, function (err, response, body) {
+            uri: 'http://' + config.host + ':' + config.httpport + '/json.htm?type=graph&sensor=temp&idx='+data.idx+'&range=month'
+          }, function(err, response, body) {
             var result = JSON.parse(body);
-            if(result.status == 'OK'){
-                var lowest = _.min(result.result, function(o){return o.tm;});
-                var highest = _.max(result.result, function(o){return o.te;});
+            if(result.status === 'OK') {
+              var lowest = _.min(result.result, function(o) {return o.tm;});
+              var highest = _.max(result.result, function(o) {return o.te;});
 
-                if(lowest && highest){
-                  self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d, unit: data.ValueUnits   });
-                }
+              if(lowest && highest) {
+                self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d, unit: data.ValueUnits });
+              }
             }
           });
         } else {
-          self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, unit: data.ValueUnits  });
+          self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, unit: data.ValueUnits });
         }
 
         //console.log('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
@@ -115,12 +115,12 @@ function Domoticz(Dashboard, app, io, config) {
     console.log('Plugin ' + 'domoticz '.yellow.bold + 'toggle'.blue, id, state);
     this.domoticz.switch(id, state ? 255 : 0);
   };
-};
+}
 
 util.inherits(Domoticz, EventEmitter);
 
 module.exports = {
-	create: function(Dashboard, app, io, config) {
-		return new Domoticz(Dashboard, app, io, config);
-	}
+  create: function(Dashboard, app, io, config) {
+    return new Domoticz(Dashboard, app, io, config);
+  }
 };
