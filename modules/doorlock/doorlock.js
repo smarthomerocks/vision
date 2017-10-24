@@ -2,8 +2,8 @@
 Module.register('doorlock', {
   
   defaults: {
-    title: "Ytterdörr",
-    plugin: "verisure",
+    title: 'Ytterdörr',
+    plugin: 'verisure'
   },
   
   getStyles: function() {
@@ -27,7 +27,7 @@ Module.register('doorlock', {
     '</div>');
 
     this.$el.css({
-     'opacity' : 0.4
+      'opacity' : 0.4
     });
 
     return this.$el;

@@ -3,4 +3,4 @@ hosting/*
 node_modules/*
 public/*
 **/*.md
-
+config/config.js

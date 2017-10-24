@@ -22,12 +22,9 @@ Module.register('announce', {
     if (!navigator.getUserMedia)
       return;
 
-		window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-    navigator.getUserMedia({"audio": true}, $.proxy(this.gotStream, this), function(e) {});
-
-		this.sendSocketNotification('ANNOUNCE_CONNECT');
-	},
+    navigator.getUserMedia({'audio': true}, $.proxy(this.gotStream, this), function(e) {});
 
     this.sendSocketNotification('ANNOUNCE_CONNECT');
   },
@@ -96,34 +93,34 @@ Module.register('announce', {
   },
 
   gotStream: function(stream) {
-		var self = this,
-				audioContext = new AudioContext();
-				inputPoint = audioContext.createGain(),
-				audioInput = audioContext.createMediaStreamSource(stream),
-				analyser = audioContext.createAnalyser(),
-				processor = audioContext.createScriptProcessor(2048, 1, 1);
+    var self = this,
+        audioContext = new AudioContext(),
+        inputPoint = audioContext.createGain(),
+        audioInput = audioContext.createMediaStreamSource(stream),
+        analyser = audioContext.createAnalyser(),
+        processor = audioContext.createScriptProcessor(2048, 1, 1);
 
-		analyser.fftSize = 2048;
+    analyser.fftSize = 2048;
 
-		function getAverageVolume(data) {
-			var values = 0;
-			var length = data.length;
-			for (var i = 0; i < data.length; i++) {
-				values += data[i];
-			}
-			return values / data.length;
-		};
+    function getAverageVolume(data) {
+      var values = 0;
+      var length = data.length;
+      for (var i = 0; i < length; i++) {
+        values += data[i];
+      }
+      return values / length;
+    }
 
-		audioInput.connect(analyser);
-		analyser.connect(inputPoint);
-		processor.connect(audioContext.destination);
+    audioInput.connect(analyser);
+    analyser.connect(inputPoint);
+    processor.connect(audioContext.destination);
 
-		this.audioRecorder = new Recorder(inputPoint);
+    this.audioRecorder = new Recorder(inputPoint);
 
-		processor.onaudioprocess = function() {
-			var array =  new Uint8Array(analyser.frequencyBinCount);
-			analyser.getByteFrequencyData(array);
-			var average = getAverageVolume(array);
+    processor.onaudioprocess = function() {
+      var array = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(array);
+      var average = getAverageVolume(array);
 
       if (self.animation && self.animation.run) {
         self.animation.setAmplitude(average / 8);

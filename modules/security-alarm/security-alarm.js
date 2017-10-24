@@ -1,19 +1,20 @@
+/*global Module*/
 Module.register('security-alarm', {
-  
+
   defaults: {
     title: 'Ytterdörr',
     plugin: 'verisure'
   },
-  
+
   getStyles: function() {
     return ['security-alarm.css'];
   },
-  
+
   start: function() {
     console.log('Starting security-alarm ' + this.config.title);
 
     this.isConnected = false;
-    
+
     this.sendSocketNotification('SECURITYALARM_CONNECT', { plugin: this.config.plugin});
   },
 
@@ -34,7 +35,7 @@ Module.register('security-alarm', {
 
     return this.$el;
   },
-  
+
   socketNotificationReceived: function(command, data) {
     var self = this;
     if (command === 'SECURITYALARM_CONNECTED') {
@@ -57,16 +58,15 @@ Module.register('security-alarm', {
       this.updateDom();
     }
   },
-  
+
   updateDom: function() {
     var self = this;
     if (this.$el) {
       this.$el.find('.state').html(
         (self.lastdata.alarm_state === 'ARMED_AWAY' ? 'Larmat' : (self.lastdata.alarm_state === 'ARMED_HOME' ? 'Skalskyddat' : 'Avlarmat'))
       );
-      
+
       this.$el.find('.date').html(moment(self.lastdata.armdate).calendar());
     }
   }
 });
-  

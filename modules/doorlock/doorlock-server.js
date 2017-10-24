@@ -1,17 +1,16 @@
 var ModuleServer = require('../../lib/module-server.js');
 
 module.exports = ModuleServer.create({
-	socketNotificationReceived: function(command, data) {
-		if (command === 'DOORLOCK_CONNECT') {
-			this.connectPlugin(data.plugin);
-		} else if (command === 'DOORLOCK_STATUS') {
-			this.dashboard.doorlock.getStatus(data.plugin, data.alias, data.area);
-			}
-		}
-	,
+  socketNotificationReceived: function(command, data) {
+    if (command === 'DOORLOCK_CONNECT') {
+      this.connectPlugin(data.plugin);
+    } else if (command === 'DOORLOCK_STATUS') {
+      this.dashboard.doorlock.getStatus(data.plugin, data.alias, data.area);
+    }
+  },	
 
-	connectPlugin: function(plugin) {
-		let self = this;
+  connectPlugin: function(plugin) {
+    let self = this;
 
     if(this.isConnected) {
       self.sendSocketNotification('DOORLOCK_CONNECTED');

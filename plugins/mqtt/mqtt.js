@@ -1,12 +1,12 @@
 const EventEmitter = require('events').EventEmitter,
-  util = require('util'),
-  mqtt = require('mqtt');
+      util = require('util'),
+      mqtt = require('mqtt');
 
 function MQTT(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
   let self = this,
-    modulesConfig;
+      modulesConfig;
 
   self.start = function() {
 
@@ -20,7 +20,7 @@ function MQTT(Dashboard, app, io, config) {
       self.client = mqtt.connect(config.host, {
         clean: false,
         port: config.port || 1883,
-        clientId: "dashboard_" + Math.random().toString(16).substr(2, 8),
+        clientId: 'dashboard_' + Math.random().toString(16).substr(2, 8),
         username: config.username,
         password: config.password
       });
@@ -43,7 +43,7 @@ function MQTT(Dashboard, app, io, config) {
 
       self.client.on('message', function(topic, message) {
         let asString = String(message).toLowerCase(),
-          result = {};
+            result = {};
 
         if (asString === 'on') {
           asString = '100';
@@ -92,12 +92,12 @@ function MQTT(Dashboard, app, io, config) {
     self.client.publish(moduleConfig.setTopic, state ? moduleConfig.onCmd : moduleConfig.offCmd);
 
   };
-};
+}
 
 util.inherits(MQTT, EventEmitter);
 
 module.exports = {
-	create: function(Dashboard, app, io, config) {
-		return new MQTT(Dashboard, app, io, config);
-	}
+  create: function(Dashboard, app, io, config) {
+    return new MQTT(Dashboard, app, io, config);
+  }
 };
