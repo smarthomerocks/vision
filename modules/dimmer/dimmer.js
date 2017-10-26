@@ -38,7 +38,7 @@ Module.register('dimmer', {
     }
 
     if(!this.config.readonly) {
-      this.$el.find('.js-dimmer-knob').on('input', function() {
+      this.$el.find('.js-dimmer-knob').on('change', function() {
         self.level = $(this).val();
         self.sendSocketNotification('DIMMER_LEVEL', {id: self.config.id, plugin: self.config.plugin, level: self.level});
       });
