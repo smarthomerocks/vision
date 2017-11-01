@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "lint": "node_modules/eslint/bin/eslint.js . --ext .js --max-warnings 20"
+    "lint": "node_modules/eslint/bin/eslint.js . --ext .js --fix --max-warnings 20"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,8 @@
     "curl": "~0.1.4",
     "debug": "~2.2.0",
     "express": "~4.13.1",
+    "http-parser-js": "0.4.9",
+    "request": "2.83.0",
     "ffmpeg-progress-stream": "~1.2.1",
     "ffmpeg-static": "~2.0.0",
     "fs-extra": "4.0.2",
