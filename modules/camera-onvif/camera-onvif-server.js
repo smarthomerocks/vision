@@ -62,7 +62,7 @@ module.exports = ModuleServer.create({
 
       camState.snapshotInterval = setInterval(() => {
         this.dashboard.camera_onvif.getSnapshot(plugin, id);
-      }, 10000);
+      }, 5000);
     }
   },
 
@@ -96,35 +96,29 @@ module.exports = ModuleServer.create({
       self.sendSocketNotification('CAMERA_PLUGIN_CONNECTED');
     });
 
-    this.dashboard.camera_onvif.on(plugin, 'CAMERA_ONLINE', function(id) {
-      let cameraModule = cameraModules.find(camera => camera.config.id === id);
-
+    this.dashboard.camera_onvif.on(plugin, 'CAMERA_CONNECTED', function(result) {
+      let id = result.id,
+          cameraModule = cameraModules.find(camera => camera.config.id === id);
+            
       if (cameraModule) {
         let camState = self.cameras[id] = self.cameras[id] || {};
         camState.module = cameraModule;
-        camState.available = 'ONLINE';
+        camState.model = result.model;
+        camState.manufacturer = result.manufacturer;
+        camState.available = 'CONNECTED';
         camState.cameraDirectory = self.getCameraDirectory(id);
 
         // create a directory where we can save pictures taken from the camera and serve them publically.
         fs.ensureDir(camState.cameraDirectory)
           .then(() => {
-            self.dashboard.camera_onvif.connect(plugin, id, cameraModule.config.username, cameraModule.config.password);
+            self.sendSocketNotification('CAMERA_CONNECTED', {id: id});
           });
       }
     });
 
-    this.dashboard.camera_onvif.on(plugin, 'CAMERA_CONNECTED', function(result) {
-      let camState = self.cameras[result.id];
-      camState.model = result.model;
-      camState.manufacturer = result.manufacturer;
-      camState.available = 'CONNECTED';
-
-      self.sendSocketNotification('CAMERA_CONNECTED', result);
-    });
-
-    this.dashboard.camera_onvif.on(plugin, 'CAMERA_OFFLINE', function(id) {
+    this.dashboard.camera_onvif.on(plugin, 'CAMERA_DISCONNECTED', function(id) {
       let camState = self.cameras[id] = self.cameras[id] || {};
-      camState.available = 'OFFLINE';
+      camState.available = 'DISCONNECTED';
 
       self.sendSocketNotification('CAMERA_DISCONNECTED', id);
     });

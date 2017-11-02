@@ -6,114 +6,113 @@ function Onvif(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
   let self = this,
-    modulesConfig,
+      modulesConfig,
       cameras = new Map();
 
   /**
-   * Scan network for ONVIF-enabled cameras.
+   * Setup cameras from module config.
    */
-  function scan4Cams() {
-    new onvif.Cam({
-      hostname: "192.168.10.51",
-      port: 10080,
-      username: "admin",
-      password: "R35x55H"
-    }, function(err) {
-      if (!err) {
-        cameras.set(this.hostname, this);
-        //this.absoluteMove({x: 1, y: 1, zoom: 1});
-      this.getStreamUri({protocol:'RTSP'}, function(err, stream) {
-        console.warn('mupp');
-        });
-      }
+  async function setupCameras() {
+    let newCameras = new Map();
+
+    // http://www.gadgetvictims.com/2017/01/veskys-and-digoo-bb-m2-ip-cameras-onvif.html
+    
+    for (let config of modulesConfig) {
+      const camera = await initCamera(config);
+      const information = await getCameraInformation(camera);
+      const streamUri = await getStreamUri(camera);
+      const snapshotUri = await getSnapshotUri(camera);
+        
+      newCameras.set(config.id, {
+        id: config.id,
+        cameraInstance: camera,
+        manufacturer: information.manufacturer,
+        model: information.model,
+        streamUri: streamUri,
+        snapshotUri: snapshotUri
+      });
+    }
+
+    cameras = newCameras;
+  }
+
+  function initCamera(config) {
+    return new Promise((resolve, reject) =>{ 
+      new onvif.Cam({
+        hostname: config.id,
+        port: config.port || 10080,
+        username: config.username,
+        password: config.password
+      }, function(error) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(this);
+        }
+      });
     });
+  }
 
-    /*onvif.Discovery.probe(function(err, cams) {
-      if (err) {
-        console.warn('Got an error when scanning network for available ONVIF-compatible cameras. Error=' + err.message);
-      } else {
-        let tmpCameras = new Map();
-
-        for (let cam of cams) {
-          tmpCameras.set(cam.hostname, cam);
-
-          if (!cameras.has(cam.hostname)) {
-            setImmediate(() => {
-              self.emit('CAMERA_ONLINE', cam.hostname);
-            }, cam);
-
-            console.log(`found new ONVIF-camera on ${cam.hostname}:${cam.port}.`);
-          }
+  function getCameraInformation(camera) {
+    return new Promise((resolve, reject) => {
+      camera.getDeviceInformation(function(error, data) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data);
         }
+      });
+    });
+  }
 
-        for (let cam of cameras) {
-          if (!tmpCameras.has(cam.hostname)) {
-            setImmediate(() => {
-              self.emit('CAMERA_OFFLINE', cam.hostname);
-              console.log(`ONVIF-camera on ${cam.hostname}:${cam.port} no longer available.`);
-            }, cam);
-          }
+  function getStreamUri(camera) {
+    return new Promise((resolve, reject) => {
+      camera.getStreamUri({protocol: 'RTSP'}, function(error, stream) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(stream.uri);
         }
+      });
+    });
+  }
 
-        cameras = tmpCameras;
-      }
-    });*/
+  function getSnapshotUri(camera) {
+    return new Promise((resolve, reject) => {
+      camera.getSnapshotUri(function(error, data) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data.uri);
+        }
+      });
+    });
   }
 
   self.start = function() {
 
     modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'onvif').map(module => module.config);
 
-    scan4Cams();
-    self.probeInterval = setInterval(scan4Cams, 30000);
-
     self.emit('CONNECTED');
+
+    setupCameras()
+    .then(() => {
+      for (let camera of cameras) {
+        self.emit('CAMERA_CONNECTED', camera[1]);
+      }      
+    })
+    .catch(error => {
+      console.log(`Failed to setup cameras. Error: "${error.stack}".`);
+    });
   };
 
   self.exit = function() {
-
-    if (self.probeInterval) {
-      clearInterval(self.probeInterval);
-    }
-
     cameras.clear();
-  };
-
-  self.connect = function(id, username, password) {
-    let cam = cameras.get(id);
-
-    if (cam) {
-      cam.username = username;
-      cam.password = password;
-
-      cam.connect(function() {
-        //this.absoluteMove({x: 1, y: 1, zoom: 1});
-
-        this.getDeviceInformation(function(error, data) {
-          if (error) {
-            console.error(`Failed to get device information about connected camera. Error: ${error.stack}".`);
-            self.emit('CAMERA_CONNECTED', {
-              error: {
-                id: id,
-                msg: 'Failed to get device information from camera.'
-              }
-            });
-          } else {
-            self.emit('CAMERA_CONNECTED', {
-              id: id,
-              model: data.model,
-              manufacturer: data.manufacturer
-            });
-
-            console.log(`Connected to camera with id "${id}" and of model "${data.model}".`);
-          }
-        });
-      });
-    }
   };
 
   self.getSnapshot = function(id) {
     let camera = cameras.get(id);
+
     if (!camera) {
       self.emit('SNAPSHOT', {
         error: {
@@ -125,27 +124,16 @@ function Onvif(Dashboard, app, io, config) {
       return;
     }
 
-    camera.getSnapshotUri((error, data) => {
-      if (error) {
-        console.error(`Failed to get snapshot from camera. Error: ${error.stack}".`);
-        self.emit('SNAPSHOT', {
-          error: {
-            id: id,
-            msg: 'Failed to get snapshot from camera.'
-          }
-        });
-      } else {
-        self.emit('SNAPSHOT', {
-          id: id,
-          uri: data.uri,
-          datetime: new Date()
-        });
-      }
+    self.emit('SNAPSHOT', {
+      id: id,
+      uri: camera.snapshotUri,
+      datetime: new Date()
     });
   };
 
   self.startLiveStream = function(id) {
     let camera = cameras.get(id);
+
     if (!camera) {
       self.emit('START_STREAM', {
         error: {
@@ -157,18 +145,16 @@ function Onvif(Dashboard, app, io, config) {
       return;
     }
 
-    camera.getStreamUri({
-      protocol: 'RTSP'
-    }, function(err, stream) {
-      self.emit('STARTED_STREAM', {
-        id: id,
-        uri: stream.uri,
-        datetime: new Date()
-      });
+    //TODO: implement!
+    self.emit('STARTED_STREAM', {
+      id: id,
+      uri: 'xxxx',
+      datetime: new Date()
     });
   };
 
   self.stopLiveStream = function(id) {
+    //TODO: implement!
     self.emit('STOPPED_STREAM', {
       id: id,
       datetime: new Date()

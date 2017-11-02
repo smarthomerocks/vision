@@ -108,6 +108,9 @@
     ],
     "react/display-name": 0
   },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
   "env": {
     "es6": true,
     "jquery": true,
