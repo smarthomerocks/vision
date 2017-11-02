@@ -1,0 +1,40 @@
+variables:
+  REGISTRY: gitlab.com:4567
+
+stages:
+  - build
+  - build_docker_x64
+ # - build_docker_rpi
+
+build:
+  image: node:8.9
+  # add cache to 'node_modules' for speeding up builds
+  cache:
+    paths: 
+      - node_modules/ # Node modules and dependencies
+  script:
+    - npm install
+
+build_docker_x64:
+  image: docker:latest
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
+    - docker build -t $REGISTRY/emilohman/node-smart-remote .
+    - docker push $REGISTRY/emilohman/node-smart-remote
+  only:
+    - production
+  tags:
+    - docker
+
+#build_docker_rpi:
+#  image: docker:latest
+#  stage: build
+#  script:
+#    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
+#    - docker build -t $REGISTRY/<PROJECT-GROUP>/<PROJECT-NAME> .
+#    - docker push $REGISTRY/<PROJECT-GROUP>/<PROJECT-NAME>
+#  only:
+#    - production
+#  tags:
+#    - docker

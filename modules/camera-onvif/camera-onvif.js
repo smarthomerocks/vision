@@ -21,6 +21,7 @@ Module.register('camera-onvif', {
   start: function() {
     console.log('Starting camera', this.config.title);
 
+    this.lastdata = {};
     this.viewdata = {};
     this.viewdata.config = this.config;
     this.viewdata.thumbnail = '';
@@ -85,8 +86,8 @@ Module.register('camera-onvif', {
       this.isConnected = true;
 
     } else if (command === 'CAMERA_CONNECTED' && (data.id === this.config.id)) {
-      this.lastdata = data;
 
+      this.lastdata = data || {};
       this.$el.css({
         'opacity': 1
       });
@@ -95,14 +96,15 @@ Module.register('camera-onvif', {
       this.sendSocketNotification('CAMERA_START_VIDEO', {id: this.config.id, plugin: this.config.plugin, streaming: false});
 
       this.updateDom();
+
     } else if (command === 'SNAPSHOT' && (data.id === this.config.id)) {
-      console.log('got snapshot.');
-      this.lastdata.thumbnail = data.uri;
+
+      this.lastdata.snapshotUri = data.uri;
       this.updateDom();
+
     } else if (command === 'CAMERA_DISCONNECTED' && (data.id === this.config.id)) {
 
-      this.lastdata = null;
-
+      this.lastdata = {};
       this.$el.css({
         'opacity': 0.4
       });
@@ -115,16 +117,8 @@ Module.register('camera-onvif', {
 
     if (this.$el) {
 
-      if(this.lastdata.thumbnail) {
-						// Keep state to busy while plugin is busy
-        this.viewdata.status = this.viewdata.busyclass === 'idle' ? '' : this.viewdata.status;
-        this.viewdata.thumbnail = this.lastdata.thumbnail;
-
-        if(this.lastdata.lastUpdate) {
-          this.viewdata.updated = this.lastdata.lastUpdate;
-          var date = moment(this.viewdata.updated);
-          this.viewdata.updatedformatted = 'Uppdaterad ' + date.fromNow();
-        }
+      if(this.lastdata.snapshotUri) {
+        this.viewdata.thumbnail = this.lastdata.snapshotUri;
       }
 
       this.render();
