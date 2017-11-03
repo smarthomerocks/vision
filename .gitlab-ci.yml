@@ -5,6 +5,9 @@ stages:
   - test
   - build
 
+services:
+  - docker:dind
+
 test:
   image: node:8.9
   stage: test
