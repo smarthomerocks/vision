@@ -1,5 +1,5 @@
 variables:
-  REGISTRY: gitlab.com:4567
+  REGISTRY: registry.gitlab.com
 
 stages:
   - test
