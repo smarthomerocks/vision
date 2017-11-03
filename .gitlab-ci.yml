@@ -24,8 +24,8 @@ build_docker_x64:
   stage: build
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
-    - docker build -t $REGISTRY/emilohman/node-smart-remote:x64 -f hosting/docker/Dockerfile.x64 .
-    - docker push $REGISTRY/emilohman/node-smart-remote
+    - docker build -t $REGISTRY/emilohman/node-smart-remote/x64 -f hosting/docker/Dockerfile.x64 .
+    - docker push $REGISTRY/emilohman/node-smart-remote/x64
   only:
     - master
   tags:
@@ -36,8 +36,8 @@ build_docker_rpi:
   stage: build
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
-    - docker build -t $REGISTRY/emilohman/node-smart-remote:rpi -f hosting/docker/Dockerfile.rpi .
-    - docker push $REGISTRY/emilohman/node-smart-remote
+    - docker build -t $REGISTRY/emilohman/node-smart-remote/rpi -f hosting/docker/Dockerfile.rpi .
+    - docker push $REGISTRY/emilohman/node-smart-remote/rpi
   only:
     - master
   tags:
