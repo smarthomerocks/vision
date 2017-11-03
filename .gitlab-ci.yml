@@ -24,7 +24,7 @@ build_docker_x64:
     - docker build -t $REGISTRY/emilohman/node-smart-remote_x64 -f hosting/docker/Dockerfile.x64 .
     - docker push $REGISTRY/emilohman/node-smart-remote_x64
   only:
-    - production
+    - master
   tags:
     - docker
 
@@ -36,6 +36,6 @@ build_docker_rpi:
     - docker build -t $REGISTRY/emilohman/node-smart-remote_rpi -f hosting/docker/Dockerfile.rpi .
     - docker push $REGISTRY/emilohman/node-smart-remote_rpi
   only:
-    - production
+    - master
   tags:
     - docker
