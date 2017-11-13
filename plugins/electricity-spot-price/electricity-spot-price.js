@@ -1,6 +1,6 @@
 const EventEmitter = require('events').EventEmitter,
       util = require('util'),
-      electricity = require('nordpool'),
+      nordpool = require('nordpool'),
       moment = require('moment');
 
 function Electricity_spot_price(Dashboard, app, io, config) {
@@ -8,13 +8,18 @@ function Electricity_spot_price(Dashboard, app, io, config) {
 
   let self = this;
   self.intervalUpdate = null;
-  self.prices = new electricity.Prices();
+  self.prices = new nordpool.Prices();
 
   self.start = function() {
 
-    self.emit('connect');
-    self.intervalUpdate = setInterval(self.getPriceList, 60 * 60 * 1000);  // get pricelist every hour.
+    if(self.connected) {
+      self.emit('connect');
+      return;
+    }
 
+    self.intervalUpdate = setInterval(self.getPriceList, 60 * 60 * 1000);  // get pricelist every hour.
+    self.connected = true;
+    self.emit('connect');
   };
 
   self.exit = function() {
@@ -28,8 +33,7 @@ function Electricity_spot_price(Dashboard, app, io, config) {
   function getPricePerDay(day) {
     return new Promise((resolve, reject) => {
       self.prices.hourly({
-        startDate: day,
-        endDate: day,
+        date: day,
         currency: config.currency,
         area: config.area
       },
@@ -44,16 +48,16 @@ function Electricity_spot_price(Dashboard, app, io, config) {
     console.log('Electricity_spot_price: getting price list.');
 
     let requests = [
-      getPricePerDay(moment().subtract(1, 'days')),
+      getPricePerDay(moment().subtract(1, 'days')), // to handle day rollover
       getPricePerDay(moment()),
-      getPricePerDay(moment().add(1, 'days'))
+      getPricePerDay(moment().add(1, 'days')) // to handle day rollover
     ];
 
     Promise.all(requests)
         .then(results => {
           let pricelist = [].concat.apply([], results).map(entry => {
             return {
-              date: entry.date.toISOString(),
+              date: entry.date.tz(config.timezone || 'Europe/Stockholm').toISOString(),
               price: entry.value / 1000 // Mega Watt to Kilo Watt divider.
             };
           });

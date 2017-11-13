@@ -33,7 +33,7 @@
     "mqtt": "2.13.1",
     "node-blink-security": "https://github.com/ingermaa/node-blink-security",
     "node-domoticz-mqtt": "1.2.2",
-    "nordpool": "1.1.0",
+    "nordpool": "2.0.0",
     "onvif": "0.5.3",
     "serve-favicon": "~2.3.0",
     "socket.io": "2.0.3",
@@ -51,5 +51,5 @@
   },
   "engines": {
     "node": ">=8.9.0"
-  }  
+  }
 }
