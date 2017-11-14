@@ -5,9 +5,9 @@ const EventEmitter = require('events').EventEmitter,
 function Onvif(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
-  let self = this,
-      modulesConfig,
-      cameras = new Map();
+  let self = this;
+  self.cameras = new Map();
+  self.connected = false;
 
   /**
    * Setup cameras from module config.
@@ -17,7 +17,7 @@ function Onvif(Dashboard, app, io, config) {
 
     // http://www.gadgetvictims.com/2017/01/veskys-and-digoo-bb-m2-ip-cameras-onvif.html
     
-    for (let config of modulesConfig) {
+    for (let config of self.modulesConfig) {
       const camera = await initCamera(config);
       const information = await getCameraInformation(camera);
       const streamUri = await getStreamUri(camera);
@@ -33,7 +33,7 @@ function Onvif(Dashboard, app, io, config) {
       });
     }
 
-    cameras = newCameras;
+    self.cameras = newCameras;
   }
 
   function initCamera(config) {
@@ -91,13 +91,18 @@ function Onvif(Dashboard, app, io, config) {
 
   self.start = function() {
 
-    modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'onvif').map(module => module.config);
+    if(self.connected) {
+      self.emit('CONNECTED');
+      return;
+    }
 
+    self.modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'onvif').map(module => module.config);
+    self.connected = true;
     self.emit('CONNECTED');
 
     setupCameras()
     .then(() => {
-      for (let camera of cameras) {
+      for (let camera of self.cameras) {
         self.emit('CAMERA_CONNECTED', camera[1]);
       }      
     })
@@ -107,11 +112,11 @@ function Onvif(Dashboard, app, io, config) {
   };
 
   self.exit = function() {
-    cameras.clear();
+    self.cameras.clear();
   };
 
   self.getSnapshot = function(id) {
-    let camera = cameras.get(id);
+    let camera = self.cameras.get(id);
 
     if (!camera) {
       self.emit('SNAPSHOT', {
@@ -132,7 +137,7 @@ function Onvif(Dashboard, app, io, config) {
   };
 
   self.startLiveStream = function(id) {
-    let camera = cameras.get(id);
+    let camera = self.cameras.get(id);
 
     if (!camera) {
       self.emit('START_STREAM', {

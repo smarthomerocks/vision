@@ -13,55 +13,54 @@ function MQTT(Dashboard, app, io, config) {
     modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'mqtt').map(module => module.config);
 
     if (self.client) {
+      self.emit('connect');
+      return;
+    }
+
+    self.client = mqtt.connect(config.host, {
+      clean: false,
+      port: config.port || 1883,
+      clientId: 'dashboard_' + Math.random().toString(16).substr(2, 8),
+      username: config.username,
+      password: config.password
+    });
+
+    self.client.on('connect', function() {
+      // Subscribe on all modules "statusTopic" topics.
+      self.client.subscribe(modulesConfig.map(config => config.statusTopic));
+
+      console.log('Plugin ' + 'mqtt '.yellow.bold + 'connected'.blue);
+
+      // Momentary buttons should all be off to start with.
+      for (let module of modulesConfig) {
+        if (module.type === 'button momentary') {
+          self.client.publish(module.setTopic, module.offCmd);
+        }
+      }
 
       self.emit('connect');
+    });
 
-    } else {
-      self.client = mqtt.connect(config.host, {
-        clean: false,
-        port: config.port || 1883,
-        clientId: 'dashboard_' + Math.random().toString(16).substr(2, 8),
-        username: config.username,
-        password: config.password
-      });
+    self.client.on('message', function(topic, message) {
+      let asString = String(message).toLowerCase(),
+          result = {};
 
-      self.client.on('connect', function() {
-        // Subscribe on all modules "statusTopic" topics.
-        self.client.subscribe(modulesConfig.map(config => config.statusTopic));
+      if (asString === 'on') {
+        asString = '100';
+      } else if (asString === 'off') {
+        asString = '0';
+      }
 
-        console.log('Plugin ' + 'mqtt '.yellow.bold + 'connected'.blue);
+      result.level = Number(asString);
+      result.isStateOn = !!result.level;
+      result.id = modulesConfig.find(mod => mod.statusTopic === topic).id;
 
-        // Momentary buttons should all be off to start with.
-        for (let module of modulesConfig) {
-          if (module.type === 'button momentary') {
-            self.client.publish(module.setTopic, module.offCmd);
-          }
-        }
+      self.emit('change', result);
+    });
 
-        self.emit('connect');
-      });
-
-      self.client.on('message', function(topic, message) {
-        let asString = String(message).toLowerCase(),
-            result = {};
-
-        if (asString === 'on') {
-          asString = '100';
-        } else if (asString === 'off') {
-          asString = '0';
-        }
-
-        result.level = Number(asString);
-        result.isStateOn = !!result.level;
-        result.id = modulesConfig.find(mod => mod.statusTopic === topic).id;
-
-        self.emit('change', result);
-      });
-
-      self.client.on('error', function(error) {
-        console.log(error);
-      });
-    }
+    self.client.on('error', function(error) {
+      console.log(error);
+    });
   };
 
   self.exit = function() {
