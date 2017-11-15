@@ -193,7 +193,15 @@ var Module = Class.extend({
 	 */
 	sendSocketNotification: function (notification, payload) {
 		this.socket().sendNotification(notification, payload);
-	}
+	},
+
+	isTouchSupported: function() {
+		return NSR.isTouchSupported;
+	},
+
+	clickEvent: function() {
+		return NSR.clickEvent;
+	},
 });
 
 Module.definitions = {};

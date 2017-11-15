@@ -17,7 +17,7 @@ if ($(window).width() > 480) {
 }
 
 // Add click effect on modules that are clickable
-$(document).on('click', '.box-clickable', function(e) {
+$(document).on(NSR.clickEvent, '.box-clickable', function(e) {
   var target = $(this);
 
   target.addClass('box-clickable-active');

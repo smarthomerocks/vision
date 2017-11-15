@@ -31,17 +31,18 @@ Module.register('mediaplayer', {
         '<div class="artist">&nbsp;</div><div class="album">&nbsp;</div><div class="nexttrack">&nbsp;</div><div class="time"><span class="elapsed"></span>' +
         '<input type="range" value="0" min="0" max="100" class="position" /><span class="duration"></span></div><input type="range" value="0" class="volume" /></div>');
 
-    this.$el.find('.play').on('click', function() {
+    this.$el.find('.play').on(this.clickEvent(), function() {
       if(!self.lastdata) return;
+      $(this).find('.material-icons').html(self.lastdata.playbackstate == 'PAUSED_PLAYBACK' ? 'pause' : 'play_arrow');
       self.sendSocketNotification('MEDIAPLAYER_PLAYSTATE_CHANGE', { device: self.config.devicename, plugin: self.config.plugin, state: self.lastdata.playbackstate == 'PAUSED_PLAYBACK' ? 'playing' : 'paused' });
     });
 
-    this.$el.find('.prev').on('click', function() {
+    this.$el.find('.prev').on(this.clickEvent(), function() {
       if(!self.lastdata) return;
       self.sendSocketNotification('MEDIAPLAYER_PLAYSTATE_PREV', { device: self.config.devicename, plugin: self.config.plugin });
     });
 
-    this.$el.find('.next').on('click', function() {
+    this.$el.find('.next').on(this.clickEvent(), function() {
       if(!self.lastdata) return;
       self.sendSocketNotification('MEDIAPLAYER_PLAYSTATE_NEXT', { device: self.config.devicename, plugin: self.config.plugin });
     });

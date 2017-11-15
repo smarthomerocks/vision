@@ -24,7 +24,7 @@ Module.register('mediaplayer-favorite', {
 
     this.$el = $('<div class="box box-clickable mediaplayer-favorite"><div class="box-content"><div class="heading">'+ this.config.title +'</div><i class="material-icons">favorite</i></div></div>');
 
-    this.$el.on('click', function() {
+    this.$el.on(this.clickEvent(), function() {
       self.sendSocketNotification('MEDIAPLAYER_FAVORITE_PLAY', { device: self.config.devicename, plugin: self.config.plugin, favoriteName: self.config.favoriteName });
     });
 
