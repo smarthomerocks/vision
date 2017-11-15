@@ -9,7 +9,7 @@ Easy to use Dashboard for Home automation
 ![Screenshot](/uploads/6393dba9bc6b6b5734e5ef5fbc2433b0/Screenshot.png)
 
 
-# Install
+# Install and running locally
 
 1. Download and install [Node.js](https://nodejs.org)
 2. Run "npm install" in the application folder

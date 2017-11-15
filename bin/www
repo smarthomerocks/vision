@@ -4,9 +4,14 @@
  * Module dependencies.
  */
 
-var app = require('../app').app;
-var debug = require('debug')('www:server');
-var http = require('http');
+// Monkey patch before you require http for the first time.
+// The reason we do this is that some devices have poor HTTP-implementations that makes Nodes HTTP-parser to throw a fatal error (HPE_INVALID_HEADER_TOKEN).
+// https://www.npmjs.com/package/http-parser-js
+process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser;
+
+const app = require('../app').app,
+      debug = require('debug')('www:server'),
+      http = require('http');
 
 /**
  * Get port from environment and store in Express.

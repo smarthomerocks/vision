@@ -58,7 +58,7 @@ First install Docker if that has not already been done, if starting from a clean
 
 #### Building
 
-Build a Docker image if you don't have one already
+Build a Docker image if you don't have one already (see #4 in Running for a prebuilt version!)
 
     1. git clone git@gitlab.com:emilohman/node-smart-remote.git && cd node-smart-remote
     2. docker build -t node-smart-remote -f hosting/docker/Dockerfile.rpi .
@@ -70,7 +70,8 @@ Start the Docker image, the configuration file will be located in the /etc/node-
     1. mkdir -p /etc/node-smart-remote
     2. cp config/config-sample.js /etc/node-smart-remote/config.js
     3. docker run -d -v /etc/node-smart-remote:/opt/node-smart-remote/config -p 80:3003 -p 443:3444 --restart unless-stopped node-smart-remote
-
+    4. if you don't want to build an image youself you could use a prebuilt version: docker run -d -v /etc/node-smart-remote:/opt/node-smart-remote/config -p 80:3003 -p 443:3444 --restart unless-stopped  registry.gitlab.com/emilohman/node-smart-remote/rpi
+    
 Now all should be up and running, verify by using a webbrowser to "IP address to your raspberry-server":80
 
 (find out the IP address by running "ifconfig" on the server)
@@ -81,7 +82,7 @@ Now all should be up and running, verify by using a webbrowser to "IP address to
 
 #### Building
 
-Build a Docker image if you don't have one already
+Build a Docker image if you don't have one already (see #4 in Running for a prebuilt version!)
 
     1. git clone git@gitlab.com:emilohman/node-smart-remote.git && cd node-smart-remote
     2. docker build -t node-smart-remote -f hosting/docker/Dockerfile.x64 .
@@ -93,6 +94,7 @@ Start the Docker image, the configuration file will be located in the /etc/node-
     1. mkdir -p /etc/node-smart-remote
     2. cp config/config-sample.js /etc/node-smart-remote/config.js
     3. docker run -d -v /etc/node-smart-remote:/opt/node-smart-remote/config -p 80:3003 -p 443:3444 --restart unless-stopped node-smart-remote
+    4. if you don't want to build an image youself you could use a prebuilt version: docker run -d -v /etc/node-smart-remote:/opt/node-smart-remote/config -p 80:3003 -p 443:3444 --restart unless-stopped  registry.gitlab.com/emilohman/node-smart-remote/x64
 
 Now all should be up and running, verify by using a webbrowser to "IP address to your server":80
 

@@ -1,43 +1,34 @@
-# <TBD>
+# Nordpool electricity spot price plugin
 
-Modulename: <TBD>
+Modulename: electricity-spot-price
 
 
 ## Description
 
-<TBD>
+This plugin fetches the current "spot prices" from the European power market, Nordpool.
+With this information you can see how the electricity pricing changes during a day for your selected area.
 
 
 ## Config
 
-    {
-        module: "<TBD>",
-        config: {
-          title:    <string>,  // title of the module that should be shown on the dashboard
-          section:  <string>,  // which section this modules should be displayed on
-          column:   <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
-          row:      <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
-          size_x: 1, <number>  // width of module, in number of columns <optional>
-          size_y: 2  <number>  // height of module, in number of rows <optional>
-        }
+    "electricity-spot-price": {
+        currency: <string>, // 'DKK', 'NOK', 'SEK', 'EUR'
+        // http://www.nordpoolspot.com/globalassets/download-center/day-ahead/elspot-area-change-log.pdf
+        // Sweden: http://www.natomraden.se/
+        area: <string>,
+        timezone: <string>
     }
 
 
 ### Config example
 
-      "electricity-spot-price": {
-        // 'DKK', 'NOK', 'SEK', 'EUR'
+    "electricity-spot-price": {
         currency: 'SEK',
-        // http://www.nordpoolspot.com/globalassets/download-center/day-ahead/elspot-area-change-log.pdf
-        // Sweden: http://www.natomraden.se/
-        area: 'SE3'
-      }
-
-## Screenshots
-
-![announcement with dark theme](doc/announce-dark.png "Announce - dark theme") &nbsp; ![ recording announcement with dark theme](doc/announce-dark-recording.png "Announce - recording announcement") &nbsp; ![announcement with dark theme](doc/announce-light.png "Announce - light theme")
+        area: 'SE3',
+        timezone: 'Europe/Stockholm'
+    }
 
 
 ## Author
 
-    <TBD>
+    Henrik Östman

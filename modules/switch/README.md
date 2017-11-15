@@ -15,8 +15,8 @@ Several options are available for customizing the look and functionallity of the
         config: {
           title:     <string>,  // title of the module that should be shown on the dashboard
           plugin:    <string>,  // plugin to use with this module
-	  id:        <string>,  // identifier that uniquely indentifies this module to the plugin
-	  readonly:  <boolean>, // the switch can not be modified
+	      id:        <string>,  // identifier that uniquely indentifies this module to the plugin
+	      readonly:  <boolean>, // the switch can not be modified
           type:      <string>,  // type of switch, "button" or "button momentary" (turns off as soon as you release the button)
           setTopic:  <string>,  // MQTT topic that should be used to set the switch to a new state
           getTopic:  <string>,  // MQTT topic that should be used to get the current state of the switch

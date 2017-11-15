@@ -9,4 +9,5 @@ node_modules
 config/config.js
 public/images/camera/
 public/**/*.css
+public/module/**
 modules/**/*.css

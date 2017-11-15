@@ -155,8 +155,6 @@ Module.register('camera', {
         }
       }
 
-      console.log();
-
       self.render();
     }
   }

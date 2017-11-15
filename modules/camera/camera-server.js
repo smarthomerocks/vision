@@ -9,7 +9,7 @@ module.exports = ModuleServer.create({
     } else if (command === 'CAMERA_SNAPSHOT') {
       this.dashboard.camera.getSnapshot(data.plugin, data.id);
     } else if (command === 'CAMERA_LIVEVIDEO') {
-      this.dashboard.camera.getLiveliew(data.plugin, data.id);
+      this.dashboard.camera.getLiveview(data.plugin, data.id);
     }
   },
 

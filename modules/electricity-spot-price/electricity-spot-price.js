@@ -2,9 +2,10 @@
 Module.register('electricity-spot-price', {
 
   defaults: {
-    title: 'Elpris',
+    title: 'Elpris (SEK)',
     plugin: 'electricity-spot-price',
-    id: 4,
+    size_x: 2,
+    size_y: 2,
     SCALE: 100, // scale of bars in graphs.
     NUMBER_OF_BARS: 23 // to fit in on the x-axis, an uneven number would be nice.
   },

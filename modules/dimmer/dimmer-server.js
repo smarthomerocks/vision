@@ -5,9 +5,9 @@ module.exports = ModuleServer.create({
     if (command === 'DIMMER_CONNECT') {
       this.connectPlugin(data.plugin);
     } else if (command === 'DIMMER_LEVEL') {
-      this.dashboard.dimmer.level(data.plugin, data.id, data.level);
+      this.dashboard.switch.switch(data.plugin, data.id, data.level);
     } else if (command === 'DIMMER_STATUS') {
-      this.dashboard.dimmer.getStatus(data.plugin, data.id);
+      this.dashboard.switch.getStatus(data.plugin, data.id);
     }
   },
 
@@ -19,16 +19,16 @@ module.exports = ModuleServer.create({
       return;
     }
 
-    this.dashboard.dimmer.once(plugin, 'connect', function(data) {
+    this.dashboard.switch.once(plugin, 'connect', function(data) {
       this.isConnected = true;
       self.sendSocketNotification('DIMMER_CONNECTED');
     });
 
-    this.dashboard.dimmer.on(plugin, 'change', function(data) {
+    this.dashboard.switch.on(plugin, 'change', function(data) {
       self.sendStatus(data.id, data.level);
     });
 
-    this.dashboard.dimmer.start(plugin);
+    this.dashboard.switch.start(plugin);
   },
 
   sendStatus: function(id, level) {
