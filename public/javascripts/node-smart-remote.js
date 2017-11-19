@@ -75,22 +75,30 @@ var NSR = (function() {
 
   var initNavigation = function() {
     var sections = $('.section'),
-        navItems = $('.js-nav-left-item');
+    navList = $('.js-nav-left-list'),
+    navName = location.hash ? location.hash.replace('#', '') : navList.children().first().data('section'); // show the section that are used in the URL, if no section specified then take the first one in the list.
 
-    sections.hide().first().show();
-    navItems.first().addClass('active');
+    sections.hide();
+    selectSection(navName);
 
     $('.js-nav-left').on('click', '.js-nav-left-item', function() {
-      var section = $(this).data('section'),
-          sectionEl = $('.section-' + section);
-
-      // TODO: Add some FANCY animation
-      sections.hide(200);
-      sectionEl.show(300);
-
-      navItems.removeClass('active');
-      $(this).addClass('active');
+      selectSection($(this).data('section'));
     });
+  }
+
+  function selectSection(name) {
+    var sections = $('.section'),
+    navItems = $('.js-nav-left-item'),
+    sectionEl = $('.section-' + name);
+
+    location.hash = name;
+
+    // TODO: Add some FANCY animation
+    sections.hide(200);
+    sectionEl.show(300);
+
+    navItems.removeClass('active');
+    navItems.filter("[data-section='" + name + "']").addClass('active');
   }
 
   var setTheme = function() {
