@@ -22,10 +22,12 @@ var NSRSocket = function(moduleName) {
 
 	self.socket.on('error', function (err) {
     console.log("SOCKET ERROR", err);
+		window.location.reload();
 	});
 
 	self.socket.on('connect_error', function(){
     console.log('Connection Failed');
+		window.location.reload();
 	});
 
 	// register catch all.

@@ -37,10 +37,13 @@ Module.register('switch', {
     }
 
     if (!this.config.readonly) {
-      this.$el.on('touchstart', this.onPress.bind(this));
-      this.$el.on('mousedown', this.onPress.bind(this));
-      this.$el.on('touchend', this.onRelease.bind(this));
-      this.$el.on('mouseup', this.onRelease.bind(this));
+      if (this.isTouchSupported()) {
+        this.$el.on('touchstart', this.onPress.bind(this));
+        this.$el.on('touchend', this.onRelease.bind(this));
+      } else {
+        this.$el.on('mousedown', this.onPress.bind(this));
+        this.$el.on('mouseup', this.onRelease.bind(this));
+      }
     }
 
     this.$el.css({

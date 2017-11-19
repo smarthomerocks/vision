@@ -31,7 +31,7 @@ Module.register('dimmer', {
     var self = this;
 
     if (this.config.type === 'slider') {
-      this.$el = $('<div class="box' + (this.config.readonly ? '' : ' box-clickable') +
+      this.$el = $('<div class="box' +
         ' dimmer"><div class="box-content"><div class="heading">' + this.config.title + '</div><div class="slider-wrapper"><input class="js-dimmer-knob" type="range" min="' + this.config.minLevel + '" max="' + this.config.maxLevel + '"/></div></div></div>');
     } else {
       this.$el = $('<div class="box' + (this.config.readonly ? '' : ' box-clickable') + ' dimmer"><div class="box-content"><div class="heading">' + this.config.title + '</div><p>TBD</p></div></div>');

@@ -1,6 +1,8 @@
 var NSR = (function() {
   var modules = [];
   var sectionGridsters = {};
+  var isTouchSupported = "ontouchend" in document;
+  var clickEvent = isTouchSupported ? 'touchend' : 'mouseup';
 
   var renderSections = function() {
     var navList = $('.js-nav-left-list'),
@@ -81,7 +83,7 @@ var NSR = (function() {
     sections.hide();
     selectSection(navName);
 
-    $('.js-nav-left').on('click', '.js-nav-left-item', function() {
+    $('.js-nav-left').on(clickEvent, '.js-nav-left-item', function() {
       selectSection($(this).data('section'));
     });
   }
@@ -93,9 +95,8 @@ var NSR = (function() {
 
     location.hash = name;
 
-    // TODO: Add some FANCY animation
-    sections.hide(200);
-    sectionEl.show(300);
+    sections.fadeOut(500);
+    sectionEl.fadeIn(500);
 
     navItems.removeClass('active');
     navItems.filter("[data-section='" + name + "']").addClass('active');
@@ -109,6 +110,8 @@ var NSR = (function() {
     renderSections: renderSections,
     modulesStarted: modulesStarted,
     initNavigation: initNavigation,
-    setTheme: setTheme
+    setTheme: setTheme,
+    isTouchSupported: isTouchSupported,
+    clickEvent: clickEvent
   }
 })();
