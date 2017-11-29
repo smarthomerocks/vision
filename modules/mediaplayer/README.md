@@ -1,19 +1,21 @@
-# <TBD>
+# Mediaplayer
 
-Modulename: <TBD>
+Modulename: mediaplayer
 
 
 ## Description
 
-<TBD>
+Module to control mediaplayer devices, like [Sonos](https://www.sonos.com) or [Volumio](https://volumio.org/).
 
 
 ## Config
 
     {
-        module: "<TBD>",
+        module: "mediaplayer",
         config: {
           title:    <string>,  // title of the module that should be shown on the dashboard
+          plugin:   <string>,  // plugin to use with this module
+          devicename: <string>,// unique identifier for device, this could be a name or a URL.
           section:  <string>,  // which section this modules should be displayed on
           column:   <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:      <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
@@ -29,9 +31,23 @@ Modulename: <TBD>
       {
         module: "mediaplayer",
         config: {
-          title: "Bärbar",
+          title: "Kitchen speaker",
           plugin: "sonos",
-          devicename: "Kontor 2",
+          devicename: "Kitchen",
+          section: "start",
+          column: 1,
+          row: 1,
+          size_x: 2,
+          size_y: 2
+        }
+      }
+
+      {
+        module: "mediaplayer",
+        config: {
+          title: "Bedroom",
+          plugin: "volumio",
+          devicename: "http://volumio.local:3000",
           section: "start",
           column: 3,
           row: 1,
@@ -42,9 +58,9 @@ Modulename: <TBD>
 
 ## Screenshots
 
-![announcement with dark theme](doc/announce-dark.png "Announce - dark theme") &nbsp; ![ recording announcement with dark theme](doc/announce-dark-recording.png "Announce - recording announcement") &nbsp; ![announcement with dark theme](doc/announce-light.png "Announce - light theme")
+![mediaplayer with dark theme](doc/mediaplayer-dark.png "Mediaplayer - dark theme") &nbsp; ![mediaplayer with light theme](doc/mediaplayer-light.png "Mediaplayer - light theme")
 
 
 ## Author
 
-    <TBD>
+    Emil Öhman

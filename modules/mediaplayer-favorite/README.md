@@ -25,7 +25,7 @@ Modulename: <TBD>
 
 ### Config example
 
-{
+    {
         module: "mediaplayer-favorite",
         config: {
           title: "Pop",
@@ -38,7 +38,7 @@ Modulename: <TBD>
           size_x: 1,
           size_y: 1
         }
-      }
+    }
 
 ## Screenshots
 

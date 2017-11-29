@@ -7,7 +7,8 @@
  */
 
 const EventEmitter = require('events').EventEmitter,
-      util = require('util');
+      util = require('util'),
+      colors = require('colors'); //eslint-disable-line no-unused-vars
 
 /**
  * Class of the plugin.
@@ -44,7 +45,7 @@ function Template(Dashboard, app, io, config) {
     
     // DO YOUR INITIALIZATION STUFF HERE!
 
-    console.log('Plugin ' + 'template '.yellow.bold + 'connected'.blue);        
+    console.log('Plugin ' + '<template name> '.yellow.bold + 'connected'.blue);        
     self.connected = true;
     self.emit('connect');
   };
