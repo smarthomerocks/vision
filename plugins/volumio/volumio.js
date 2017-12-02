@@ -136,15 +136,27 @@ function Volumio(Dashboard, app, io, config) {
     
     if (player) {
 
-      player.socket.emit('clearQueue', null);
-      // TOOD: still reverse engenering code...
-      setTimeout(() => {
-        player.socket.emit('addPlay', {
-          service: 'spop',  // select Spotify plugin
-          title: 'sommarmys'
-          //uri: 'spotify/playlists/5'
+      player.socket.once('pushQueue', () => {
+        player.socket.once('pushBrowseLibrary', data => {
+          let favoList = data.navigation.lists[0].items.find(item => {
+            return item.title === favoriteName;
+          });
+
+          if (favoList) {
+            player.socket.emit('addPlay', {
+              service: favoList.service,
+              title: favoList.title,
+              uri: favoList.uri
+            });
+          }
         });
-      }, 200);
+
+        player.socket.emit('browseLibrary', {
+          uri: 'spotify/playlists'
+        });
+      });
+      
+      player.socket.emit('clearQueue', null);
     }
   },
 
