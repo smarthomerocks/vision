@@ -92,8 +92,10 @@ function Volumio(Dashboard, app, io, config) {
     
     if (player) {
       if (player.lastState && player.lastState.playbackstate === 'PLAYING') {
+        console.log('Plugin ' + 'volumio '.yellow.bold + '"stop"'.blue);
         player.socket.emit('stop', null);
       } else {
+        console.log('Plugin ' + 'volumio '.yellow.bold + '"play"'.blue);
         player.socket.emit('play', null);
       }
     }
@@ -103,6 +105,7 @@ function Volumio(Dashboard, app, io, config) {
     let player = self.players[devicename];
     
     if (player) {
+      console.log('Plugin ' + 'volumio '.yellow.bold + `"volume"=${volume}`.blue);
       player.socket.emit('volume', parseInt(volume));
     }
   },
@@ -111,6 +114,7 @@ function Volumio(Dashboard, app, io, config) {
     let player = self.players[devicename];
     
     if (player) {
+      console.log('Plugin ' + 'volumio '.yellow.bold + '"prev"'.blue);
       player.socket.emit('prev', null);
     }
   },
@@ -119,6 +123,7 @@ function Volumio(Dashboard, app, io, config) {
     let player = self.players[devicename];
     
     if (player) {
+      console.log('Plugin ' + 'volumio '.yellow.bold + '"next"'.blue);
       player.socket.emit('next', null);
     }
   },
@@ -127,6 +132,7 @@ function Volumio(Dashboard, app, io, config) {
     let player = self.players[devicename];
     
     if (player) {
+      console.log('Plugin ' + 'volumio '.yellow.bold + `"seek"=${duration}`.blue);
       player.socket.emit('seek', parseInt(duration));
     }
   },
@@ -143,6 +149,7 @@ function Volumio(Dashboard, app, io, config) {
           });
 
           if (favoList) {
+            console.log('Plugin ' + 'volumio '.yellow.bold + `"addPlay"=${favoList.uri}`.blue);
             player.socket.emit('addPlay', {
               service: favoList.service,
               title: favoList.title,
@@ -156,6 +163,7 @@ function Volumio(Dashboard, app, io, config) {
         });
       });
       
+      console.log('Plugin ' + 'volumio '.yellow.bold + '"clearQueue"'.blue);
       player.socket.emit('clearQueue', null);
     }
   },
