@@ -95,8 +95,8 @@ var NSR = (function() {
 
     location.hash = name;
 
-    sections.fadeOut(500);
-    sectionEl.fadeIn(500);
+    sections.fadeOut(300);
+    sectionEl.fadeIn(200);
 
     navItems.removeClass('active');
     navItems.filter("[data-section='" + name + "']").addClass('active');

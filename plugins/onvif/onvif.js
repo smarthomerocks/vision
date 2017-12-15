@@ -18,26 +18,32 @@ function Onvif(Dashboard, app, io, config) {
     // http://www.gadgetvictims.com/2017/01/veskys-and-digoo-bb-m2-ip-cameras-onvif.html
     
     for (let config of self.modulesConfig) {
-      const camera = await initCamera(config);
-      const information = await getCameraInformation(camera);
-      const streamUri = await getStreamUri(camera);
-      const snapshotUri = await getSnapshotUri(camera);
+      try {
+        const camera = await initCamera(config);
+        const information = await getCameraInformation(camera);
+        const streamUri = await getStreamUri(camera);
+        const snapshotUri = await getSnapshotUri(camera);
         
-      newCameras.set(config.id, {
-        id: config.id,
-        cameraInstance: camera,
-        manufacturer: information.manufacturer,
-        model: information.model,
-        streamUri: streamUri,
-        snapshotUri: snapshotUri
-      });
+        console.log(`Camera setup using id: ${config.id}, manufacturer: ${information.manufacturer}, model: ${information.model}.`);
+
+        newCameras.set(config.id, {
+          id: config.id,
+          cameraInstance: camera,
+          manufacturer: information.manufacturer,
+          model: information.model,
+          streamUri: streamUri,
+          snapshotUri: snapshotUri
+        });
+      } catch(error) {
+        console.log(`Failed to setup camera with id: ${config.id}. Error: "${error.stack}".`);
+      }
     }
 
     self.cameras = newCameras;
   }
 
   function initCamera(config) {
-    return new Promise((resolve, reject) =>{ 
+    return new Promise((resolve, reject) =>{
       new onvif.Cam({
         hostname: config.id,
         port: config.port || 10080,
@@ -105,10 +111,7 @@ function Onvif(Dashboard, app, io, config) {
       for (let camera of self.cameras) {
         self.emit('CAMERA_CONNECTED', camera[1]);
       }      
-    })
-    .catch(error => {
-      console.log(`Failed to setup cameras. Error: "${error.stack}".`);
-    });
+    }); 
   };
 
   self.exit = function() {

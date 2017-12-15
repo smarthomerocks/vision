@@ -4,7 +4,6 @@ Module.register('camera-onvif', {
   defaults: {
     title: 'Camera',
     plugin: 'onvif',
-    id: 'pool',
     streaming: false,
     size_x: 2,
     size_y: 2
@@ -29,10 +28,8 @@ Module.register('camera-onvif', {
     var sourceTemplate = '<div class="box-content">'+
 				'<div class="heading">{{config.title}}</div>'+
       '<div class="spapshot"><img src="{{thumbnail}}"/>' +
-      '<span class="thumbnail">' +
-      '<i class="material-icons">play_circle_outline</i>' +
-						'</span>'+
-						'<div class="updated">{{updatedformatted}}</div>'+
+      '<span class="thumbnail"></span>' +
+      '<div class="updated">{{updatedformatted}}</div>'+
       '</div>';
     /* <video id="gum-local" autoplay playsinline>
     Your brower does not support playback of video streams.
@@ -42,9 +39,11 @@ Module.register('camera-onvif', {
     
     this.template = Handlebars.compile(sourceTemplate);
 
-    this.isConnected = false;
+    if (!this.$el) {
+      this.getDom();
+    }
 
-    this.sendSocketNotification('CAMERA_PLUGIN_CONNECT', {id: this.config.id, plugin: this.config.plugin});
+    this.sendSocketNotification('CAMERA_CONNECT', {id: this.config.id});
   },
 
   updateSnapshot: function() {
@@ -61,15 +60,7 @@ Module.register('camera-onvif', {
   },
 
   getDom: function() {
-    var self = this;
-
-    this.$el = $('<div class="box box-4 camera"></div>');
-
-    this.$el.on('click', '.thumbnail', function() {
-      self.viewdata.status = 'Hämtar snapshot...';
-      self.sendSocketNotification('CAMERA_SNAPSHOT', { id: self.config.id, plugin: self.config.plugin});
-    });
-
+    this.$el = $('<div class="box box-4 camera"><i class="material-icons md-36">videocam</i></div>');
     this.$el.css({
       'opacity' : 0.4
     });
@@ -78,23 +69,14 @@ Module.register('camera-onvif', {
   },
 
   socketNotificationReceived: function(command, data) {
-    if (command === 'CAMERA_PLUGIN_CONNECTED') {
-      if (!this.$el) {
-        this.getDom();
-      }
-
-      this.isConnected = true;
-
-    } else if (command === 'CAMERA_CONNECTED' && (data.id === this.config.id)) {
-
+    if (command === 'CAMERA_CONNECTED' && (data.id === this.config.id)) {
       this.lastdata = data || {};
+
       this.$el.css({
         'opacity': 1
       });
 
-      //TODO: remove.
       this.sendSocketNotification('CAMERA_START_VIDEO', {id: this.config.id, plugin: this.config.plugin, streaming: false});
-
       this.updateDom();
 
     } else if (command === 'SNAPSHOT' && (data.id === this.config.id)) {

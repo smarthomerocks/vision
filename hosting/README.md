@@ -63,7 +63,7 @@ Build a Docker image if you don't have one already (see #4 in Running for a preb
     1. git clone git@gitlab.com:emilohman/node-smart-remote.git && cd node-smart-remote
     2. docker build -t node-smart-remote -f hosting/docker/Dockerfile.rpi .
 
-### Running
+#### Running
 
 Start the Docker image, the configuration file will be located in the /etc/node-smart-remote directory on your host computer.
 

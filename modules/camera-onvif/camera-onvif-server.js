@@ -2,13 +2,14 @@ const fs = require('fs-extra'),
       uuid = require('uuid/v4'),
       request = require('request'),
       ModuleServer = require('../../lib/module-server.js'),
-      rootCameraDirectory = `${process.cwd()}/public/module/camera`;
+      rootCameraDirectory = `${process.cwd()}/public/module/camera`,
+      PLUGIN = 'onvif';
 
 module.exports = ModuleServer.create({
   socketNotificationReceived: function(command, data) {
     switch (command) {
-      case 'CAMERA_PLUGIN_CONNECT':
-        this.connectPlugin(data.plugin);
+      case 'CAMERA_CONNECT':
+        this.connect(data.id);
         break;
       case 'CAMERA_START_VIDEO':
         this.startVideo(data.plugin, data.id, !!data.streaming);
@@ -28,7 +29,7 @@ module.exports = ModuleServer.create({
     return `module/camera/${id.replace(/\./g, '_')}/current.jpg?${uuid()}`; // add uuid to prevent webbrowsers from caching them.
   },
 
-  startVideo: function(plugin, id, streaming) {
+  startVideo: function(id, streaming) {
     //TODO: don't run this whole block if we are already playing for this camera. Hold a global list of camera status.
     let camState = this.cameras[id];
 
@@ -58,15 +59,15 @@ module.exports = ModuleServer.create({
        */
     } else {
       camState.state = 'RECORDING';
-      this.dashboard.camera_onvif.getSnapshot(plugin, id);
+      this.dashboard.camera_onvif.getSnapshot(PLUGIN, id);
 
       camState.snapshotInterval = setInterval(() => {
-        this.dashboard.camera_onvif.getSnapshot(plugin, id);
+        this.dashboard.camera_onvif.getSnapshot(PLUGIN, id);
       }, 5000);
     }
   },
 
-  stopVideo: function(plugin, id) {
+  stopVideo: function(id) {
 
     let camState = this.cameras[id];
     
@@ -80,25 +81,29 @@ module.exports = ModuleServer.create({
     }
   },
 
-  connectPlugin: function(plugin) {
-
-    if (this.isConnected) {
-      this.sendSocketNotification('CAMERA_PLUGIN_CONNECTED');
-      return;
-    }
+  connect: function(id) {
 
     let self = this,
         cameraModules = this.dashboard.getConfig().modules.filter(module => module.module === 'camera-onvif');
 
+    // if another client connect to the dashboard when we already are up and running, notify the client that the camera is already connected.
+    if (this.cameras[id]) {
+      this.sendSocketNotification('CAMERA_CONNECTED', {id: id});
+      return;
+    }
 
-    this.dashboard.camera_onvif.once(plugin, 'CONNECTED', function(data) {
+    // if we already has started the plugin, nothing nee to be done.
+    if (this.isConnected) {
+      return;
+    }
+
+    this.dashboard.camera_onvif.once(PLUGIN, 'CONNECTED', () => {
       self.isConnected = true;
-      self.sendSocketNotification('CAMERA_PLUGIN_CONNECTED');
     });
 
-    this.dashboard.camera_onvif.on(plugin, 'CAMERA_CONNECTED', function(result) {
+    this.dashboard.camera_onvif.on(PLUGIN, 'CAMERA_CONNECTED', function(result) {
       let id = result.id,
-          cameraModule = cameraModules.find(camera => camera.config.id === id);
+          cameraModule = cameraModules.find(camera => camera.config.id === id);         
             
       if (cameraModule) {
         let camState = self.cameras[id] = self.cameras[id] || {};
@@ -116,14 +121,14 @@ module.exports = ModuleServer.create({
       }
     });
 
-    this.dashboard.camera_onvif.on(plugin, 'CAMERA_DISCONNECTED', function(id) {
+    this.dashboard.camera_onvif.on(PLUGIN, 'CAMERA_DISCONNECTED', function(id) {
       let camState = self.cameras[id] = self.cameras[id] || {};
       camState.available = 'DISCONNECTED';
 
       self.sendSocketNotification('CAMERA_DISCONNECTED', id);
     });
 
-    this.dashboard.camera_onvif.on(plugin, 'SNAPSHOT', function(result) {
+    this.dashboard.camera_onvif.on(PLUGIN, 'SNAPSHOT', function(result) {
       let camState = self.cameras[result.id];
 
       // get remote picture and save to local public directory, so that we can serve it to our clients.
@@ -151,6 +156,6 @@ module.exports = ModuleServer.create({
       });        
     });
 
-    this.dashboard.camera_onvif.start(plugin);
+    this.dashboard.camera_onvif.start(PLUGIN);
   }
 });
