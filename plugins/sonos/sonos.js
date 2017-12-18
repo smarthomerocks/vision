@@ -112,7 +112,9 @@ function Sonos(Dashboard, app, io, config) {
     this.discovery.on('queue-change', function(player) {
       console.log('queue-changed', player.roomName);
     });
+
     self.connected = true;
+    this.players = self.discovery.players;
     self.emit('connect');
   },
   this.changePlayState = function(devicename, state) {

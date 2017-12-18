@@ -1,0 +1,5 @@
+.vscode
+.dockerignore
+.eslint*
+.git
+package-lock.json
