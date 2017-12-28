@@ -33,7 +33,7 @@
     "node-blink-security": "https://github.com/ingermaa/node-blink-security",
     "node-domoticz-mqtt": "1.2.2",
     "nordpool": "2.0.0",
-    "onvif": "0.5.3",
+    "onvif": "git://github.com/trycoon/onvif.git",
     "request": "2.83.0",
     "serve-favicon": "2.4.5",
     "socket.io": "2.0.4",

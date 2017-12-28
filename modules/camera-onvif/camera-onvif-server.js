@@ -29,7 +29,7 @@ module.exports = ModuleServer.create({
     return `module/camera/${id.replace(/\./g, '_')}/current.jpg?${uuid()}`; // add uuid to prevent webbrowsers from caching them.
   },
 
-  startVideo: function(id, streaming) {
+  startVideo: function(plugin, id, streaming) {
     //TODO: don't run this whole block if we are already playing for this camera. Hold a global list of camera status.
     let camState = this.cameras[id];
 
@@ -63,7 +63,7 @@ module.exports = ModuleServer.create({
 
       camState.snapshotInterval = setInterval(() => {
         this.dashboard.camera_onvif.getSnapshot(PLUGIN, id);
-      }, 5000);
+      }, 3000);
     }
   },
 
@@ -138,7 +138,7 @@ module.exports = ModuleServer.create({
         let snapshot = {
           id: result.id,
           uri: self.getCameraSnapshotUri(result.id),
-          datetime: result || new Date()
+          datetime: result.datetime || new Date()
         };
 
         self.sendSocketNotification('SNAPSHOT', snapshot);
