@@ -1,6 +1,7 @@
 const fs = require('fs-extra'),
       uuid = require('uuid/v4'),
       request = require('request'),
+      logger = require('../../logger'),
       ModuleServer = require('../../lib/module-server.js'),
       rootCameraDirectory = `${process.cwd()}/public/module/camera`,
       PLUGIN = 'onvif';
@@ -145,14 +146,14 @@ module.exports = ModuleServer.create({
       });
 
       fileStream.on('error', err => {
-        console.error('Failed to save snapshot to file.');
+        logger.error('Failed to save snapshot to file.');
       });
       
       request.get(result.uri)
       .auth(camState.module.config.username, camState.module.config.password, false)
       .pipe(fileStream)
       .on('error', err => {
-        console.eror('Failed to get snapshot picture from camera.');
+        logger.eror('Failed to get snapshot picture from camera.');
       });        
     });
 

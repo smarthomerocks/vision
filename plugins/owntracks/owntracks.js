@@ -1,6 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var mqtt = require('mqtt');
+var logger = require('../../logger');
 
 function Owntracks(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -28,11 +29,11 @@ function Owntracks(Dashboard, app, io, config) {
         self.lastReceivedData = owntracksData;
         self.emit('change', owntracksData);
 
-        console.log('Owntracks data: ' + JSON.stringify(owntracksData));
+        logger.debug('Owntracks data: ' + JSON.stringify(owntracksData));
       });
 
       this.mqttConnection.on('connect', function() {
-        console.log('Owntracks connected');
+        logger.info('Owntracks connected');
 
         self.mqttConnection.subscribe('owntracks/#');
 

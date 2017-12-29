@@ -1,4 +1,5 @@
 const EventEmitter = require('events').EventEmitter,
+      logger = require('../../logger'),
       util = require('util'),
       onvif = require('onvif');
 
@@ -24,7 +25,7 @@ function Onvif(Dashboard, app, io, config) {
         const streamUri = await getStreamUri(camera);
         const snapshotUri = await getSnapshotUri(camera);
         
-        console.log(`Camera setup using id: ${config.id}, title: ${config.title}, manufacturer: ${information.manufacturer}, model: ${information.model}.`);
+        logger.info(`Camera setup using id: ${config.id}, title: ${config.title}, manufacturer: ${information.manufacturer}, model: ${information.model}.`);
 
         newCameras.set(config.id, {
           id: config.id,
@@ -35,7 +36,7 @@ function Onvif(Dashboard, app, io, config) {
           snapshotUri: snapshotUri
         });
       } catch(error) {
-        console.log(`Failed to setup camera with id: ${config.id}, title: ${config.title}. Error: "${error.stack}".`);
+        logger.error(`Failed to setup camera with id: ${config.id}, title: ${config.title}. Error: "${error.stack}".`);
       }
     }
 

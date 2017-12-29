@@ -2,6 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var async = require('async');
 var itach = require('itach');
+var logger = require('../../logger');
 
 function ITach(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -24,7 +25,7 @@ function ITach(Dashboard, app, io, config) {
       this.emit('connect');
     } else {
       itach.on('connect', function() {
-        console.log('ITach connected');
+        logger.info('ITach connected');
 
         self.isConnected = true;
 

@@ -4,13 +4,14 @@ const EventEmitter = require('events').EventEmitter,
       request = require('request'),
       async = require('async'),
       colors = require('colors'), //eslint-disable-line no-unused-vars
+      logger = require('../../logger'),
       BlinkAPI = require('node-blink-security');
 
 function Blink(Dashboard, app, io, config) {
   EventEmitter.call(this);
 
   if(config.username === null || config.username === '' || config.password === null || config.password === '') {
-    console.log('Plugin ' + 'blink '.yellow.bold + 'Please check config. Could not found Blink username and/or password'.red);
+    logger.warn('Plugin ' + 'blink '.yellow.bold + 'Please check config. Could not found Blink username and/or password'.red);
     return;
   }
 
@@ -23,7 +24,7 @@ function Blink(Dashboard, app, io, config) {
     //var idx = _.map(_.filter(Dashboard.getConfig().modules, function(module) { return module.config.plugin === 'blink';}), function(module) { return module.config['id']; });
 
     if(blink._token) {
-      console.log('Plugin ' + 'blink '.yellow.bold + 'Connection token exists.');
+      logger.debug('Plugin ' + 'blink '.yellow.bold + 'Connection token exists.');
       self.emit('connect');
       return;
     }
@@ -32,14 +33,14 @@ function Blink(Dashboard, app, io, config) {
       .then(() => {
         self.emit('connect');
       }, (error) => {
-        console.log('Plugin ' + 'blink '.yellow.bold + 'Error'.red, error);
+        logger.error('Plugin ' + 'blink '.yellow.bold + 'Error'.red, error);
       });
   };
 
   this.statusQueue = [];
 
   this.setArmStatus = function(name, armState = false) {
-    console.log('Plugin ' + 'blink '.yellow.bold + 'setArmStatus'.blue + ' state: ' + armState);
+    logger.debug('Plugin ' + 'blink '.yellow.bold + 'setArmStatus'.blue + ' state: ' + armState);
     var camera = blink.cameras[name];
     if(camera) {
       self.emit('change', {state: 'busy'});
@@ -48,10 +49,10 @@ function Blink(Dashboard, app, io, config) {
           self.emit('change', {state: 'idle'});
           self.getStatus(name);
         }, (error) => {
-          console.log('Plugin ' + 'blink '.yellow.bold + ' setArmStatus '.blue + ' error'.red + name, error);
+          logger.error('Plugin ' + 'blink '.yellow.bold + ' setArmStatus '.blue + ' error'.red + name, error);
         });
     } else {
-      console.log('Plugin ' + 'blink '.yellow.bold + ' setArmStatus '.blue + ' error'.red + name + ' camera not found.');
+      logger.error('Plugin ' + 'blink '.yellow.bold + ' setArmStatus '.blue + ' error'.red + name + ' camera not found.');
     }
   };
 
@@ -59,7 +60,7 @@ function Blink(Dashboard, app, io, config) {
 
     var self = this;
 
-    console.log('Plugin ' + 'blink '.yellow.bold + 'getStatus'.blue + ' ' + name);
+    logger.debug('Plugin ' + 'blink '.yellow.bold + 'getStatus'.blue + ' ' + name);
     var camera = blink.cameras[name];
 
     if(camera && camera.thumbnail) {
@@ -94,14 +95,14 @@ function Blink(Dashboard, app, io, config) {
               camera.thumbnaildata = body.toString('base64');
               self.emit('change', {id: name, thumbnail: camera.thumbnaildata, lastUpdate: camera.updated_at, armed: camera.armed});
             } else {
-              console.log('Plugin ' + 'blink '.yellow.bold + 'getStatus'.blue + 'camera ' + name.blue + ' error while fething thumbnail image'.red, err);
+              logger.warn('Plugin ' + 'blink '.yellow.bold + 'getStatus'.blue + 'camera ' + name.blue + ' error while fething thumbnail image'.red, err);
               self.emit('change', {id: name, lastUpdate: new Date()});
             }
 
             self.statusQueue = _.without(self.statusQueue, _.findWhere(self.statusQueue, name));
           });
         }, (error) => {
-          console.log('Plugin ' + 'blink '.yellow.bold + ' getStatus '.blue + ' error'.red + name, error);
+          logger.error('Plugin ' + 'blink '.yellow.bold + ' getStatus '.blue + ' error'.red + name, error);
         });
     }
   };
@@ -109,7 +110,7 @@ function Blink(Dashboard, app, io, config) {
 
   this.getSnapshot = function(name) {
     var self = this;
-    console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' ' + name);
+    logger.debug('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' ' + name);
 
     var camera = blink.cameras[name];
 
@@ -138,7 +139,7 @@ function Blink(Dashboard, app, io, config) {
             });
           }, function(err, result) {
             if(err) {
-              console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error '.red + name, err);
+              logger.error('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error '.red + name, err);
             }
             self.emit('change', {state: 'idle'});
             self.getStatus(name);
@@ -146,7 +147,7 @@ function Blink(Dashboard, app, io, config) {
           
         }, (error) => {
           self.emit('change', {state: 'idle'});
-          console.log('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error '.red + name, error);
+          logger.error('Plugin ' + 'blink '.yellow.bold + ' getSnapshot '.blue + ' error '.red + name, error);
         });
     }
   };

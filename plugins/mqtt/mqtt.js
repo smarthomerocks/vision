@@ -1,4 +1,5 @@
 const EventEmitter = require('events').EventEmitter,
+      logger = require('../../logger'),
       util = require('util'),
       mqtt = require('mqtt');
 
@@ -29,7 +30,7 @@ function MQTT(Dashboard, app, io, config) {
       // Subscribe on all modules "statusTopic" topics.
       self.client.subscribe(modulesConfig.map(config => config.statusTopic));
 
-      console.log('Plugin ' + 'mqtt '.yellow.bold + 'connected'.blue);
+      logger.info('Plugin ' + 'mqtt '.yellow.bold + 'connected'.blue);
 
       // Momentary buttons should all be off to start with.
       for (let module of modulesConfig) {
@@ -59,7 +60,7 @@ function MQTT(Dashboard, app, io, config) {
     });
 
     self.client.on('error', function(error) {
-      console.log(error);
+      logger.error(error);
     });
   };
 
@@ -71,7 +72,7 @@ function MQTT(Dashboard, app, io, config) {
   };
 
   self.getStatus = function(id) {
-    console.log('Plugin ' + 'mqtt '.yellow.bold + 'getStatus'.blue, id);
+    logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'getStatus'.blue, id);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
 
     if (moduleConfig && moduleConfig.getTopic && moduleConfig.getTopic.length > 0) {
@@ -80,13 +81,13 @@ function MQTT(Dashboard, app, io, config) {
   };
 
   self.switch = function(id, level) {
-    console.log('Plugin ' + 'mqtt '.yellow.bold + 'switch'.blue, id, level);
+    logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'switch'.blue, id, level);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
     self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)));
   };
 
   self.toggle = function(id, state) {
-    console.log('Plugin ' + 'mqtt '.yellow.bold + 'toggle'.blue, id, state);
+    logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'toggle'.blue, id, state);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
     self.client.publish(moduleConfig.setTopic, state ? moduleConfig.onCmd : moduleConfig.offCmd);
 

@@ -25,8 +25,8 @@ var NSRSocket = function(moduleName) {
 		window.location.reload();
 	});
 
-	self.socket.on('connect_error', function(){
-    console.log('Connection Failed');
+	self.socket.on('connect_error', function(err){
+    console.log('Connection Failed', err);
 		window.location.reload();
 	});
 

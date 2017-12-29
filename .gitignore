@@ -11,3 +11,4 @@ public/images/camera/
 public/**/*.css
 public/module/**
 modules/**/*.css
+*.log

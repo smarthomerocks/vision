@@ -1,6 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var APIFetcher = require('./apifetcher.js');
+var logger = require('../../logger');
 var colors = require('colors'); //eslint-disable-line no-unused-vars
 
 function SMHI(Dashboard, app, io, config) {
@@ -11,11 +12,11 @@ function SMHI(Dashboard, app, io, config) {
 
     this.emit('connect');
 
-    console.log('Plugin ' + 'smhi '.yellow.bold + 'connected'.blue);
+    logger.info('Plugin ' + 'smhi '.yellow.bold + 'connected'.blue);
   };
 
   this.getCurrent = function(lat, lon) {
-    console.log('Plugin ' + 'smhi '.yellow.bold + 'getCurrent'.blue, lat, lon);
+    logger.debug('Plugin ' + 'smhi '.yellow.bold + 'getCurrent'.blue, lat, lon);
 
     var self = this,
         fetcher,
@@ -27,18 +28,18 @@ function SMHI(Dashboard, app, io, config) {
       fetcher.onReceive(function(fetcher) {
         var data = { lat: fetcher.lat(), lon: fetcher.lon(), currentWeather: fetcher.currentWeather()};
 
-        console.log('Plugin ' + 'smhi '.yellow.bold + 'data'.blue, data);
+        logger.debug('Plugin ' + 'smhi '.yellow.bold + 'data'.blue, data);
 
         self.emit('change', data);
       });
 
       fetcher.onError(function(fetcher, error) {
-        console.log('Plugin ' + 'smhi '.yellow.bold + 'Fetch error'.blue, error);
+        logger.error('Plugin ' + 'smhi '.yellow.bold + 'Fetch error'.blue, error);
       });
 
       self.fetchers[id] = fetcher;
     } else {
-      console.log('Plugin ' + 'smhi '.yellow.bold + 'Use existing fetcher for lat: ' + lat + ' lon: ' + lon);
+      logger.debug('Plugin ' + 'smhi '.yellow.bold + 'Use existing fetcher for lat: ' + lat + ' lon: ' + lon);
       fetcher = self.fetchers[id];
       fetcher.broadcastCurrentWeather();
     }

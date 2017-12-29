@@ -2,6 +2,7 @@ const EventEmitter = require('events').EventEmitter,
       util = require('util'),
       _ = require('underscore'),
       SonosDiscovery = require('sonos-discovery'),
+      logger = require('../../logger'),
       colors = require('colors'); //eslint-disable-line no-unused-vars
 //var sonosdevice = require('sonos');
 //var Listener = require('sonos/lib/events/listener');
@@ -29,7 +30,7 @@ function Sonos(Dashboard, app, io, config) {
       return;
     }
 
-    console.log('Plugin ' + 'sonos'.yellow.bold + ' start. Scanning for devices...');
+    logger.info('Plugin ' + 'sonos'.yellow.bold + ' start. Scanning for devices...');
 
     this.discovery.on('topology-change', function(data) {
       //socketServer.sockets.emit('topology-change', discovery.players);
@@ -110,7 +111,7 @@ function Sonos(Dashboard, app, io, config) {
     });
 
     this.discovery.on('queue-change', function(player) {
-      console.log('queue-changed', player.roomName);
+      logger.debug('queue-changed', player.roomName);
     });
 
     self.connected = true;

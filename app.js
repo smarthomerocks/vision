@@ -1,20 +1,70 @@
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var constants = require('constants');
-
-var routes = require('./routes/index');
-
-var plugins = require('./lib/plugins');
-var modules = require('./lib/modules');
-var Dashboard = require('./lib/dashboard');
+const express = require('express'),
+      fs = require('fs'),
+      path = require('path'),     
+      morgan = require('morgan'),
+      cookieParser = require('cookie-parser'),
+      bodyParser = require('body-parser'),
+      constants = require('constants'),
+      logger = require('./logger'),
+      routes = require('./routes/index'),
+      plugins = require('./lib/plugins'),
+      modules = require('./lib/modules'),
+      Dashboard = require('./lib/dashboard');
 
 var dashboard = new Dashboard();
 
 dashboard.setConfig(dashboard.loadConfig());
+/*
+function approveDomains(opts, certs, cb) {
+  // This is where you check your database and associated
+  // email addresses with domains and agreements and such
+
+
+  // The domains being approved for the first time are listed in opts.domains
+  // Certs being renewed are listed in certs.altnames
+  if (certs) {
+    opts.domains = certs.altnames;
+  } else {
+    opts.email = 'john.doe@example.com';
+    opts.agreeTos = true;
+  }
+
+  // NOTE: you can also change other options such as `challengeType` and `challenge`
+  // opts.challengeType = 'http-01';
+  // opts.challenge = require('le-challenge-fs').create({});
+
+  cb(null, {options: opts, certs: certs});
+}
+
+var lex = require('greenlock-express').create({
+  // set to https://acme-v01.api.letsencrypt.org/directory in production
+  server: 'staging',
+  challenges: {
+    'http-01': require('le-challenge-fs').create({
+      webrootPath: '/tmp/acme-challenges'
+    })
+  },
+  store: require('le-store-certbot').create({
+    webrootPath: '/tmp/acme-challenges'
+  }),
+  approveDomains: approveDomains
+});
+
+// handles acme-challenge and redirects to https
+require('http').createServer(lex.middleware(require('redirect-https')())).listen(80, function() {
+  logger.debug("Listening for ACME http-01 challenges on", this.address());
+});
+
+var app = require('express')();
+app.use('/', function(req, res) {
+  res.end('Hello, World!');
+});
+
+// handles your app
+var server = require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(443, function() {
+  logger.debug("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
+});
+*/
 
 var app = express();
 var server = require('http').Server(app);
@@ -39,7 +89,12 @@ app.use(function(req, res, next) {
   res.io = io;
   next();
 });
-app.use(logger('dev'));
+// Setup request-logger, write to Winston logger.
+app.use(morgan('dev', { 
+  stream: { 
+    write: message => logger.info(message.trim()) 
+  }
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

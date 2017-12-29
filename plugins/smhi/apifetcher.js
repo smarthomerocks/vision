@@ -65,7 +65,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
 	 * Schedule the timer for the next update.
 	 */
   var scheduleTimer = function() {
-		//console.log('Schedule update timer.');
+		//logger.debug('Schedule update timer.');
     clearTimeout(reloadTimer);
     reloadTimer = setTimeout(function() {
       fetchWeather();

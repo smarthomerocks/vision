@@ -1,12 +1,13 @@
-var ModuleServer = require('../../lib/module-server.js');
+var ModuleServer = require('../../lib/module-server.js'),
+    logger = require('../../logger');
 
 module.exports = ModuleServer.create({
   socketNotificationReceived: function(command, data) {
     if (command === 'APPLE_TV_REMOTE_CONNECT') {
-      console.log('APPLE_TV_REMOTE_CONNECT');
+      logger.debug('APPLE_TV_REMOTE_CONNECT');
       this.connectPlugin(data.plugin);
     } else if (command === 'APPLE_TV_REMOTE_SEND_COMMAND') {
-      console.log('APPLE_TV_REMOTE_SEND_COMMAND');
+      logger.debug('APPLE_TV_REMOTE_SEND_COMMAND');
       this.dashboard.remotecontrol.sendCommand(data.plugin, data.commands);
     }
   },

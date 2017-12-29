@@ -3,3 +3,4 @@
 .eslint*
 .git
 package-lock.json
+*.log

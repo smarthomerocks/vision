@@ -2,6 +2,7 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 var fs = require('fs');
+var logger = require('../../logger');
 var ModuleServer = require('../../lib/module-server.js');
 
 module.exports = ModuleServer.create({
@@ -19,8 +20,10 @@ module.exports = ModuleServer.create({
         self = this;
 
     fs.writeFile(filePath, data.audio, function(err) {
-      if (err)
-        return console.error(err);
+      if (err) {
+        logger.error(err);
+        return;
+      }
 
       var callback = function(response) {
 
@@ -37,7 +40,7 @@ module.exports = ModuleServer.create({
       var request = http.request(url.parse(data.url + (data.room === 'all' ? '/clipall/' : '/' + data.room + '/clip/') + filename + '/' + data.volume), callback);
 
       request.on('error', function(e) {
-        console.log('problem with request: ' + e.message);
+        logger.warn('problem with request: ' + e.message);
       });
 
       request.end();

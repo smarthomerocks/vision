@@ -1,7 +1,8 @@
 const EventEmitter = require('events').EventEmitter,
       util = require('util'),
       nordpool = require('nordpool'),
-      moment = require('moment');
+      moment = require('moment'),
+      logger = require('../../logger');
 
 function Electricity_spot_price(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -45,7 +46,7 @@ function Electricity_spot_price(Dashboard, app, io, config) {
 
   self.getPriceList = function(id) {
 
-    console.log('Electricity_spot_price: getting price list.');
+    logger.debug('Electricity_spot_price: getting price list.');
 
     let requests = [
       getPricePerDay(moment().subtract(1, 'days')), // to handle day rollover
@@ -65,7 +66,7 @@ function Electricity_spot_price(Dashboard, app, io, config) {
           self.emit('change', {hourly: pricelist});
         })
         .catch(error => {
-          console.err('Electricity_spot_price: get price list error: ' + error.message);
+          logger.error('Electricity_spot_price: get price list error: ' + error.message);
         });
   };
 }

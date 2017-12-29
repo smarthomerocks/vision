@@ -2,7 +2,8 @@ const EventEmitter = require('events').EventEmitter,
       util = require('util'),
       _ = require('underscore'),
       async = require('async'),
-      verisure = require('verisure');
+      verisure = require('verisure'),
+      logger = require('../../logger');
 
 
 function Verisure(Dashboard, app, io, config) {
@@ -19,7 +20,7 @@ function Verisure(Dashboard, app, io, config) {
   this.password = config.password;
 
   this.start = function() {
-    console.log('Plugin ' + 'verisure'.yellow.bold + ' start. ');
+    logger.info('Plugin ' + 'verisure'.yellow.bold + ' start. ');
 
     if(self.token) {
       self.emit('connect');
@@ -29,7 +30,7 @@ function Verisure(Dashboard, app, io, config) {
         authCallInProgress = true;
         verisure.auth(config.username, config.password, function(err, token) {
           if(err) {
-            console.log('Plugin ' + 'verisure'.yellow.bold + ' auth error. ', err);
+            logger.error('Plugin ' + 'verisure'.yellow.bold + ' auth error. ', err);
           }
           self.token = token;
           self.authCallInProgress = false;
@@ -52,11 +53,11 @@ function Verisure(Dashboard, app, io, config) {
         verisure.installations(self.token, config.username, function(err, installations) {
           
           if(err) {
-            console.log('Plugin ' + 'verisure '.yellow.bold + ' getLastestOverView '.blue + ' error'.red, err);
+            logger.debug('Plugin ' + 'verisure '.yellow.bold + ' getLastestOverView '.blue + ' error'.red, err);
             callback(err);
           } else {
             if(!installations) {
-              console.log('Plugin ' + 'verisure '.yellow.bold + 'No installations found'.red);
+              logger.warn('Plugin ' + 'verisure '.yellow.bold + 'No installations found'.red);
               callback(err);
             } else {
               // Find installation by alias
@@ -89,7 +90,7 @@ function Verisure(Dashboard, app, io, config) {
     overviewPollTimer = setTimeout(function() {
       self.getLastestOverView(function(err, ok) {
         if(err) {
-          console.log('ERR', err);
+          logger.error('ERR', err);
         }
         self.reloadTimer();
       });
@@ -97,7 +98,7 @@ function Verisure(Dashboard, app, io, config) {
   };
 
   this.parseAndSendStatusUpdate = function() {
-    console.log('Plugin ' + 'verisure'.yellow.bold + ' parseAndSendStatusUpdate. ');
+    logger.debug('Plugin ' + 'verisure'.yellow.bold + ' parseAndSendStatusUpdate. ');
 
     // Doorlocks
     _.each(doorLockSubscibersList, function(subscriber) {
@@ -125,7 +126,7 @@ function Verisure(Dashboard, app, io, config) {
   };
 
   this.getAlarmStatus = function(alias) {
-    console.log('Plugin ' + 'verisure'.yellow.bold + ' getAlarmStatus. ' + alias);
+    logger.debug('Plugin ' + 'verisure'.yellow.bold + ' getAlarmStatus. ' + alias);
 
     // Do we have this doorlock in event list?
     let eventSubscriberExists = _.find(alarmSubscibersList, function(item) { return item.alias === alias;});
@@ -147,7 +148,7 @@ function Verisure(Dashboard, app, io, config) {
   };
 
   this.getDoorLockStatus = function(alias, area) {
-    console.log('Plugin ' + 'verisure'.yellow.bold + ' getDoorLockStatus. ' + alias + ' ' + area);
+    logger.debug('Plugin ' + 'verisure'.yellow.bold + ' getDoorLockStatus. ' + alias + ' ' + area);
 
     // Do we have this doorlock in event list?
     let eventSubscriberExists = _.find(doorLockSubscibersList, function(item) { return item.alias === alias && item.area == area;});

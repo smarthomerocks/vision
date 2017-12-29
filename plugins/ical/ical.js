@@ -1,6 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var CalendarFetcher = require('./calendarfetcher.js');
+var logger = require('../../logger');
 var colors = require('colors'); //eslint-disable-line no-unused-vars
 
 function ICal(Dashboard, app, io, config) {
@@ -9,17 +10,17 @@ function ICal(Dashboard, app, io, config) {
   this.start = function() {
     this.fetchers = [];
     this.emit('connect');
-    console.log('Plugin ' + 'ical '.yellow.bold + 'connected');
+    logger.info('Plugin ' + 'ical '.yellow.bold + 'connected');
   };
 
   this.getEvents = function(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass) {
-    console.log('Plugin ' + 'ical '.yellow.bold + 'getEvents ' + url);
+    logger.debug('Plugin ' + 'ical '.yellow.bold + 'getEvents ' + url);
     var self = this,
         fetcher;
 
     if (typeof self.fetchers[url] === 'undefined') {
 
-      console.log('Plugin ' + 'ical '.yellow.bold + 'fething ' + url);
+      logger.debug('Plugin ' + 'ical '.yellow.bold + 'fething ' + url);
 
       fetcher = new CalendarFetcher(url, fetchInterval, maximumEntries, maximumNumberOfDays, user, pass);
 
@@ -29,12 +30,12 @@ function ICal(Dashboard, app, io, config) {
       });
 
       fetcher.onError(function(fetcher, error) {
-        console.log('Fetch error: ', error);
+        logger.error('Fetch error: ', error);
       });
 
       self.fetchers[url] = fetcher;
     } else {
-      console.log('Use existing news fetcher for url: ' + url);
+      logger.debug('Use existing news fetcher for url: ' + url);
       fetcher = self.fetchers[url];
       fetcher.broadcastEvents();
     }
