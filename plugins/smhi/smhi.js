@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var APIFetcher = require('./apifetcher.js');
-var logger = require('../../logger');
+var logger = require('../../logger').logger;
 var colors = require('colors'); //eslint-disable-line no-unused-vars
 
 function SMHI(Dashboard, app, io, config) {

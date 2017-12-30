@@ -1,7 +1,7 @@
 const fs = require('fs-extra'),
       uuid = require('uuid/v4'),
       request = require('request'),
-      logger = require('../../logger'),
+      logger = require('../../logger').logger,
       ModuleServer = require('../../lib/module-server.js'),
       rootCameraDirectory = `${process.cwd()}/public/module/camera`,
       PLUGIN = 'onvif';

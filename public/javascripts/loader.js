@@ -127,14 +127,14 @@ var Loader = (function() {
 	 * argument callback function - Function called when done.
 	 */
 	var bootstrapModule = function(module, mObj, callback) {
-		console.log("Bootstrapping module: " + module.name);
+		winston.debug("Bootstrapping module: " + module.name);
 
 		mObj.setData(module);
 
 		mObj.loadScripts(function() {
-			console.log("Scripts loaded for: " + module.name);
+			winston.debug("Scripts loaded for: " + module.name);
 			mObj.loadStyles(function() {
-				console.log("Styles loaded for: " + module.name);
+				winston.debug("Styles loaded for: " + module.name);
 				moduleObjects.push(mObj);
 				callback();
 			});
@@ -149,12 +149,12 @@ var Loader = (function() {
 	 * argument callback function - Function called when done.
 	 */
 	var loadFile = function(fileName, callback) {
-		console.log(fileName);
+		winston.debug(fileName);
 		var extension =  fileName.slice((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1);
 
 		switch (extension.toLowerCase()) {
 		case "js":
-			console.log("Load script: " + fileName);
+			winston.debug("Load script: " + fileName);
 			var script = document.createElement("script");
 			script.type = "text/javascript";
 			script.src = fileName;
@@ -164,7 +164,7 @@ var Loader = (function() {
 			document.getElementsByTagName("body")[0].appendChild(script);
 			break;
 		case "css":
-			console.log("Load stylesheet: " + fileName);
+			winston.debug("Load stylesheet: " + fileName);
 			var stylesheet = document.createElement("link");
 			stylesheet.rel = "stylesheet";
 			stylesheet.type = "text/css";
@@ -199,7 +199,7 @@ var Loader = (function() {
 		loadFile: function(fileName, module, callback) {
 
 			if (loadedFiles.indexOf(fileName.toLowerCase()) !== -1) {
-				console.log("File already loaded: " + fileName);
+				winston.debug("File already loaded: " + fileName);
 				callback();
 				return;
 			}

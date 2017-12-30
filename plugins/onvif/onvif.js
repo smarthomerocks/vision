@@ -1,5 +1,5 @@
 const EventEmitter = require('events').EventEmitter,
-      logger = require('../../logger'),
+      logger = require('../../logger').logger,
       util = require('util'),
       onvif = require('onvif');
 

@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('calendar', {
 
   defaults: {
@@ -17,7 +17,7 @@ Module.register('calendar', {
   },
 
   start: function() {
-    console.log('Starting calendar ' + this.config.title);
+    winston.info('Starting calendar ' + this.config.title);
 
     this.isStateOn = false;
 

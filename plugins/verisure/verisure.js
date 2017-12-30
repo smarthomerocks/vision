@@ -3,7 +3,7 @@ const EventEmitter = require('events').EventEmitter,
       _ = require('underscore'),
       async = require('async'),
       verisure = require('verisure'),
-      logger = require('../../logger');
+      logger = require('../../logger').logger;
 
 
 function Verisure(Dashboard, app, io, config) {

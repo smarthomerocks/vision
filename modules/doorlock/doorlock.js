@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('doorlock', {
   
   defaults: {
@@ -11,7 +11,7 @@ Module.register('doorlock', {
   },
 
   start: function() {
-    console.log('Starting doorlock ' + this.config.title);
+    winston.info('Starting doorlock ' + this.config.title);
 
     this.isConnected = false;this.sendSocketNotification('DOORLOCK_CONNECT', { plugin: this.config.plugin});
   },

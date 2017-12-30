@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('apple-tv-remote', {
 
   defaults: {
@@ -11,7 +11,7 @@ Module.register('apple-tv-remote', {
   },
 
   start: function() {
-    console.log('Starting apple-tv-remote ' + this.config.title);
+    winston.info('Starting apple-tv-remote ' + this.config.title);
 
     this.sendSocketNotification('APPLE_TV_REMOTE_CONNECT', { plugin: this.config.plugin });
   },

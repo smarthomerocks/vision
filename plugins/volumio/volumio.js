@@ -5,7 +5,7 @@
 const EventEmitter = require('events').EventEmitter,
       socketIO = require('socket.io-client'),
       util = require('util'),
-      logger = require('../../logger'),
+      logger = require('../../logger').logger,
       colors = require('colors'); //eslint-disable-line no-unused-vars
 
 /**

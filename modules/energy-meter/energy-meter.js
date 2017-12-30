@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('energy-meter', {
 
   defaults: {
@@ -13,7 +13,7 @@ Module.register('energy-meter', {
   },
 
   start: function() {
-    console.log('Starting energy-meter ' + this.config.title);
+    winston.info('Starting energy-meter ' + this.config.title);
 
     this.sendSocketNotification('ENERGY_METER_CONNECT', { id: this.config.id, plugin: this.config.plugin });
   },
@@ -38,7 +38,6 @@ Module.register('energy-meter', {
 
   socketNotificationReceived: function(command, data) {
     var self = this;
-		//console.log(data);
     if (command === 'ENERGY_METER_CONNECTED') {
 			// Connected to plugin, get status
       this.sendSocketNotification('ENERGY_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });

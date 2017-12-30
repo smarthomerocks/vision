@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('temperature-meter', {
 
   defaults: {
@@ -12,7 +12,7 @@ Module.register('temperature-meter', {
   },
 
   start: function() {
-    console.log('Starting TEMP-meter ' + this.config.title);
+    winston.info('Starting TEMP-meter ' + this.config.title);
 
     this.sendSocketNotification('TEMP_METER_CONNECT', { id: this.config.id, plugin: this.config.plugin });
   },
@@ -37,7 +37,6 @@ Module.register('temperature-meter', {
 
   socketNotificationReceived: function(command, data) {
     var self = this;
-		//console.log(data);
     if (command === 'TEMP_METER_CONNECTED') {
 			// Connected to plugin, get status
       this.sendSocketNotification('TEMP_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });

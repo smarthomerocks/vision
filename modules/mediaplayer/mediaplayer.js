@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('mediaplayer', {
 
   defaults: {
@@ -12,7 +12,7 @@ Module.register('mediaplayer', {
   },
 
   start: function() {
-    console.log('Starting mediaplayer ' + this.config.devicename);
+    winston.info('Starting mediaplayer ' + this.config.devicename);
 
     this.sendSocketNotification('MEDIAPLAYER_CONNECT', { device: this.config.devicename, plugin: this.config.plugin });
 

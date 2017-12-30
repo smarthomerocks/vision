@@ -21,13 +21,17 @@ var NSRSocket = function(moduleName) {
 	};
 
 	self.socket.on('error', function (err) {
-    console.log("SOCKET ERROR", err);
-		window.location.reload();
+		winston.error("SOCKET ERROR", err);
+		setTimeout(function() {
+			window.location.reload();
+		}, 100);		
 	});
 
 	self.socket.on('connect_error', function(err){
-    console.log('Connection Failed', err);
-		window.location.reload();
+		winston.error('Connection Failed', err);
+		setTimeout(function() {
+			window.location.reload();
+		}, 100);
 	});
 
 	// register catch all.

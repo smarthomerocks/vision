@@ -1,5 +1,5 @@
 var ModuleServer = require('../../lib/module-server.js'),
-    logger = require('../../logger');
+    logger = require('../../logger').logger;
 
 module.exports = ModuleServer.create({
   socketNotificationReceived: function(command, data) {

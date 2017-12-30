@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('weather-current', {
 
   defaults: {
@@ -13,7 +13,7 @@ Module.register('weather-current', {
   },
 
   start: function() {
-    console.log('Starting weather-current ' + this.config.title);
+    winston.info('Starting weather-current ' + this.config.title);
 
     this.isStateOn = false;
 

@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('electricity-spot-price', {
 
   defaults: {
@@ -15,7 +15,7 @@ Module.register('electricity-spot-price', {
   },
 
   start: function() {
-    console.log('Starting electricity-spot-price ' + this.config.title);
+    winston.info('Starting electricity-spot-price ' + this.config.title);
 
     this.graphTemplate = Handlebars.compile(`
       <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph">

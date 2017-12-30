@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('camera-onvif', {
 
   defaults: {
@@ -18,7 +18,7 @@ Module.register('camera-onvif', {
   },
 
   start: function() {
-    console.log('Starting camera', this.config.title);
+    winston.info('Starting camera', this.config.title);
 
     this.lastdata = {};
     this.viewdata = {};

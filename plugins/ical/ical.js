@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var CalendarFetcher = require('./calendarfetcher.js');
-var logger = require('../../logger');
+var logger = require('../../logger').logger;
 var colors = require('colors'); //eslint-disable-line no-unused-vars
 
 function ICal(Dashboard, app, io, config) {

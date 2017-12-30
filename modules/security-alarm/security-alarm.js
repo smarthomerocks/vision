@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('security-alarm', {
 
   defaults: {
@@ -11,7 +11,7 @@ Module.register('security-alarm', {
   },
 
   start: function() {
-    console.log('Starting security-alarm ' + this.config.title);
+    winston.info('Starting security-alarm ' + this.config.title);
 
     this.isConnected = false;
 

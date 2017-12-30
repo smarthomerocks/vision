@@ -2,7 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var async = require('async');
 var itach = require('itach');
-var logger = require('../../logger');
+var logger = require('../../logger').logger;
 
 function ITach(Dashboard, app, io, config) {
   EventEmitter.call(this);

@@ -1,4 +1,4 @@
-/*global Module google*/
+/*global Module google winston*/
 Module.register('map', {
 
   defaults: {
@@ -17,7 +17,7 @@ Module.register('map', {
   start: function() {
     var self = this;
 
-    console.log('Starting map ' + this.config.title);
+    winston.info('Starting map ' + this.config.title);
 
     $.getScript('https://maps.google.com/maps/api/js?key=' + this.config.apiKey, function() {
       self.sendSocketNotification('MAP_CONNECT', { plugin: self.config.plugin });

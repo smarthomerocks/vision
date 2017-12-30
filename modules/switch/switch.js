@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('switch', {
 
   defaults: {
@@ -19,7 +19,7 @@ Module.register('switch', {
   },
 
   start: function() {
-    console.log('Starting switch ' + this.config.title);
+    winston.info('Starting switch ' + this.config.title);
 
     this.isStateOn = false;
 

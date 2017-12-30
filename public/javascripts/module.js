@@ -1,4 +1,4 @@
-/* global Log, Class, Loader, Class , MM */
+/* global Log, Class, Loader, Class , MM, winston */
 /* exported Module */
 
 /* Magic Mirror
@@ -21,14 +21,14 @@ var Module = Class.extend({
 	 * Is called when the module is instantiated.
 	 */
 	init: function () {
-		//console.log(this.defaults);
+		//winston.debug(this.defaults);
 	},
 
 	/* start()
 	 * Is called when the module is started.
 	 */
 	start: function () {
-		console.info("Starting module: " + this.name);
+		winston.info("Starting module: " + this.name);
 	},
 
 	/* getScripts()
@@ -79,7 +79,7 @@ var Module = Class.extend({
 	 * argument payload mixed - The payload of the notification.
 	 */
 	socketNotificationReceived: function (notification, payload) {
-		console.log(this.name + " received a socket notification: " + notification + " - Payload: " + payload);
+		winston.debug(this.name + " received a socket notification: " + notification + " - Payload: " + payload);
 	},
 
 	/*********************************************
@@ -224,6 +224,6 @@ Module.create = function (name) {
 };
 
 Module.register = function (name, moduleDefinition) {
-	console.log("Module registered: " + name);
+	winston.info("Module registered: " + name);
 	Module.definitions[name] = moduleDefinition;
 };

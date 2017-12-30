@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('counter', {
 
   defaults: {
@@ -12,7 +12,7 @@ Module.register('counter', {
   },
 
   start: function() {
-    console.log('Starting counter ' + this.config.title);
+    winston.info('Starting counter ' + this.config.title);
 
     this.sendSocketNotification('COUNTER_CONNECT', { id: this.config.id, plugin: this.config.plugin });
   },
@@ -36,7 +36,6 @@ Module.register('counter', {
 
   socketNotificationReceived: function(command, data) {
     var self = this;
-		//console.log(data);
     if (command === 'COUNTER_CONNECTED') {
 			// Connected to plugin, get status
       this.sendSocketNotification('COUNTER_STATUS', { id: this.config.id, plugin: this.config.plugin });

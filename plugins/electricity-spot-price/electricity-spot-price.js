@@ -2,7 +2,7 @@ const EventEmitter = require('events').EventEmitter,
       util = require('util'),
       nordpool = require('nordpool'),
       moment = require('moment'),
-      logger = require('../../logger');
+      logger = require('../../logger').logger;
 
 function Electricity_spot_price(Dashboard, app, io, config) {
   EventEmitter.call(this);

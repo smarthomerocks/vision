@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module, winston*/
 Module.register('dimmer', {
 
   defaults: {
@@ -19,7 +19,7 @@ Module.register('dimmer', {
   },
 
   start: function() {
-    console.log('Starting dimmer ' + this.config.title);
+    winston.info('Starting dimmer ' + this.config.title);
 
     this.isStateOn = false;
     this.self = this;

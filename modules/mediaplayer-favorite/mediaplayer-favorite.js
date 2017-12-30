@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('mediaplayer-favorite', {
 
   defaults: {
@@ -12,7 +12,7 @@ Module.register('mediaplayer-favorite', {
   },
 
   start: function() {
-    console.log('Starting mediaplayer-favorite ' + this.config.title);
+    winston.info('Starting mediaplayer-favorite ' + this.config.title);
 
     this.isStateOn = false;
 

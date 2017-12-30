@@ -1,4 +1,4 @@
-/*global Module*/
+/*global Module winston*/
 Module.register('camera', {
 
   defaults: {
@@ -17,7 +17,7 @@ Module.register('camera', {
 
   start: function() {
     var self = this;
-    console.log('Starting camera', this.config);
+    winston.info('Starting camera', this.config);
 
     this.viewdata = {};
     this.viewdata.config = this.config;

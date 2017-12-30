@@ -1,4 +1,4 @@
-/*global define*/
+/*global define winston*/
 (function() {
 //
 
@@ -136,7 +136,7 @@
     this.cache = {};
 
     if (opt.container == null) {
-      console.warn('SiriWaveJS: no container defined, using body');
+      winston.warn('SiriWaveJS: no container defined, using body');
       opt.container = document.body;
     }
 

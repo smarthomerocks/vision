@@ -2,7 +2,7 @@ var http = require('http');
 var path = require('path');
 var url = require('url');
 var fs = require('fs');
-var logger = require('../../logger');
+var logger = require('../../logger').logger;
 var ModuleServer = require('../../lib/module-server.js');
 
 module.exports = ModuleServer.create({

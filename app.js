@@ -1,7 +1,6 @@
 const express = require('express'),
       fs = require('fs'),
       path = require('path'),     
-      morgan = require('morgan'),
       cookieParser = require('cookie-parser'),
       bodyParser = require('body-parser'),
       constants = require('constants'),
@@ -85,16 +84,17 @@ app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(function(req, res, next) {
   res.io = io;
   next();
 });
-// Setup request-logger, write to Winston logger.
-app.use(morgan('dev', { 
-  stream: { 
-    write: message => logger.info(message.trim()) 
-  }
-}));
+
+// capture clientside log messages
+logger.registerClientLogger(app);
+// log requests to accesslog
+logger.registerRequestLogger(app);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -117,7 +117,6 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {

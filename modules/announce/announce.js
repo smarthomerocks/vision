@@ -1,4 +1,4 @@
-/*global Module Recorder SiriWave*/
+/*global Module Recorder SiriWave winston*/
 Module.register('announce', {
 
   defaults: {
@@ -14,7 +14,7 @@ Module.register('announce', {
   },
 
   start: function() {
-    console.log('Starting announce ' + this.config.title);
+    winston.info('Starting announce ' + this.config.title);
 
     if (!navigator.getUserMedia)
       navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -51,7 +51,7 @@ Module.register('announce', {
         'opacity' : 1
       });
     } else if (command === 'ANNOUNCE_STATUS' && data.id === this.config.id) {
-      console.log(`command ${command} id ${data.id}`);
+      winston.debug(`command ${command} id ${data.id}`);
     }
   },
 
@@ -60,14 +60,17 @@ Module.register('announce', {
   },
 
   uploadAudio: function(blob) {
-    console.log('Uploading audio');
+    winston.debug('Uploading audio');
     this.sendSocketNotification('ANNOUNCE_SEND', {path: this.config.path, url: this.config.url, room: this.config.room, volume: this.config.volume, audio: blob});
   },
 
   startRecording: function() {
-    if (!this.audioRecorder)
+    if (!this.audioRecorder) {
       return;
-    console.log('Recording audio');
+    }
+
+    winston.debug('Recording audio');
+
     if (this.animation) {
       clearTimeout(this.animationIndex);
       if (!this.animation.run) {
@@ -82,7 +85,7 @@ Module.register('announce', {
   stopRecording: function() {
     var self = this;
     this.audioRecorder.stop();
-    console.log('Recording audio: done!');
+    winston.debug('Recording audio: done!');
     if (this.animation) {
       this.$el.removeClass('recording');
       this.animationIndex = setTimeout(function() {

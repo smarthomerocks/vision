@@ -4,7 +4,7 @@ const EventEmitter = require('events').EventEmitter,
       request = require('request'),
       async = require('async'),
       colors = require('colors'), //eslint-disable-line no-unused-vars
-      logger = require('../../logger'),
+      logger = require('../../logger').logger,
       BlinkAPI = require('node-blink-security');
 
 function Blink(Dashboard, app, io, config) {

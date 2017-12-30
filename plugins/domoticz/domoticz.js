@@ -3,7 +3,7 @@ var util = require('util');
 var _ = require('underscore');
 var mqtt = require('node-domoticz-mqtt');
 var request = require('request');
-var logger = require('../../logger');
+var logger = require('../../logger').logger;
 
 function Domoticz(Dashboard, app, io, config) {
   EventEmitter.call(this);

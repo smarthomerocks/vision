@@ -1,7 +1,7 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
 var mqtt = require('mqtt');
-var logger = require('../../logger');
+var logger = require('../../logger').logger;
 
 function Owntracks(Dashboard, app, io, config) {
   EventEmitter.call(this);

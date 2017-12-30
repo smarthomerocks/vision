@@ -10,7 +10,7 @@
 process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser;
 
 const app = require('../app').app,
-      logger = require('../logger'),
+      logger = require('../logger').logger,
       debug = require('debug')('www:server'),
       http = require('http');
 
