@@ -36,7 +36,7 @@ Module.register('map', {
 
   socketNotificationReceived: function(command, data) {
     if (command === 'MAP_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.map = this.initMap();
     } else if (command === 'MAP_STATUS') {
       this.$el.css({

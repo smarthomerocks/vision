@@ -39,7 +39,7 @@ Module.register('energy-meter', {
   socketNotificationReceived: function(command, data) {
     var self = this;
     if (command === 'ENERGY_METER_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.sendSocketNotification('ENERGY_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
     } else if (command === 'ENERGY_METER_STATUS' && data.id === this.config.id) {

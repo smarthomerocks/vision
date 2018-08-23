@@ -108,11 +108,11 @@ function Onvif(Dashboard, app, io, config) {
     self.emit('CONNECTED');
 
     setupCameras()
-    .then(() => {
-      for (let camera of self.cameras) {
-        self.emit('CAMERA_CONNECTED', camera[1]);
-      }      
-    }); 
+      .then(() => {
+        for (let camera of self.cameras) {
+          self.emit('CAMERA_CONNECTED', camera[1]);
+        }      
+      }); 
   };
 
   self.exit = function() {

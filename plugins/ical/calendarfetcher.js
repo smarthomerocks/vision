@@ -19,7 +19,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
   var fetchFailedCallback = function() {};
   var eventsReceivedCallback = function() {};
 
-	/* fetchCalendar()
+  /* fetchCalendar()
 	 * Initiates calendar fetch.
 	 */
   var fetchCalendar = function() {
@@ -49,7 +49,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
         return;
       }
 
-			//console.log(data);
+      //console.log(data);
       var newEvents = [];
 
       var limitFunction = function(date, i) {return i < maximumEntries;};
@@ -62,9 +62,9 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
         var today = moment().startOf('day').toDate();
         var future = moment().startOf('day').add(maximumNumberOfDays, 'days').subtract(1, 'seconds').toDate(); // Subtract 1 second so that events that start on the middle of the night will not repeat.
 
-				// FIXME:
-				// Ugly fix to solve the facebook birthday issue.
-				// Otherwise, the recurring events only show the birthday for next year.
+        // FIXME:
+        // Ugly fix to solve the facebook birthday issue.
+        // Otherwise, the recurring events only show the birthday for next year.
         var isFacebookBirthday = false;
         if (typeof event.uid !== 'undefined') {
           if (event.uid.indexOf('@facebook.com') !== -1) {
@@ -87,7 +87,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
           }
 
 
-					// calculate the duration f the event for use with recurring events.
+          // calculate the duration f the event for use with recurring events.
           var duration = parseInt(endDate.format('x')) - parseInt(startDate.format('x'));
 
           if (event.start.length === 8) {
@@ -127,26 +127,26 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
               }
             }
           } else {
-						// console.log("Single event ...");
-						// Single event.
+            // console.log("Single event ...");
+            // Single event.
             var fullDayEvent = (isFacebookBirthday) ? true : isFullDayEvent(event);
 
             if (!fullDayEvent && endDate < new Date()) {
-							//console.log("It's not a fullday event, and it is in the past. So skip: " + title);
+              //console.log("It's not a fullday event, and it is in the past. So skip: " + title);
               continue;
             }
 
             if (fullDayEvent && endDate <= today) {
-							//console.log("It's a fullday event, and it is before today. So skip: " + title);
+              //console.log("It's a fullday event, and it is before today. So skip: " + title);
               continue;
             }
 
             if (startDate > future) {
-							//console.log("It exceeds the maximumNumberOfDays limit. So skip: " + title);
+              //console.log("It exceeds the maximumNumberOfDays limit. So skip: " + title);
               continue;
             }
 
-						// Every thing is good. Add it to the list.
+            // Every thing is good. Add it to the list.
 
             newEvents.push({
               title: title,
@@ -167,7 +167,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
         return a.startDate - b.startDate;
       });
 
-			//console.log(newEvents);
+      //console.log(newEvents);
 
       events = newEvents.slice(0, maximumEntries);
 
@@ -176,18 +176,18 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
     });
   };
 
-	/* scheduleTimer()
+  /* scheduleTimer()
 	 * Schedule the timer for the next update.
 	 */
   var scheduleTimer = function() {
-		//console.log('Schedule update timer.');
+    //console.log('Schedule update timer.');
     clearTimeout(reloadTimer);
     reloadTimer = setTimeout(function() {
       fetchCalendar();
     }, reloadInterval);
   };
 
-	/* isFullDayEvent(event)
+  /* isFullDayEvent(event)
 	 * Checks if an event is a fullday event.
 	 *
 	 * argument event obejct - The event object to check.
@@ -204,31 +204,31 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
     var end = event.end || 0;
 
     if (end - start === 24 * 60 * 60 * 1000 && startDate.getHours() === 0 && startDate.getMinutes() === 0) {
-			// Is 24 hours, and starts on the middle of the night.
+      // Is 24 hours, and starts on the middle of the night.
       return true;
     }
 
     return false;
   };
 
-	/* public methods */
+  /* public methods */
 
-	/* startFetch()
+  /* startFetch()
 	 * Initiate fetchCalendar();
 	 */
   this.startFetch = function() {
     fetchCalendar();
   };
 
-	/* broadcastItems()
+  /* broadcastItems()
 	 * Broadcast the existing events.
 	 */
   this.broadcastEvents = function() {
-		//console.log('Broadcasting ' + events.length + ' events.');
+    //console.log('Broadcasting ' + events.length + ' events.');
     eventsReceivedCallback(self);
   };
 
-	/* onReceive(callback)
+  /* onReceive(callback)
 	 * Sets the on success callback
 	 *
 	 * argument callback function - The on success callback.
@@ -237,7 +237,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
     eventsReceivedCallback = callback;
   };
 
-	/* onError(callback)
+  /* onError(callback)
 	 * Sets the on error callback
 	 *
 	 * argument callback function - The on error callback.
@@ -246,7 +246,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
     fetchFailedCallback = callback;
   };
 
-	/* url()
+  /* url()
 	 * Returns the url of this fetcher.
 	 *
 	 * return string - The url of this fetcher.
@@ -255,7 +255,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
     return url;
   };
 
-	/* events()
+  /* events()
 	 * Returns current available events for this fetcher.
 	 *
 	 * return array - The current available events for this fetcher.

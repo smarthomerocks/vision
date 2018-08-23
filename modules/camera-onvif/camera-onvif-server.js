@@ -150,11 +150,11 @@ module.exports = ModuleServer.create({
       });
       
       request.get(result.uri)
-      .auth(camState.module.config.username, camState.module.config.password, false)
-      .pipe(fileStream)
-      .on('error', err => {
-        logger.eror('Failed to get snapshot picture from camera.');
-      });        
+        .auth(camState.module.config.username, camState.module.config.password, false)
+        .pipe(fileStream)
+        .on('error', err => {
+          logger.eror('Failed to get snapshot picture from camera.');
+        });        
     });
 
     this.dashboard.camera_onvif.start(PLUGIN);

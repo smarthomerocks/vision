@@ -3,20 +3,20 @@ const fs = require('fs'),
       morgan = require('morgan'),
       winston = require('winston'),
       winstonExpress = require('winston-express'),
-      logger = new (winston.Logger)({
+      logger = new winston.Logger({
         level: process.env.LOGLEVEL ? process.env.LOGLEVEL : 'info',
         prettyPrint: true,
         exitOnError: false,
         handleExceptions: true,
         humanReadableUnhandledException: true,
         transports: [
-          new (winston.transports.Console)({ 
+          new winston.transports.Console({ 
             colorize: true,
             json: false            
           }),
-          new (winston.transports.File)({
+          new winston.transports.File({
             filename: 'app.log',
-            maxsize: 1048576 * 10,  // 10 Megabytes
+            maxsize: 1048576 * 10, // 10 Megabytes
             maxFiles: 10,
             json: false,
             colorize: false
@@ -25,7 +25,7 @@ const fs = require('fs'),
       });
 
 function registerRequestLogger(app) {
-    // log only 4xx and 5xx responses to console
+  // log only 4xx and 5xx responses to console
   app.use(morgan('dev', {
     skip: function(req, res) { 
       return res.statusCode < 400;

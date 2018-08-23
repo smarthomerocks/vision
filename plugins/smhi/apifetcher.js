@@ -11,7 +11,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
   var fetchFailedCallback = function() {};
   var currentWeatherReceivedCallback = function() {};
 
-	/* fetchCalendar()
+  /* fetchCalendar()
 	 * Initiates calendar fetch.
 	 */
   var fetchWeather = function() {
@@ -20,7 +20,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     reloadTimer = null;
 
     var request = http.request(url.parse('http://opendata-download-metfcst.smhi.se/api/category/pmp2g/version/2/geotype/point/lon/' + lon + '/lat/' + lat + '/data.json'
-        ), function(response) {
+    ), function(response) {
       var res = '';
 
       response.on('data', function(chunk) {
@@ -61,27 +61,27 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     request.end();
   };
 
-	/* scheduleTimer()
+  /* scheduleTimer()
 	 * Schedule the timer for the next update.
 	 */
   var scheduleTimer = function() {
-		//logger.debug('Schedule update timer.');
+    //logger.debug('Schedule update timer.');
     clearTimeout(reloadTimer);
     reloadTimer = setTimeout(function() {
       fetchWeather();
     }, fetchInterval);
   };
 
-	/* public methods */
+  /* public methods */
 
-	/* startFetch()
+  /* startFetch()
 	 * Initiate fetchCalendar();
 	 */
   this.startFetch = function() {
     fetchWeather();
   };
 
-	/* broadcastItems()
+  /* broadcastItems()
 	 * Broadcast the existing events.
 	 */
   this.broadcastCurrentWeather = function() {
@@ -90,7 +90,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     }
   };
 
-	/* onReceive(callback)
+  /* onReceive(callback)
 	 * Sets the on success callback
 	 *
 	 * argument callback function - The on success callback.
@@ -99,7 +99,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     currentWeatherReceivedCallback = callback;
   };
 
-	/* onError(callback)
+  /* onError(callback)
 	 * Sets the on error callback
 	 *
 	 * argument callback function - The on error callback.
@@ -116,7 +116,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     return lon;
   };
 
-	/* events()
+  /* events()
 	 * Returns current available events for this fetcher.
 	 *
 	 * return array - The current available events for this fetcher.

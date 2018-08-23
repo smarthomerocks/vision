@@ -18,7 +18,7 @@ function Electricity_spot_price(Dashboard, app, io, config) {
       return;
     }
 
-    self.intervalUpdate = setInterval(self.getPriceList, 60 * 60 * 1000);  // get pricelist every hour.
+    self.intervalUpdate = setInterval(self.getPriceList, 60 * 60 * 1000); // get pricelist every hour.
     self.connected = true;
     self.emit('connect');
   };
@@ -38,9 +38,9 @@ function Electricity_spot_price(Dashboard, app, io, config) {
         currency: config.currency,
         area: config.area
       },
-          function(error, results) {
-            error ? reject(error) : resolve(results);
-          });
+      function(error, results) {
+        error ? reject(error) : resolve(results);
+      });
     });
   }
 
@@ -55,19 +55,19 @@ function Electricity_spot_price(Dashboard, app, io, config) {
     ];
 
     Promise.all(requests)
-        .then(results => {
-          let pricelist = [].concat.apply([], results).map(entry => {
-            return {
-              date: entry.date.tz(config.timezone || 'Europe/Stockholm').toISOString(),
-              price: entry.value / 1000 // Mega Watt to Kilo Watt divider.
-            };
-          });
-
-          self.emit('change', {hourly: pricelist});
-        })
-        .catch(error => {
-          logger.error('Electricity_spot_price: get price list error: ' + error.message);
+      .then(results => {
+        let pricelist = [].concat.apply([], results).map(entry => {
+          return {
+            date: entry.date.tz(config.timezone || 'Europe/Stockholm').toISOString(),
+            price: entry.value / 1000 // Mega Watt to Kilo Watt divider.
+          };
         });
+
+        self.emit('change', {hourly: pricelist});
+      })
+      .catch(error => {
+        logger.error('Electricity_spot_price: get price list error: ' + error.message);
+      });
   };
 }
 

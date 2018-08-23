@@ -137,107 +137,107 @@ function Sonos(Dashboard, app, io, config) {
 
   },
 
-this.changeVolume = function(devicename, volume) {
-  var self = this;
-  _.each(this.players, function(device) {
-    if (device.roomName == devicename) {
-      var player = self.discovery.getPlayerByUUID(device.uuid);
-      if (!player) return;
-      player.setVolume(volume, function(err, stopped) {
-      });
-    }
-  });
-},
-
-this.prev = function(devicename) {
-  var self = this;
-  _.each(this.players, function(device) {
-    if (device.roomName == devicename) {
-      var player = self.discovery.getPlayerByUUID(device.uuid);
-      if (!player) return;
-      player.previousTrack(function(err, stopped) {
-      });
-    }
-  });
-},
-
-this.next = function(devicename) {
-  var self = this;
-  _.each(this.players, function(device) {
-    if (device.roomName == devicename) {
-      var player = self.discovery.getPlayerByUUID(device.uuid);
-      if (!player) return;
-      player.nextTrack(function(err, stopped) {
-      });
-    }
-  });
-},
-
-this.trackSeek = function(devicename, duration) {
-  var self = this;
-  _.each(this.players, function(device) {
-    if (device.roomName == devicename) {
-      var player = self.discovery.getPlayerByUUID(device.uuid);
-      if (!player) return;
-      player.timeSeek(duration);
-    }
-  });
-
-},
-
-this.favorite = function(devicename, favoriteName) {
-  var self = this;
-  _.each(this.players, function(device) {
-    if (device.roomName == devicename) {
-      var player = self.discovery.getPlayerByUUID(device.uuid);
-      if (!player) return;
-      player.replaceWithFavorite(favoriteName);
-
-      setTimeout(function() {
-        player.play(function(err, stopped) {
+  this.changeVolume = function(devicename, volume) {
+    var self = this;
+    _.each(this.players, function(device) {
+      if (device.roomName == devicename) {
+        var player = self.discovery.getPlayerByUUID(device.uuid);
+        if (!player) return;
+        player.setVolume(volume, function(err, stopped) {
         });
-      }, 500);
-    }
-  });
+      }
+    });
+  },
 
-},
+  this.prev = function(devicename) {
+    var self = this;
+    _.each(this.players, function(device) {
+      if (device.roomName == devicename) {
+        var player = self.discovery.getPlayerByUUID(device.uuid);
+        if (!player) return;
+        player.previousTrack(function(err, stopped) {
+        });
+      }
+    });
+  },
 
- this.getStatus = function(devicename) {
+  this.next = function(devicename) {
+    var self = this;
+    _.each(this.players, function(device) {
+      if (device.roomName == devicename) {
+        var player = self.discovery.getPlayerByUUID(device.uuid);
+        if (!player) return;
+        player.nextTrack(function(err, stopped) {
+        });
+      }
+    });
+  },
 
-   var self = this;
-   _.each(self.players, function(player) {
-     if (player.roomName == devicename) {
-       var playerDevice = self.discovery.getPlayerByUUID(player.uuid);
+  this.trackSeek = function(devicename, duration) {
+    var self = this;
+    _.each(this.players, function(device) {
+      if (device.roomName == devicename) {
+        var player = self.discovery.getPlayerByUUID(device.uuid);
+        if (!player) return;
+        player.timeSeek(duration);
+      }
+    });
 
-       if (!playerDevice) return;
+  },
 
-       var change = {
-         device: playerDevice.roomName,
-         currenttrack :{
-           artist : playerDevice.state.currentTrack.artist,
-           album : playerDevice.state.currentTrack.album,
-           title : playerDevice.state.currentTrack.title,
-           duration : playerDevice.state.currentTrack.duration,
-           albumart : playerDevice.state.currentTrack.absoluteAlbumArtUri,
-           type : playerDevice.state.currentTrack.type
-         },
-         nexttrack :{
-           artist : playerDevice.state.nextTrack.artist,
-           album : playerDevice.state.nextTrack.album,
-           title : playerDevice.state.nextTrack.title,
-           duration : playerDevice.state.nextTrack.duration,
-           albumart : playerDevice.state.nextTrack.absoluteAlbumArtUri,
-           type : playerDevice.state.nextTrack.type
-         },
-         elapsedtime: playerDevice.state.elapsedTime,
-         playbackstate: playerDevice.state.playbackState,
-         volume: playerDevice.state.volume
-       };
+  this.favorite = function(devicename, favoriteName) {
+    var self = this;
+    _.each(this.players, function(device) {
+      if (device.roomName == devicename) {
+        var player = self.discovery.getPlayerByUUID(device.uuid);
+        if (!player) return;
+        player.replaceWithFavorite(favoriteName);
 
-       self.emit('change', change);
-     }
-   });
- };
+        setTimeout(function() {
+          player.play(function(err, stopped) {
+          });
+        }, 500);
+      }
+    });
+
+  },
+
+  this.getStatus = function(devicename) {
+
+    var self = this;
+    _.each(self.players, function(player) {
+      if (player.roomName == devicename) {
+        var playerDevice = self.discovery.getPlayerByUUID(player.uuid);
+
+        if (!playerDevice) return;
+
+        var change = {
+          device: playerDevice.roomName,
+          currenttrack :{
+            artist : playerDevice.state.currentTrack.artist,
+            album : playerDevice.state.currentTrack.album,
+            title : playerDevice.state.currentTrack.title,
+            duration : playerDevice.state.currentTrack.duration,
+            albumart : playerDevice.state.currentTrack.absoluteAlbumArtUri,
+            type : playerDevice.state.currentTrack.type
+          },
+          nexttrack :{
+            artist : playerDevice.state.nextTrack.artist,
+            album : playerDevice.state.nextTrack.album,
+            title : playerDevice.state.nextTrack.title,
+            duration : playerDevice.state.nextTrack.duration,
+            albumart : playerDevice.state.nextTrack.absoluteAlbumArtUri,
+            type : playerDevice.state.nextTrack.type
+          },
+          elapsedtime: playerDevice.state.elapsedTime,
+          playbackstate: playerDevice.state.playbackState,
+          volume: playerDevice.state.volume
+        };
+
+        self.emit('change', change);
+      }
+    });
+  };
 
   this.exit = function() {
     this.discovery.dispose();

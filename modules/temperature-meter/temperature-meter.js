@@ -38,7 +38,7 @@ Module.register('temperature-meter', {
   socketNotificationReceived: function(command, data) {
     var self = this;
     if (command === 'TEMP_METER_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.sendSocketNotification('TEMP_METER_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
     } else if (command === 'TEMP_METER_STATUS' && data.id === this.config.id) {

@@ -37,7 +37,7 @@ Module.register('counter', {
   socketNotificationReceived: function(command, data) {
     var self = this;
     if (command === 'COUNTER_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.sendSocketNotification('COUNTER_STATUS', { id: this.config.id, plugin: this.config.plugin });
 
     } else if (command === 'COUNTER_STATUS' && data.id === this.config.id) {

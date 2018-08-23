@@ -44,7 +44,7 @@ Module.register('announce', {
 
   socketNotificationReceived: function(command, data) {
     if (command === 'ANNOUNCE_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.initAnimation();
 
       this.$el.css({

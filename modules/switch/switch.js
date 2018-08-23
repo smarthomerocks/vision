@@ -69,7 +69,7 @@ Module.register('switch', {
 
   socketNotificationReceived: function(command, data) {
     if (command === 'SWITCH_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.sendSocketNotification('SWITCH_STATUS', {id: this.config.id, plugin: this.config.plugin});
 
     } else if (command === 'SWITCH_STATUS' && data.id === this.config.id) {

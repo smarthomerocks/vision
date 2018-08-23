@@ -67,7 +67,7 @@ Module.register('mediaplayer', {
   socketNotificationReceived: function(command, data) {
     var self = this;
     if (command === 'MEDIAPLAYER_CONNECTED') {
-			// Connected to plugin, get status
+      // Connected to plugin, get status
       this.sendSocketNotification('MEDIAPLAYER_STATUS', { device: this.config.devicename, plugin: this.config.plugin });
 
     } else if (command === 'MEDIAPLAYER_STATUS' && data.device === this.config.devicename) {
@@ -149,7 +149,7 @@ Module.register('mediaplayer', {
         self = this;
     //var modulus = [60 ^ 2, 60];
     var remainingTime = seconds;
-			// hours
+    // hours
     var hours = Math.floor(remainingTime / 3600);
 
     if (hours > 0) {
@@ -157,13 +157,13 @@ Module.register('mediaplayer', {
       remainingTime -= hours * 3600;
     }
 
-			// minutes
+    // minutes
     var minutes = Math.floor(remainingTime / 60);
-			// If we have hours, pad minutes, otherwise not.
+    // If we have hours, pad minutes, otherwise not.
     var padding = chunks.length > 0 ? 2 : 1;
     chunks.push(self.zpad(minutes, padding));
     remainingTime -= minutes * 60;
-			// seconds
+    // seconds
     chunks.push(this.zpad(Math.floor(remainingTime), 2));
     return chunks.join(':');
   }

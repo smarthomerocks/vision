@@ -114,7 +114,7 @@ Module.register('camera', {
       }
 			
       if(!self.isConnected) {
-				// Connected to plugin, get status if we did not recieve any update
+        // Connected to plugin, get status if we did not recieve any update
         this.sendSocketNotification('CAMERA_STATUS', { id: this.config.id, plugin: this.config.plugin });
         self.isConnected = true;
       }
@@ -144,7 +144,7 @@ Module.register('camera', {
       }
 					
       if(self.lastdata.thumbnail) {
-						// Keep state to busy while plugin is busy
+        // Keep state to busy while plugin is busy
         self.viewdata.status = self.viewdata.busyclass == 'idle' ? '' : self.viewdata.status ;
         self.viewdata.thumbnail = self.lastdata.thumbnail;
 

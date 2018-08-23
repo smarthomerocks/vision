@@ -2,7 +2,7 @@
 (function() {
 //
 
-// Siri Wave iOS9 Style curve
+  // Siri Wave iOS9 Style curve
 
   function SiriWave9Curve(opt) {
     this.controller = opt.controller;
@@ -70,12 +70,12 @@
   };
 
   SiriWave9Curve.prototype.definition = [
-{ color: '32,133,252' },
-{ color: '94,252,169' },
-{ color: '253,71,103' }
+    { color: '32,133,252' },
+    { color: '94,252,169' },
+    { color: '253,71,103' }
   ];
 
-// Standard Curve
+  // Standard Curve
 
   function SiriWaveCurve(opt) {
     this.controller = opt.controller;
@@ -119,14 +119,14 @@
   };
 
   SiriWaveCurve.prototype.definition = [
-{ attenuation: -2, lineWidth: 1, opacity: 0.1 },
-{ attenuation: -6, lineWidth: 1, opacity: 0.2 },
-{ attenuation: 4, lineWidth: 1, opacity: 0.4 },
-{ attenuation: 2, lineWidth: 1, opacity: 0.6 },
-{ attenuation: 1, lineWidth: 1.5, opacity: 1 }
+    { attenuation: -2, lineWidth: 1, opacity: 0.1 },
+    { attenuation: -6, lineWidth: 1, opacity: 0.2 },
+    { attenuation: 4, lineWidth: 1, opacity: 0.4 },
+    { attenuation: 2, lineWidth: 1, opacity: 0.6 },
+    { attenuation: 1, lineWidth: 1.5, opacity: 1 }
   ];
 
-// Expose API
+  // Expose API
 
   function SiriWave(opt) {
     opt = opt || {};
@@ -155,14 +155,14 @@
     this.cache.width4 = this.cache.width / 4;
     this.cache.heightMax = (this.cache.height2) - 4;
 
-	// Constructor opt
+    // Constructor opt
 
     this.amplitude = (opt.amplitude == undefined) ? 1 : opt.amplitude;
     this.speed = (opt.speed == undefined) ? 0.2 : opt.speed;
     this.frequency = (opt.frequency == undefined) ? 6 : opt.frequency;
     this.color = this._hex2rgb(opt.color || '#fff');
 
-	// Interpolation
+    // Interpolation
 
     this.speedInterpolationSpeed = opt.speedInterpolationSpeed || 0.005;
     this.amplitudeInterpolationSpeed = opt.amplitudeInterpolationSpeed || 0.05;
@@ -172,7 +172,7 @@
       amplitude: this.amplitude
     };
 
-	// Canvas
+    // Canvas
 
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
@@ -207,7 +207,7 @@
       }
     }
 
-	// Start
+    // Start
     this.container.appendChild(this.canvas);
     if (opt.autostart) {
       this.start();
@@ -219,8 +219,8 @@
     hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ?
-	parseInt(result[1], 16).toString()+','+parseInt(result[2], 16).toString()+','+parseInt(result[3], 16).toString()
-	: null;
+      parseInt(result[1], 16).toString()+','+parseInt(result[2], 16).toString()+','+parseInt(result[3], 16).toString()
+      : null;
   };
 
   SiriWave.prototype._interpolate = function(propertyStr) {
@@ -253,7 +253,7 @@
     if (this.run === false) return;
     this._clear();
 
-	// Interpolate values
+    // Interpolate values
     this._interpolate('amplitude');
     this._interpolate('speed');
 
@@ -267,7 +267,7 @@
     }
   };
 
-/* API */
+  /* API */
 
   SiriWave.prototype.start = function() {
     this.phase = 0;
