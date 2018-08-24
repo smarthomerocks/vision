@@ -50,11 +50,20 @@ function Spotify(Dashboard, app, io, config) {
 
     self.credentialsTimeout = setTimeout(() => {
       self.spotifyApi.refreshAccessToken().then(data => {
-        console.log('The access token has been refreshed!');
+        logger.info('Spotify accesstoken has been refreshed.');
+        self.spotifyApi.setAccessToken(data.body.access_token);
 
+        fs.writeFileSync(spotifyTokens, JSON.stringify({
+          access_token: data.body.access_token,
+          refresh_token: self.spotifyApi.getRefreshToken(),
+          expires_in: data.body.expires_in,
+          gotToken: new Date()
+        }, null, 4));
+        
         refreshToken((data.body.expires_in * 0.8) * 1000);
       })
         .catch((err) => {
+          logger.warn(`Failed to refresh Spotify accesstoken. statuscode: ${err.statusCode}, error: ${err.stack}`);
           refreshToken(10000);
         });
     }, timeout);
@@ -62,7 +71,7 @@ function Spotify(Dashboard, app, io, config) {
 
   function authenticate(authorizationCode, tokens) {
     if (tokens && tokens.access_token && tokens.refresh_token && tokens.expires_in) {
-      logger.debug('Plugin ' + 'spotify '.yellow.bold + 'loaded credentials'.blue);
+      logger.info('Plugin ' + 'spotify '.yellow.bold + 'loaded credentials'.blue);
       //TODO: compare if expiretime > gotToken + expires_in.
       // Save the access token so that it's used in future calls
       self.spotifyApi.setAccessToken(tokens.access_token);
@@ -74,7 +83,7 @@ function Spotify(Dashboard, app, io, config) {
 
     return self.spotifyApi.authorizationCodeGrant(authorizationCode)
       .then(credentials => {
-        logger.debug('Plugin ' + 'spotify '.yellow.bold + `got credentials, access token expires in ${credentials.body.expires_in} seconds`.blue);
+        logger.info('Plugin ' + 'spotify '.yellow.bold + `got credentials, access token expires in ${credentials.body.expires_in} seconds`.blue);
 
         // Save the access token so that it's used in future calls
         self.spotifyApi.setAccessToken(credentials.body.access_token);
@@ -89,7 +98,7 @@ function Spotify(Dashboard, app, io, config) {
         }, null, 4));
       },
       function(err) {
-        console.log('Spotify authenticate, something went wrong!', err);
+        logger.error(`Spotify authenticate, something went wrong! statuscode: ${err.statusCode}, error: ${err.stack}`);
       });
   }
 
@@ -147,9 +156,9 @@ function Spotify(Dashboard, app, io, config) {
       ])      
         .then(results => {
           let devices = results[0].body.devices;
-          console.log('Available devices:');
+          logger.info('Available devices:');
           for (let device of devices) {
-            console.log(`id: ${device.id}, name: "${device.name}", is_active: ${device.is_active}`);
+            logger.info(`id: ${device.id}, name: "${device.name}", is_active: ${device.is_active}`);
             self.players[device.id] = {};
           }
 
@@ -160,9 +169,9 @@ function Spotify(Dashboard, app, io, config) {
             };
           });
 
-          console.log('Available playlists:');
+          logger.info('Available playlists:');
           for (let playlist of playlists) {
-            console.log(`id: ${playlist.id}, name: "${playlist.name}"`);
+            logger.info(`id: ${playlist.id}, name: "${playlist.name}"`);
           }
 
           self.emit('connect');
@@ -171,7 +180,7 @@ function Spotify(Dashboard, app, io, config) {
             self.getStatus();
           }, 5000);
         }).catch(err => {
-          logger.error(`Plugin "spotify" got error when listing devices and playlists. ${err.stack}`);
+          logger.error(`Plugin "spotify" got error when listing devices and playlists. statuscode: ${err.statusCode}, error: ${err.stack}`);
         });
     }).catch(err => {
       logger.error(`Plugin "spotify" got error when authenticating. ${err.stack}`);
