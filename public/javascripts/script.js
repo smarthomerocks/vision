@@ -5,8 +5,6 @@ Loader.loadModules();
 
 moment.locale("sv")
 
-FastClick.attach(document.body);
-
 if ($(window).width() > 480) {
   // Disable scroll on the page, add more exceptions here that should be scrollable
   $(document).on('touchmove', function(e) {
