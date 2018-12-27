@@ -108,8 +108,8 @@ function Domoticz(Dashboard, app, io, config) {
     logger.debug('Plugin ' + 'domoticz '.yellow.bold + 'getStatus'.blue, id);
     this.domoticz.request(id);
   };
-  this.switch = function(id, level) {
-    logger.debug('Plugin ' + 'domoticz '.yellow.bold + 'switch'.blue, id, level);
+  this.setLevel = function(id, level) {
+    logger.debug('Plugin ' + 'domoticz '.yellow.bold + 'setLevel'.blue, id, level);
     this.domoticz.switch(id, level);
   };
   this.toggle = function(id, state) {

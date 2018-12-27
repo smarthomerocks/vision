@@ -71,9 +71,9 @@ function MQTT(Dashboard, app, io, config) {
       self.client.publish(moduleConfig.getTopic, '');
     }
   };
-
-  self.switch = function(id, level) {
-    logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'switch'.blue, id, level);
+  //TODO: should these be moved to module to keep plugin clean of module logic and settings?
+  self.setLevel = function(id, level) {
+    logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'setLevel'.blue, id, level);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
     self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)));
   };
