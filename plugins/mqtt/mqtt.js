@@ -1,7 +1,8 @@
 const EventEmitter = require('events').EventEmitter,
       logger = require('../../logger').logger,
       util = require('util'),
-      mqtt = require('mqtt');
+      mqtt = require('mqtt'),
+      ip = require('ip');
 
 function MQTT(Dashboard, app, io, config) {
   EventEmitter.call(this);
@@ -21,7 +22,7 @@ function MQTT(Dashboard, app, io, config) {
     self.client = mqtt.connect(config.host, {
       clean: false,
       port: config.port || 1883,
-      clientId: 'dashboard_' + Math.random().toString(16).substr(2, 8),
+      clientId: 'dashboard_' + ip.address(), // clientId must be unique, but determistic (between restarts).
       username: config.username,
       password: config.password
     });
@@ -32,6 +33,7 @@ function MQTT(Dashboard, app, io, config) {
 
       logger.info('Plugin ' + 'mqtt '.yellow.bold + 'connected'.blue);
 
+      //TODO: this should be moved to switch! mqtt.js should be generic.
       // Momentary buttons should all be off to start with.
       for (let module of modulesConfig) {
         if (module.type === 'button momentary') {
@@ -43,20 +45,10 @@ function MQTT(Dashboard, app, io, config) {
     });
 
     self.client.on('message', function(topic, message) {
-      let asString = String(message).toLowerCase(),
-          result = {};
-
-      if (asString === 'on') {
-        asString = '100';
-      } else if (asString === 'off') {
-        asString = '0';
-      }
-
-      result.level = Number(asString);
-      result.isStateOn = !!result.level;
-      result.id = modulesConfig.find(mod => mod.statusTopic === topic).id;
-
-      self.emit('change', result);
+      self.emit('change', {
+        state: String(message),
+        id: modulesConfig.find(mod => mod.statusTopic === topic).id
+      });
     });
 
     self.client.on('error', function(error) {

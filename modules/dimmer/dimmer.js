@@ -1,4 +1,4 @@
-/*global Module, winston*/
+/*global Module, winston, jsel*/
 Module.register('dimmer', {
 
   defaults: {
@@ -21,9 +21,6 @@ Module.register('dimmer', {
   start: function() {
     winston.info('Starting dimmer ' + this.config.title);
 
-    this.isStateOn = false;
-    this.self = this;
-
     this.sendSocketNotification('DIMMER_CONNECT', {id: this.config.id, plugin: this.config.plugin});
   },
 
@@ -37,7 +34,7 @@ Module.register('dimmer', {
       this.$el = $('<div class="box' + (this.config.readonly ? '' : ' box-clickable') + ' dimmer"><div class="box-content"><div class="heading">' + this.config.title + '</div><p>TBD</p></div></div>');
     }
 
-    if(!this.config.readonly) {
+    if (!this.config.readonly) {
       this.$el.find('.js-dimmer-knob').on('change', function() {
         self.level = $(this).val();
         self.sendSocketNotification('DIMMER_LEVEL', {id: self.config.id, plugin: self.config.plugin, level: self.level});
@@ -56,7 +53,12 @@ Module.register('dimmer', {
       // Connected to plugin, get status
       this.sendSocketNotification('DIMMER_STATUS', {id: this.config.id, plugin: this.config.plugin});
     } else if (command === 'DIMMER_STATUS' && data.id === this.config.id) {
-      this.level = data.level;
+      if (this.config.stateParseExpression && this.config.stateParseExpression.length > 0) {
+        let value = jsel(JSON.parse(data.state)).select(this.config.stateParseExpression);
+        this.level = Number(value);
+      } else {
+        this.level = Number(data.state);
+      }
 
       this.$el.css({
         'opacity' : 1

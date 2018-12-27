@@ -1,4 +1,4 @@
-var ModuleServer = require('../../lib/module-server.js');
+const ModuleServer = require('../../lib/module-server.js');
 
 module.exports = ModuleServer.create({
   socketNotificationReceived: function(command, data) {
@@ -12,27 +12,22 @@ module.exports = ModuleServer.create({
   },
 
   connectPlugin: function(plugin) {
-    var self = this;
+    let self = this;
 
     if (this.isConnected) {
       self.sendSocketNotification('SWITCH_CONNECTED');
       return;
     }
 
-    this.isConnected = true;
-
     this.dashboard.switch.once(plugin, 'connect', function(data) {
+      this.isConnected = true;
       self.sendSocketNotification('SWITCH_CONNECTED');
     });
 
     this.dashboard.switch.on(plugin, 'change', function(data) {
-      self.sendStatus(data.id, data.isStateOn);
+      self.sendSocketNotification('SWITCH_STATUS', {id: data.id, state: data.state});
     });
 
     this.dashboard.switch.start(plugin);
-  },
-
-  sendStatus: function(id, isStateOn) {
-    this.sendSocketNotification('SWITCH_STATUS', {id: id, isStateOn: isStateOn});
   }
 });

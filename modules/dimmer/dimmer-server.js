@@ -1,4 +1,4 @@
-var ModuleServer = require('../../lib/module-server.js');
+const ModuleServer = require('../../lib/module-server.js');
 
 module.exports = ModuleServer.create({
   socketNotificationReceived: function(command, data) {
@@ -12,7 +12,7 @@ module.exports = ModuleServer.create({
   },
 
   connectPlugin: function(plugin) {
-    var self = this;
+    let self = this;
 
     if (this.isConnected) {
       self.sendSocketNotification('DIMMER_CONNECTED');
@@ -25,13 +25,9 @@ module.exports = ModuleServer.create({
     });
 
     this.dashboard.switch.on(plugin, 'change', function(data) {
-      self.sendStatus(data.id, data.level);
+      self.sendSocketNotification('DIMMER_STATUS', {id: data.id, state: data.state});
     });
 
     this.dashboard.switch.start(plugin);
-  },
-
-  sendStatus: function(id, level) {
-    this.sendSocketNotification('DIMMER_STATUS', {id: id, level: level});
   }
 });

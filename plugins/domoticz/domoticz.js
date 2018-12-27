@@ -49,7 +49,7 @@ function Domoticz(Dashboard, app, io, config) {
               var today = _.find(result.result, function(o) { return o.d === todayDate.toISOString().substring(0, 10);});
 
               if(lowest && highest) {
-                self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.v, lowestdate: lowest.d, highest: highest.v, highestdate: highest.d, today: today ? today.v : null });
+                self.emit('change', {id: data.idx, level: data.svalue1, state: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.v, lowestdate: lowest.d, highest: highest.v, highestdate: highest.d, today: today ? today.v : null });
               }
             }
           });
@@ -64,7 +64,7 @@ function Domoticz(Dashboard, app, io, config) {
               var highest = _.max(result.result, function(o) {return o.te;});
 
               if(lowest && highest) {
-                self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d });
+                self.emit('change', {id: data.idx, level: data.svalue1, state: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d });
               }
             }
           });
@@ -79,15 +79,15 @@ function Domoticz(Dashboard, app, io, config) {
               var highest = _.max(result.result, function(o) {return o.te;});
 
               if(lowest && highest) {
-                self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d, unit: data.ValueUnits });
+                self.emit('change', {id: data.idx, level: data.svalue1, state: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, lowest: lowest.tm, lowestdate: lowest.d, highest: highest.te, highestdate: highest.d, unit: data.ValueUnits });
               }
             }
           });
         } else {
-          self.emit('change', {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, unit: data.ValueUnits });
+          self.emit('change', {id: data.idx, level: data.svalue1, state: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype, unit: data.ValueUnits });
         }
 
-        //logger.debug('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, isStateOn: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
+        //logger.debug('Plugin ' +  'domotics'.yellow.bold + ' data'.blue, {id: data.idx, level: data.svalue1, state: !!data.nvalue, value: data.svalue1, value_extra: data.svalue2, type: data.stype });
       });
 
       this.domoticz.on('connect', function() {

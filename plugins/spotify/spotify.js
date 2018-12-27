@@ -279,6 +279,8 @@ function Spotify(Dashboard, app, io, config) {
       logger.debug('Plugin ' + 'spotify '.yellow.bold + `"play favorite"="${favoriteName}"`.blue);
       self.spotifyApi.play({ device_id: devicename, context_uri: favoriteName }).then(() => {
         self.getStatus();
+        self.spotifyApi.setRepeat({state: 'context'});
+        self.spotifyApi.setShuffle({state: 'false'});
       }).catch(err => {
         logger.error(`Plugin "spotify" got error when changing to playlist "${favoriteName}". ${err.stack}`);
       });

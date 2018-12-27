@@ -83,7 +83,7 @@ var Module = Class.extend({
 	},
 
 	/*********************************************
-	 * The methods below don"t need subclassing. *
+	 * The methods below don't need subclassing. *
 	 *********************************************/
 
 	/* setData(data)

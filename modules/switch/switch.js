@@ -1,4 +1,4 @@
-/*global Module winston*/
+/*global Module winston, jsel*/
 Module.register('switch', {
 
   defaults: {
@@ -67,14 +67,28 @@ Module.register('switch', {
     }
   },
 
+  parseValue: function(value) {
+    if (isNaN(value)) {
+      return String(value).toLowerCase() === 'on';
+    } else {
+      return value > 0;
+    }
+  },
+
   socketNotificationReceived: function(command, data) {
     if (command === 'SWITCH_CONNECTED') {
       // Connected to plugin, get status
       this.sendSocketNotification('SWITCH_STATUS', {id: this.config.id, plugin: this.config.plugin});
 
     } else if (command === 'SWITCH_STATUS' && data.id === this.config.id) {
-      this.isStateOn = data.isStateOn;
 
+      if (this.config.stateParseExpression && this.config.stateParseExpression.length > 0) {
+        let value = jsel(JSON.parse(data.state)).select(this.config.stateParseExpression);
+        this.isStateOn = this.parseValue(value);
+      } else {
+        this.isStateOn = this.parseValue(data.state);
+      }
+ 
       this.$el.css({
         'opacity' : 1
       });
