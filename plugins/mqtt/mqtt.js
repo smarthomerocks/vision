@@ -45,10 +45,13 @@ function MQTT(Dashboard, app, io, config) {
     });
 
     self.client.on('message', function(topic, message) {
-      self.emit('change', {
-        state: String(message),
-        id: modulesConfig.find(mod => mod.statusTopic === topic).id
-      });
+      let subscribingModules = modulesConfig.filter(mod => mod.statusTopic === topic);
+      for (let mod of subscribingModules) {
+        self.emit('change', {
+          state: String(message),
+          id: mod.id
+        });
+      }
     });
 
     self.client.on('error', function(error) {
