@@ -7,7 +7,8 @@ Module.register('switch', {
     id: '1',
     readonly: false,
     type: 'button',
-    icon: 'lightbulb_outline',
+    icon_on: 'lightbulb',
+    icon_off: 'lightbulb_outline',
     onCmd: 'ON',
     offCmd: 'OFF',
     size_x: 1,
@@ -28,7 +29,7 @@ Module.register('switch', {
 
   getDom: function() {
 
-    this.$el = $('<div class="box' + (this.config.readonly ? '' : ' box-clickable') + ' switch"><div class="box-content"><div class="heading">' + this.config.title + '</div><i class="material-icons md-64">' + this.config.icon + '</i></div></div>');
+    this.$el = $('<div class="box' + (this.config.readonly ? '' : ' box-clickable') + ' switch"><div class="box-content"><div class="heading">' + this.config.title + '</div><i class="js-switch-icon material-icons md-64">' + (this.isStateOn ? this.config.icon_on : this.config.icon_off) + '</i></div></div>');
 
     if (this.isStateOn) {
       this.$el.addClass('switch-on');
@@ -103,8 +104,10 @@ Module.register('switch', {
 
       if (this.isStateOn) {
         this.$el.addClass('switch-on');
+        this.$el.find('.js-switch-icon').text(this.config.icon_on);
       } else {
         this.$el.addClass('switch-off');
+        this.$el.find('.js-switch-icon').text(this.config.icon_off);
       }
     }
   }

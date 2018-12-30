@@ -51,7 +51,8 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
           stateParseExpression: <string>, // XPath expression for parsing the state from an JSON-object, if not set then we expect the returned state be a simple datatype as string or number.
           onCmd:     <string>,  // command that should be sent to the "setTopic"-topic for turning the switch on
           offCmd:    <string>,  // command that should be sent to the "setTopic"-topic for turning the switch off
-          icon:      <string>,  // icon for button
+          icon_on:   <string>,  // icon for switch when active
+          icon_off:  <string>,  // icon for switch when inactive
           section:   <string>,  // which section this modules should be displayed on
           column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:       <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
@@ -92,6 +93,8 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
           id: "lamppost2",
           readonly: false,
           type: "button",
+          icon_on: 'lightbulb',
+          icon_off: 'lightbulb_outline',
           setTopic: "home/zwave/command",
           getTopic: "",
           statusTopic: "home/zwave/node/7/value_change",
