@@ -1,12 +1,11 @@
-FROM node:8.11
+FROM node:8-jessie
 
 ENV NODE_ENV production
 ENV USING_DOCKER true
-RUN mkdir -p /opt/node-smart-remote
-WORKDIR /opt/node-smart-remote
+WORKDIR /home/node
 
-COPY package.json /opt/node-smart-remote
+COPY package.json /home/node
 RUN npm install --production
-COPY . /opt/node-smart-remote
+COPY . /home/node
 
 CMD [ "npm", "start" ]
