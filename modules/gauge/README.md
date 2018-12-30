@@ -6,8 +6,12 @@ Modulename: gauge
 ## Description
 
 Generic gauge module to visualize a value/reading from a sensor or some kind of device.
-The gauge support visualizing the value in several format, a simple text representation, a radial meter-like representation and a linear termometer-like representation.
+The gauge support visualizing the value in several formats:
 
+- Plain textual representation
+- LCD box, similar to "text" but with a more digial touch
+- Radial meter-like representation
+- Linear termometer-like representation
 
 ## Config
 
@@ -17,7 +21,7 @@ The gauge support visualizing the value in several format, a simple text represe
             title:     <string>,  // title of the module that should be shown on the dashboard
             plugin:    <string>,  // plugin to use with this module
             id:        <string>,  // identifier that uniquely indentifies this module to the plugin
-            type:      <string>,  // type of gauge, "text", "radial-gauge" or "linear-gauge"
+            type:      <string>,  // type of gauge, "text", "lcd", "radial-gauge" or "linear-gauge"
             gaugeConfig: <object>,// additional configuration for the specific gauge-type. For radial and linear-gauge see this page: https://canvas-gauges.com/documentation/user-guide/configuration.
             getTopic:  <string>,  // MQTT topic that should be used to get the current value of the gauge
             statusTopic: <string>,// MQTT topic the gauge use to report back state changes
@@ -50,6 +54,25 @@ Text Gauge
         row: 1
       }
     }
+
+LCD Gauge
+
+    {
+      module: "gauge",
+      config: {
+        title: "Frontdoor light",
+        plugin: "mqtt",
+        id: "doorlight-power2",
+        type: "lcd",
+        statusTopic: "home/zwave/node/7/power_change",
+        stateParseExpression: "//value/@value",
+        section: "lights",
+        size_x: 1,
+        size_y: 1,
+        column: 4,
+        row: 2
+      }
+    }    
 
 Radial Gauge
 
@@ -108,6 +131,7 @@ Radial Gauge - Advanced
           colorNumbers: '#eee',
           colorNeedle: 'rgba(240, 128, 128, 1)',
           colorNeedleEnd: 'rgba(255, 160, 122, .9)',
+          fontValue: 'LCD',
           valueBox: true,
           animationRule: 'bounce',
           animationDuration: 500
@@ -149,8 +173,9 @@ Linear Gauge
 
 ## Screenshots
 
-![Text gauge](doc/text-gauge.png "Text Gauge") &nbsp;![Radial gauge](doc/radial-gauge.png "Radial Gauge") &nbsp;![Radial gauge - advanced](doc/radial-gauge-advanced.png "Radial Gauge - Advanced") &nbsp;![Linear gauge](doc/linear-gauge.png "Linear Gauge")
+![Text gauge](doc/text-gauge.png "Text Gauge") &nbsp;![LCD gauge](doc/lcd-gauge.png "LCD Gauge") &nbsp;![Radial gauge](doc/radial-gauge.png "Radial Gauge") &nbsp;![Radial gauge - advanced](doc/radial-gauge-advanced.png "Radial Gauge - Advanced")
 
+![Linear gauge](doc/linear-gauge.png "Linear Gauge")
 
 ## Author
 

@@ -26,6 +26,8 @@ Module.register('gauge', {
 
     if (this.config.type === 'text') {
       gaugeDom = `<div class="text js-gauge-${this.config.id}">...</div>`;
+    } else if (this.config.type === 'lcd') {
+      gaugeDom = `<div class="text textLCD js-gauge-${this.config.id}">...</div>`;
     } else if (this.config.type === 'linear-gauge' || this.config.type === 'radial-gauge') {
       gaugeDom = `<canvas class="js-gauge-${this.config.id}"></canvas>`;
     } else {
@@ -71,7 +73,7 @@ Module.register('gauge', {
 
   updateDom: function() {
     if (this.$el) {
-      if (this.config.type === 'text') {
+      if (this.config.type === 'text' || this.config.type === 'lcd') {
         this.$el.find(`.js-gauge-${this.config.id}`).html(this.value);
       } else if (this.config.type === 'linear-gauge' || this.config.type === 'radial-gauge') {
         if (this.gauge) {
