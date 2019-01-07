@@ -2,8 +2,9 @@
 Module.register('mediaplayer-favorite', {
 
   defaults: {
-    title: 'Lampa',
+    title: 'Favorite',
     plugin: 'sonos',
+    icon: 'music_note',
     devicename: 2
   },
 
@@ -22,7 +23,7 @@ Module.register('mediaplayer-favorite', {
   getDom: function() {
     var self = this;
 
-    this.$el = $('<div class="box box-clickable mediaplayer-favorite"><div class="box-content"><div class="heading">'+ this.config.title +'</div><i class="material-icons">favorite</i></div></div>');
+    this.$el = $('<div class="box box-clickable mediaplayer-favorite"><div class="box-content"><div class="heading">'+ this.config.title +'</div><i class="material-icons">' + this.config.icon + '</i></div></div>');
 
     this.$el.on(this.clickEvent(), function() {
       self.sendSocketNotification('MEDIAPLAYER_FAVORITE_PLAY', { device: self.config.devicename, plugin: self.config.plugin, favoriteName: self.config.favoriteName });

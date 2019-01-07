@@ -9,7 +9,7 @@ services:
   - docker:dind
 
 test:
-  image: node:8.9
+  image: node:8
   stage: test
   # add cache to 'node_modules' for speeding up builds
   cache:

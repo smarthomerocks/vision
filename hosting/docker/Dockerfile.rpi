@@ -4,6 +4,8 @@ ENV NODE_ENV production
 ENV USING_DOCKER true
 WORKDIR /home/node
 
+RUN cp /usr/share/zoneinfo/Europe/Stockholm /etc/localtime
+
 COPY package.json /home/node
 RUN npm install --production
 COPY . /home/node
