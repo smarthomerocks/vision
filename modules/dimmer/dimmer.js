@@ -1,3 +1,4 @@
+// TODO: if not slider: https://codepen.io/jon-walstedt/pen/vfhgx
 /*global Module, winston, jsel*/
 Module.register('dimmer', {
 

@@ -78,13 +78,13 @@ function MQTT(Dashboard, app, io, config) {
   self.setLevel = function(id, level) {
     logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'setLevel'.blue, id, level);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
-    self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)));
+    self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)), { qos: 1, retain: 1 });
   };
 
   self.toggle = function(id, state) {
     logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'toggle'.blue, id, state);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
-    self.client.publish(moduleConfig.setTopic, state ? moduleConfig.onCmd : moduleConfig.offCmd);
+    self.client.publish(moduleConfig.setTopic, state ? moduleConfig.onCmd : moduleConfig.offCmd, { qos: 1, retain: 1 });
 
   };
 }

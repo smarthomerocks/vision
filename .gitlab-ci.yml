@@ -32,7 +32,7 @@ build_docker_x64:
     - docker
 
 build_docker_rpi:
-  image: docker:latest
+  image: balenalib/raspberrypi3-debian-node:8-jessie-build
   stage: build
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY

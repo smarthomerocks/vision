@@ -10,22 +10,21 @@ var config = {
       title: 'Start',
       margins: [10, 10],
       base_dimensions: [180, 140],
-      icon: 'home'
+      icon: 'home',
+      modules: [
+        {
+          module: 'clock',
+          config: {
+            column: 1,
+            row: 1
+          }
+        }
+      ]
     }
   ],
   plugins: {
 
-  },
-  modules: [
-    {
-      module: 'clock',
-      config: {
-        section: 'start',
-        column: 1,
-        row: 1
-      }
-    }
-  ]
+  }  
 };
 
 if (typeof module !== 'undefined') {module.exports = config;}
