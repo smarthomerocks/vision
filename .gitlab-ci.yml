@@ -36,7 +36,11 @@ build_docker_rpi:
   stage: build
   before_install:
     - sudo apt-get --quiet update --yes
-    - sudo apt-get install --yes docker git
+    - sudo apt-get install --yes git apt-transport-https ca-certificates curl gnupg2 software-properties-common
+    - sudo curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
+    - sudo groupadd docker
+    - sudo gpasswd -a $USER docker
+    - newgrp docker
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
     - docker build -t $REGISTRY/emilohman/node-smart-remote/rpi -f hosting/docker/Dockerfile.rpi .
