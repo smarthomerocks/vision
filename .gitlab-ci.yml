@@ -34,6 +34,9 @@ build_docker_x64:
 build_docker_rpi:
   image: balenalib/raspberrypi3-debian-node:8-jessie-build
   stage: build
+  before_install:
+    - sudo apt-get --quiet update --yes
+    - sudo apt-get install --yes docker git
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
     - docker build -t $REGISTRY/emilohman/node-smart-remote/rpi -f hosting/docker/Dockerfile.rpi .
