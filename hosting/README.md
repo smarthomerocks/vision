@@ -71,7 +71,7 @@ Start the Docker image, the configuration file will be located in the /etc/node-
     2. cp config/config-sample.js /etc/node-smart-remote/config.js
     3. docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped node-smart-remote
     4. if you don't want to build an image youself you could use a prebuilt version:
-    docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped  registry.gitlab.com/emilohman/node-smart-remote/rpi
+    docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --name node-smart-remote registry.gitlab.com/emilohman/node-smart-remote/rpi
     
 Now all should be up and running, verify by using a webbrowser to \<IP address to your raspberry-server>
 
@@ -96,7 +96,7 @@ Start the Docker image, the configuration file will be located in the /etc/node-
     2. cp config/config-sample.js /etc/node-smart-remote/config.js
     3. docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped node-smart-remote
     4. if you don't want to build an image youself you could use a prebuilt version:
-    docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped  registry.gitlab.com/emilohman/node-smart-remote/x64
+    docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --name node-smart-remote registry.gitlab.com/emilohman/node-smart-remote/x64
 
 Now all should be up and running, verify by using a webbrowser to \<IP address to your raspberry-server>
 

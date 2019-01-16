@@ -39,7 +39,7 @@ var Loader = (function() {
 			module.start();
 		}
 
-		// Notifiy core of loded modules.
+		// Notify core of loded modules.
 		NSR.modulesStarted(moduleObjects);
 	};
 
@@ -49,7 +49,16 @@ var Loader = (function() {
 	 * return array - module data as configured in config
 	 */
 	var getAllModules = function() {
-		return config.modules;
+		let modules = [];
+		for (let section of config.sections) {
+			if (Array.isArray(section.modules)) {
+				for (let module of section.modules) {
+					module.config.section = section.section;
+					modules.push(module);
+				}
+			}
+		}
+		return modules;
 	};
 
 	/* getModuleData()

@@ -42,7 +42,7 @@ function Template(Dashboard, app, io, config) {
 
     // Sometimes it is useful to get the configuration for the modules that is using this plugin, it can be accomplished with this line of code (replace "template" with the name of your plugin).
     // See example of this in the MQTT-plugin, if this plugin has no need of that you should remove this line of code.
-    self.modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'template').map(module => module.config);
+    self.modulesConfig = Dashboard.getModulesByPluginName('template').map(module => module.config);
     
     // DO YOUR INITIALIZATION STUFF HERE!
 

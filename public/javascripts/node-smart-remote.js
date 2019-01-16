@@ -5,31 +5,30 @@ var NSR = (function() {
   var clickEvent = isTouchSupported ? 'touchend' : 'mouseup';
 
   var renderSections = function() {
-    var navList = $('.js-nav-left-list'),
+    let navList = $('.js-nav-left-list'),
         main = $('.js-main'),
         menuWidth = $('.js-nav-left').outerWidth(),
         contentWidth = $(window).width() - menuWidth,
         isMobile = $(window).width() < 480;
 
-    for (var i = 0, sectionLength = config.sections.length; i < sectionLength; i++) {
-      var section = config.sections[i];
+    for (let section of config.sections) {
 
-      var navSectionEl = $('<li class="nav-left-item js-nav-left-item" data-section="' + section.section + '"><i class="material-icons md-36">' + section.icon + '</i>' + section.title + '</li>');
+      let navSectionEl = $('<li class="nav-left-item js-nav-left-item" data-section="' + section.section + '"><i class="material-icons md-36">' + section.icon + '</i>' + section.title + '</li>');
 
       navList.append(navSectionEl);
 
-      var sectionEl = $('<section class="section section-' + section.section +'" />');
+      let sectionEl = $('<section class="section section-' + section.section +'" />');
 
       main.append(sectionEl);
 
-      var baseDimensions = section.base_dimensions,
+      let baseDimensions = section.base_dimensions,
           margins = section.margins,
           maxCols;
 
       if (isMobile) {
         margins = [5, 5];
 
-        var baseWidth = baseDimensions[0],
+        let baseWidth = baseDimensions[0],
             marginHorizontal = margins[0];
 
         // One or two columns. Could be done better..
@@ -57,26 +56,23 @@ var NSR = (function() {
   }
 
   var modulesStarted = function(moduleObjects) {
-		modules = [];
-		for (var m in moduleObjects) {
-			var module = moduleObjects[m];
+    modules = [];
+		for (let m in moduleObjects) {
+			let module = moduleObjects[m];
 			modules[module.data.index] = module;
-		}
-
-		renderModules();
-	}
+    }
+    
+    renderModules();
+    }
 
   var renderModules = function() {
-    for (var i = 0, length = modules.length; i < length; i++) {
-      var module = modules[i],
-          moduleEl = module.getDom();
-
-      sectionGridsters[module.config.section].add_widget(moduleEl, module.config.size_x || 1, module.config.size_y || 1, module.config.column || 1, module.config.row || 1);
+    for (let module of modules) {
+      sectionGridsters[module.config.section].add_widget(module.getDom(), module.config.size_x || 1, module.config.size_y || 1, module.config.column || 1, module.config.row || 1);
     }
   }
 
   var initNavigation = function() {
-    var sections = $('.section'),
+    let sections = $('.section'),
     navList = $('.js-nav-left-list'),
     navName = location.hash ? location.hash.replace('#', '') : navList.children().first().data('section'); // show the section that are used in the URL, if no section specified then take the first one in the list.
 
@@ -89,7 +85,7 @@ var NSR = (function() {
   }
 
   function selectSection(name) {
-    var sections = $('.section'),
+    let sections = $('.section'),
     navItems = $('.js-nav-left-item'),
     sectionEl = $('.section-' + name);
 

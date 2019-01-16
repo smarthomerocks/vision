@@ -12,7 +12,7 @@ function MQTT(Dashboard, app, io, config) {
 
   self.start = function() {
 
-    modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'mqtt').map(module => module.config);
+    modulesConfig = Dashboard.getModulesByPluginName('mqtt').map(module => module.config);
 
     if (self.client) {
       self.emit('connect');

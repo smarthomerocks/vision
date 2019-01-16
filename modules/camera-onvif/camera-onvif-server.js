@@ -85,7 +85,7 @@ module.exports = ModuleServer.create({
   connect: function(id) {
 
     let self = this,
-        cameraModules = this.dashboard.getConfig().modules.filter(module => module.module === 'camera-onvif');
+        cameraModules = this.dashboard.getModulesByName('camera-onvif');
 
     // if another client connect to the dashboard when we already are up and running, notify the client that the camera is already connected.
     if (this.cameras[id]) {

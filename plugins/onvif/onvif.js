@@ -103,7 +103,7 @@ function Onvif(Dashboard, app, io, config) {
       return;
     }
 
-    self.modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'onvif').map(module => module.config);
+    self.modulesConfig = Dashboard.getModulesByPluginName('onvif').map(module => module.config);
     self.connected = true;
     self.emit('CONNECTED');
 

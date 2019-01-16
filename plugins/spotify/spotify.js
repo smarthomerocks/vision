@@ -123,7 +123,7 @@ function Spotify(Dashboard, app, io, config) {
       return;
     }
 
-    self.modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'spotify').map(module => module.config);
+    self.modulesConfig = Dashboard.getModulesByPluginName('spotify').map(module => module.config);
 
     //app.get('/spotifycallback', spotifyCallback);
                 

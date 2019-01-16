@@ -13,7 +13,7 @@ function Domoticz(Dashboard, app, io, config) {
 
   this.start = function() {
 
-    modulesConfig = Dashboard.getConfig().modules.filter(module => module.config.plugin === 'domoticz').map(module => module.config);
+    modulesConfig = Dashboard.getModulesByPluginName('domoticz').map(module => module.config);
 
     let idx = modulesConfig.map(config => config['id']);
 

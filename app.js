@@ -105,7 +105,7 @@ app.use('/modules', express.static(path.join(__dirname, 'modules')));
 app.use('/config', express.static(path.join(__dirname, 'config')));
 
 dashboard.setPlugins(plugins.init(dashboard, app, io));
-dashboard.setModules(modules.init(dashboard, app, io));
+dashboard.setModules(modules.init(dashboard, app, io).modules);
 
 app.use('/', routes);
 
