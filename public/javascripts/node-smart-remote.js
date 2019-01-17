@@ -1,5 +1,6 @@
 var NSR = (function() {
   var modules = [];
+  var currentSection;
   var sectionGridsters = {};
   var isTouchSupported = "ontouchend" in document;
   var clickEvent = isTouchSupported ? 'touchend' : 'mouseup';
@@ -63,7 +64,8 @@ var NSR = (function() {
     }
     
     renderModules();
-    }
+    signalModulesShown(currentSection);
+  }
 
   var renderModules = function() {
     for (let module of modules) {
@@ -85,17 +87,45 @@ var NSR = (function() {
   }
 
   function selectSection(name) {
-    let sections = $('.section'),
-    navItems = $('.js-nav-left-item'),
-    sectionEl = $('.section-' + name);
+    if (currentSection !== name) {
+      let sections = $('.section'),
+      navItems = $('.js-nav-left-item'),
+      sectionEl = $('.section-' + name);
 
-    location.hash = name;
+      location.hash = name;
 
-    sections.fadeOut(300);
-    sectionEl.fadeIn(200);
+      sections.fadeOut(300);
+      sectionEl.fadeIn(200);
 
-    navItems.removeClass('active');
-    navItems.filter("[data-section='" + name + "']").addClass('active');
+      navItems.removeClass('active');
+      navItems.filter("[data-section='" + name + "']").addClass('active');
+
+      signalModulesHidden(currentSection);
+      currentSection = name;
+      signalModulesShown(currentSection);
+    }
+  }
+
+  // signal all modules on the newly selected section that they are now visible.
+  function signalModulesShown(section) {
+    if (section) {
+      for (let module of modules.filter(m => m.config.section === section)) {
+        if (module.shown && typeof module.shown === 'function') {
+          module.shown();
+        }
+      }
+    }
+  }
+
+  // signal all modules on the last selected section that they are no longer visible.
+  function signalModulesHidden(section) {
+    if (section) {
+      for (let module of modules.filter(m => m.config.section === section)) {
+        if (module.hidden && typeof module.hidden === 'function') {
+          module.hidden();
+        }
+      }
+    }
   }
 
   var setTheme = function() {

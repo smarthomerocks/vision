@@ -31,6 +31,22 @@ var Module = Class.extend({
 		winston.info("Starting module: " + this.name);
 	},
 
+	/* shown()
+	 * Is called when the module becomming visible, e.g. when the section where the module is placed is selected.
+	 * Could be used for re-rendering modules visual representation.
+	 */
+	shown: function () {
+		winston.debug(`Module: "${this.name}" is now shown`);
+	},
+
+	/* hidden()
+	 * Is called when the module is no longer visible, e.g. when the section where the module is placed is no longer selected.
+	 * Could be used for unregisterering setInterval-instances, eventlisteners and such.
+	 */
+	hidden: function () {
+		winston.debug(`Module: "${this.name}" is now hidden`);
+	},
+
 	/* getScripts()
 	 * Returns a list of scripts the module requires to be loaded.
 	 *
@@ -95,7 +111,6 @@ var Module = Class.extend({
 		this.data = data;
 		this.name = data.name;
 		this.identifier = data.identifier;
-		this.hidden = false;
 
 		this.setConfig(data.config);
 	},
