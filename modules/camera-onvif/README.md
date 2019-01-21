@@ -19,7 +19,6 @@ Support for network based cameras that follows the [ONVIF](https://www.onvif.org
             password:   <string>,   // password to access camera
             streaming:  <boolean>,  // if streaming video from camera should be used, otherwise pictures will be taken at intervals
             title:      <string>,   // title of the module that should be shown on the dashboard
-            section:    <string>,   // which section this modules should be displayed on
             column:     <number>,   // at what column on the section should this module be displayed at, higher value = more to the right of the screen
             row:        <number>,   // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
             size_x: 1,  <number>    // width of module, in number of columns <optional>
@@ -39,7 +38,6 @@ Support for network based cameras that follows the [ONVIF](https://www.onvif.org
             password: "admin",
             streaming: false,
             title: "nursery",
-            section: "start",
             column: 1,
             row: 2,
             size_x: 2,

@@ -14,7 +14,6 @@ Modulename: <TBD>
         module: "<TBD>",
         config: {
           title:    <string>,  // title of the module that should be shown on the dashboard
-          section:  <string>,  // which section this modules should be displayed on
           column:   <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:      <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
           size_x: 1, <number>  // width of module, in number of columns <optional>
@@ -32,7 +31,6 @@ Modulename: <TBD>
           plugin: "smhi",
           lat: '57.634800',
           lon: '18.294840',
-          section: "start",
           column: 3,
           row: 1,
           size_x: 1,

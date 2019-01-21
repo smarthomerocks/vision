@@ -51,7 +51,6 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
             levelCmd:  <string>,  // command that should be sent to the "setTopic"-topic for changing the level of the dimmer
             maxLevel:  <number>,  // value that represent te highest value the dimmer can take (fully on)
             minLevel:  <number>,  // value that represent te lowest value the dimmer can take (fully off)
-            section:   <string>,  // which section this modules should be displayed on
             column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
             row:       <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
             size_x: 1, <number>  // width of module, in number of columns <optional>
@@ -76,7 +75,6 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
             levelCmd: '{"level": <level>}',
             maxLevel: 100,
             minLevel: 0,
-            section: "start",
             column: 2,
             row: 1,
             size_x: 1,

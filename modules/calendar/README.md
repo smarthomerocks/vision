@@ -21,7 +21,6 @@ Calendar module
           maximumNumberOfDays   <number>,  // maximum number of days we should fetch calendar entries for <optional>
           user      <string>,  // username for fetching calendar entries <optional>
           pass      <string>,  // password for fetching calendar entries <optional>
-          section:  <string>,  // which section this modules should be displayed on
           column:   <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:      <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
           size_x: 1, <number>  // width of module, in number of columns <optional>
@@ -38,7 +37,6 @@ Calendar module
           title: "My kalendar",
           plugin: "ical",
           url: 'https://calendar.google.com/calendar/ical/12345678/basic.ics',
-          section: "start",
           column: 5,
           row: 1,
           size_x: 1,

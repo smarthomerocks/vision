@@ -14,7 +14,6 @@ Modulename: <TBD>
         module: "<TBD>",
         config: {
           title:    <string>,  // title of the module that should be shown on the dashboard
-          section:  <string>,  // which section this modules should be displayed on
           column:   <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:      <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
           icon:     <string>,  // icon
@@ -33,7 +32,6 @@ Modulename: <TBD>
           plugin: "sonos",
           devicename: "Bärbar",
           favoriteName: "Trending Top 40",
-          section: "start",
           icon: "favorite"
           column: 4,
           row: 3,

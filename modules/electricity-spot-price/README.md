@@ -15,7 +15,6 @@ This module visualizes the current electricity pricing during the 24 hours of a 
         config: {
           title:     <string>,  // title of the module that should be shown on the dashboard
           plugin:    <string>,  // plugin to use with this module
-          section:   <string>,  // which section this module should be displayed on
           column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:       <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
           size_x:    <number>,  // width of module, in number of columns <optional>
@@ -31,7 +30,6 @@ This module visualizes the current electricity pricing during the 24 hours of a 
         config: {
           title: "Elpris (SEK)",
           plugin: "electricity-spot-price",
-          section: "start",
           column: 1,
           row: 5,
           size_x: 2,

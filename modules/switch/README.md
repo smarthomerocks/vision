@@ -53,7 +53,6 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
           offCmd:    <string>,  // command that should be sent to the "setTopic"-topic for turning the switch off
           icon_on:   <string>,  // icon for switch when active
           icon_off:  <string>,  // icon for switch when inactive
-          section:   <string>,  // which section this modules should be displayed on
           column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
           row:       <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
           size_x: 1, <number>  // width of module, in number of columns <optional>
@@ -77,7 +76,6 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
           statusTopic: "home/kitchen/lightlevel",
           onCmd: '{"level": 100}',
           offCmd: '{"level": 0}',
-          section: "start",
           column: 2,
           row: 1,
           size_x: 1,
@@ -101,7 +99,6 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
           onCmd: '{"nodeid":7,"cmdclass":37,"cmdidx":0,"value":true}',
           offCmd: '{"nodeid":7,"cmdclass":37,"cmdidx":0,"value":false}',
           stateParseExpression: "//@val[1]", 
-          section: "start",
           column: 2,
           row: 2
         }

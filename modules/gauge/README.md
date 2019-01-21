@@ -26,7 +26,6 @@ The gauge support visualizing the value in several formats:
             getTopic:  <string>,  // MQTT topic that should be used to get the current value of the gauge
             statusTopic: <string>,// MQTT topic the gauge use to report back state changes
             stateParseExpression: <string>, // XPath expression for parsing the state from an JSON-object, if not set then we expect the returned state be a simple datatype as string or number.
-            section:   <string>,  // which section this modules should be displayed on
             column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
             row:       <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
             size_x: 1, <number>  // width of module, in number of columns <optional>
@@ -47,7 +46,6 @@ Text Gauge
         type: "text",
         statusTopic: "home/zwave/node/7/power_change",
         stateParseExpression: "//value/@value",
-        section: "lights",
         size_x: 1,
         size_y: 1,
         column: 4,
@@ -66,7 +64,6 @@ LCD Gauge
         type: "lcd",
         statusTopic: "home/zwave/node/7/power_change",
         stateParseExpression: "//value/@value",
-        section: "lights",
         size_x: 1,
         size_y: 1,
         column: 4,
@@ -91,7 +88,6 @@ Radial Gauge
         },
         statusTopic: "home/zwave/node/7/power_change",
         stateParseExpression: "//value/@value",
-        section: "lights",
         size_x: 3,
         size_y: 3,
         column: 1,
@@ -138,7 +134,6 @@ Radial Gauge - Advanced
         },
         statusTopic: "home/zwave/node/7/power_change",
         stateParseExpression: "//value/@value",
-        section: "lights",
         size_x: 2,
         size_y: 2,
         column: 1,
@@ -163,7 +158,6 @@ Linear Gauge
         },
         statusTopic: "home/zwave/node/7/power_change",
         stateParseExpression: "//value/@value",
-        section: "lights",
         size_x: 1,
         size_y: 5,
         column: 4,
