@@ -1,5 +1,7 @@
 const ModuleServer = require('../../lib/module-server.js'),
-      got = require('got');
+      logger = require('../../logger').logger,
+      got = require('got'),
+      ping = require('ping');
 
 
 module.exports = ModuleServer.create({
@@ -35,7 +37,7 @@ module.exports = ModuleServer.create({
     config.type === 'http' ? this.makeHttpRequest(monitorHost) : this.makePingRequest(monitorHost);
   },
 
-  makeHttpRequest(monitorHost) {
+  makeHttpRequest: function(monitorHost) {
     (async (monitorHost) => { 
       try {
         //https://www.npmjs.com/package/got
@@ -43,7 +45,7 @@ module.exports = ModuleServer.create({
           timeout: monitorHost.config.timeout
         });
         // remember when we last change state.
-        if (!monitorHost.available) {
+        if (!monitorHost.available || !monitorHost.lastChange) {
           monitorHost.lastChange = new Date();
         }
 
@@ -52,7 +54,7 @@ module.exports = ModuleServer.create({
       
       } catch(error) {
         // remember when we last change state.
-        if (monitorHost.available) {
+        if (monitorHost.available || !monitorHost.lastChange) {
           monitorHost.lastChange = new Date();
         }
 
@@ -62,8 +64,29 @@ module.exports = ModuleServer.create({
     })(monitorHost);
   },
 
-  makePingRequest(config, monitorHost) {
-    // TBD
-    //https://www.npmjs.com/package/net-ping
+  makePingRequest: function(monitorHost) {
+    ping.promise.probe(monitorHost.config.target, {
+      timeout: monitorHost.config.timeout
+    }).then(res => {
+      if (res.alive) {
+        // remember when we last change state.
+        if (!monitorHost.available || !monitorHost.lastChange) {
+          monitorHost.lastChange = new Date();
+        }
+
+        monitorHost.available = true;
+        this.sendSocketNotification('NETWORK-STATUS_STATUS', { id: monitorHost.config.id, since: monitorHost.lastChange, available: monitorHost.available });
+      } else {
+        // remember when we last change state.
+        if (monitorHost.available || !monitorHost.lastChange) {
+          monitorHost.lastChange = new Date();
+        }
+        
+        monitorHost.available = false;
+        this.sendSocketNotification('NETWORK-STATUS_STATUS', { id: monitorHost.config.id, since: monitorHost.lastChange, available: monitorHost.available });
+      }
+    }).catch(err => {
+      logger.error(err);
+    });
   }
 });

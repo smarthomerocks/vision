@@ -26,11 +26,11 @@ Module.register('network-status', {
 
   getDom: function() {
 
-    this.$el = $(`<div class="box network-status ${this.available ? 'available' : 'not-available'}">
+    this.$el = $(`<div class="box network-status'}">
                     <div class="box-content">
                       <div class="heading">${this.config.title}</div>
-                      <p class="statusText">${this.available ? this.config.okText : this.config.errorText}</p>
-                      <p class="statusSince">${this.available ? '' : new Date(this.since).toLocaleTimeString()}</p>
+                      <div class="statusText">---</div>
+                      <div class="statusSince">&nbsp;</div>
                     </div>
                   </div>`);
 
@@ -61,7 +61,7 @@ Module.register('network-status', {
 
       this.available ? this.$el.addClass('available') : this.$el.addClass('not-available');
       this.$el.find('.statusText').text(this.available ? this.config.okText : this.config.errorText);
-      this.$el.find('.statusSince').text(this.available ? '' : new Date(this.since).toLocaleTimeString());
+      this.$el.find('.statusSince').html(this.available ? '&nbsp;' : new Date(this.since).toLocaleTimeString());
     }
   }
 });
