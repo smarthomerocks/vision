@@ -22,7 +22,20 @@ Module.register('weather-current', {
 
   getDom: function() {
 
-    this.$el = $('<div class="box wheater-current"><div class="box-content"><div class="heading">'+ this.config.title +'</div><div class="weather-current-content"><span class="temp hidden"></span><br /><i class="wi wi-day-sunny hidden"></i></div></div></div>');
+    this.$el = $(`
+    <div class="box wheater-current">
+      <div class="box-content">
+        <div class="heading">${this.config.title}</div>  
+        <div class="weather-forcasts">
+          <div class="weather-forcast">
+            <div class="wi wi-day-sunny hidden"></div>
+            <div class="temp hidden">10&deg;C</div>
+            <div class="windspeed hidden">0&nbsp;m/s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `);
 
     this.$el.css({
       'opacity' : 0.4
@@ -32,14 +45,6 @@ Module.register('weather-current', {
   },
 
   socketNotificationReceived: function(command, data) {
-    // function getTime(dateTime) {
-    //   var date = new Date(dateTime),
-    //       hours = String(date.getHours()),
-    //       minutes = String(date.getMinutes());
-    //
-    //   return (hours.length < 2 ? '0' : '') + hours + ':' + (minutes.length < 2 ? '0' : '') + minutes;
-    // }
-
     if (command === 'WEATHER_CURRENT_CONNECTED') {
       this.$el.css({
         'opacity' : 1
@@ -48,7 +53,7 @@ Module.register('weather-current', {
       this.sendSocketNotification('WEATHER_CURRENT_STATUS', { plugin: this.config.plugin, lat: this.config.lat, lon: this.config.lon });
 
     } else if (command === 'WEATHER_CURRENT_STATUS' && this.config.lat === data.lat && this.config.lon === data.lon) {
-      var currentWeather = data.currentWeather,
+      let currentWeather = data.currentWeather,
           weatherIconMap = {
             '1': 'wi-day-sunny',
             '2': 'wi-day-sunny-overcast',
@@ -65,9 +70,22 @@ Module.register('weather-current', {
             '13': 'wi-lightning',
             '14': 'wi-sleet',
             '15': 'wi-snow'
-          };
+          },
+          forecastDOM = '';
 
-      this.$el.find('.weather-current-content').html('<i class="wi ' + weatherIconMap[currentWeather.icon] + '"></i><br /><span class="temp"> ' + Math.round(currentWeather.temp, 10) + ' &deg;C</span>');
+      currentWeather.length = this.config.size_x; // show as many weather forecast as the width of the module.
+
+      for (let weather of currentWeather) {
+        forecastDOM += `
+        <div class="weather-forcast">
+          <div class="wi ${weatherIconMap[weather.icon]}"></div>
+          <div class="temp">${Math.round(weather.temp, 10)}&deg;C</div>
+          <div class="windspeed">${Math.round(weather.windspeed, 10)}&nbsp;m/s</div>
+        </div>
+        `;
+      } 
+
+      this.$el.find('.weather-forcasts').html(forecastDOM);
     }
   }
 });

@@ -1,12 +1,12 @@
-var http = require('http');
-var url = require('url');
-var moment = require('moment');
+const https = require('https'),
+      url = require('url'),
+      logger = require('../../logger').logger;
 
 var APIFetcher = function(lat, lon, fetchInterval) {
   var self = this;
 
   var reloadTimer = null;
-  var currentWeather = null;
+  var currentWeather = [];
 
   var fetchFailedCallback = function() {};
   var currentWeatherReceivedCallback = function() {};
@@ -19,8 +19,9 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     clearTimeout(reloadTimer);
     reloadTimer = null;
 
-    var request = http.request(url.parse('http://opendata-download-metfcst.smhi.se/api/category/pmp2g/version/2/geotype/point/lon/' + lon + '/lat/' + lat + '/data.json'
-    ), function(response) {
+    let requestUrl = url.parse('https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/' + lon + '/lat/' + lat + '/data.json');
+    
+    https.request(requestUrl, response => {
       var res = '';
 
       response.on('data', function(chunk) {
@@ -28,37 +29,78 @@ var APIFetcher = function(lat, lon, fetchInterval) {
       });
 
       response.on('end', function() {
-        var timeSeries = JSON.parse(res);
+        
+        currentWeather = [];
 
-        currentWeather = null;
+        try {
+          let now = new Date(),
+              timeSeries = JSON.parse(res),
+              datebuckets = new Map(timeSeries.timeSeries.map(t => {
+                /* returns
+                {
+                  "2019-02-20": [],
+                  "2019-02-21": [],
+                  "2019-02-22": [],
+                  ...
+                }
+                */
+                return [
+                  t.validTime.split('T')[0],
+                  []
+                ];
+              })),
+              currentHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()); // "2019-02-24T21:00:00Z" 
+          /* returns
+          [
+            "2019-02-24": [
+              {
+                date:"1551027600000"
+                icon:3
+                temp:5.3
+                windspeed:6.8
+              },
+              ...
+            ],
+            ...
+          ]
+          */
+          for (let key of datebuckets.keys()) {
+            datebuckets.set(key, timeSeries.timeSeries.filter(t => t.validTime.startsWith(key)).map(t => {
+              let icon = t.parameters.find(i => i.name === 'Wsymb2');
+              let temp = t.parameters.find(i => i.name === 't');
+              let windspeed = t.parameters.find(i => i.name === 'ws');
 
-        var now = new Date(),
-            currentHour = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()).getTime();
-
-        for (var i = 0, length = timeSeries.timeSeries.length; i < length; i++) {
-          var time = timeSeries.timeSeries[i],
-              validDate = new Date(time.validTime);
-
-          if (currentHour === validDate.getTime()) {
-            currentWeather = {
-              date: moment(validDate).format('x'),
-              icon: (time.parameters && time.parameters[18]) ? time.parameters[18].values[0] : '',
-              temp: (time.parameters && time.parameters[1]) ? time.parameters[1].values[0] : ''
-            };
+              return {
+                dateTime: t.validTime.replace('Z', ''), // strip UTC-marker since the response is really in localtime.
+                icon: icon ? icon.values[0] : '', // https://opendata.smhi.se/apidocs/metfcst/parameters.html#parameter-wsymb
+                temp: temp ? temp.values[0] : '',
+                windspeed: windspeed ? windspeed.values[0] : ''
+              };
+            }));
           }
+
+          // first position in array is the weather the current hour of this day.
+          let bucketIterator = datebuckets.values();
+          currentWeather.push(bucketIterator.next().value.find(t => new Date(t.dateTime).getTime() === currentHour.getTime())); //TODO: we are 1 hour off, no match!
+
+          for (let hourEntries of bucketIterator) {
+            if (hourEntries.length > 0) {
+              currentWeather.push(hourEntries[Math.floor(hourEntries.length / 2)]);
+            }
+          }
+
+          self.broadcastCurrentWeather();
+        } catch (error) {
+          logger.error(`Failed to parse SMHI response, url: "${requestUrl.format()}", "${error.stack}".`);
+          fetchFailedCallback(self, error);
         }
 
-        self.broadcastCurrentWeather();
         scheduleTimer();
       });
-    });
-
-    request.on('error', function(e) {
+    }).on('error', function(e) {
       fetchFailedCallback(self, e);
       scheduleTimer();
-    });
-
-    request.end();
+    }).end();
   };
 
   /* scheduleTimer()
@@ -69,7 +111,7 @@ var APIFetcher = function(lat, lon, fetchInterval) {
     clearTimeout(reloadTimer);
     reloadTimer = setTimeout(function() {
       fetchWeather();
-    }, fetchInterval);
+    }, fetchInterval || 300000);
   };
 
   /* public methods */

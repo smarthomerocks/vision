@@ -1,15 +1,25 @@
 .wheater-current {
-  .temp {
-    font-size: 40px;
-    line-height: 1;
-  }
+  .weather-forcasts {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
 
-  .wi {
-    font-size: 40px;
-    line-height: 1.3;
-  }
-
-  .hidden {
-    visibility: hidden;
+    .weather-forcast {
+      .wi {
+        font-size: 40px;
+        line-height: 1.3;
+      }
+      .temp {
+        font-size: 20px;
+        line-height: 1;
+      }
+      .windspeed {
+        font-size: 15px;
+        line-height: 1;
+      }
+      .hidden {
+        visibility: hidden;
+      }
+    }
   }
 }
