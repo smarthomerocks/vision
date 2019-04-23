@@ -1,9 +1,9 @@
 [Unit]
-Description=Smart remote dashboard for home automation.
+Description=Easy to use Dashboard for Home automation.
 After=syslog.target network.target 
 
 [Service]
-WorkingDirectory=/opt/node-smart-remote
+WorkingDirectory=/opt/vision
 ExecStart=NODE_ENV=production PORT=80 /usr/local/bin/npm start
 Restart=on-failure
 RestartSec=5

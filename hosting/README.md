@@ -1,4 +1,4 @@
-# node-smart-remote - hosting
+# Vision - hosting
 
 Soo you got the application running on your desktop or laptop computer? That's very nice, but in the long run you probably want to host it on a dedicated server so that you could turn of your computer once in a while.
 A cheap and power efficient single-board computer as the [Raspberry Pi 2/3](https://en.wikipedia.org/wiki/Raspberry_Pi) would be perfect for the job, loaded with a suitable operatingsystem like [Raspbian lite](https://www.raspberrypi.org/downloads/raspbian/) or [Hypriot (if you choose the Docker path)](https://blog.hypriot.com/downloads/).
@@ -20,21 +20,21 @@ First install Node.js and some required packages (in case you have not already d
 
     1. sudo apt-get update
     2. apt-get install git curl
-    2. curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
-    3. apt-get install nodejs
+    2. curl -sL https://deb.nodesource.com/setup_11.x | bash -
+    3. apt-get install -y nodejs
     4. verify with "node -v"
 
-Then download and install node-smart-remote
+Then download and install Vision
 
     1. cd /opt
-    2. git clone git@gitlab.com:emilohman/node-smart-remote.git
+    2. git clone https://github.com/smarthomerocks/vision.git
     3. npm install --production
 
 Lastly we need to enable and start the service, [Understanding systemd](https://www.linux.com/learn/understanding-and-using-systemd)
 
-    1. cp /opt/node-smart-remote/hosting/systemd/node-smart-remote.service /etc/systemd/system
-    2. systemctl enable node-smart-remote.service
-    3. systemctl start node-smart-remote.service
+    1. cp /opt/vision/hosting/systemd/vision.service /etc/systemd/system
+    2. systemctl enable vision.service
+    3. systemctl start vision.service
 
 Now all should be up and running, verify by using a webbrowser to "IP address to your raspberry-server":80
 
@@ -60,18 +60,18 @@ First install Docker if that has not already been done, if starting from a clean
 
 Build a Docker image if you don't have one already (see #4 in Running for a prebuilt version!)
 
-    1. git clone git@gitlab.com:emilohman/node-smart-remote.git && cd node-smart-remote
-    2. docker build -t node-smart-remote -f hosting/docker/Dockerfile.rpi .
+    1. git clone https://github.com/smarthomerocks/vision.git && cd vision
+    2. docker build -t vision -f hosting/docker/Dockerfile.rpi .
 
 #### Running
 
-Start the Docker image, the configuration file will be located in the /etc/node-smart-remote directory on your host computer.
+Start the Docker image, the configuration file will be located in the /etc/vision directory on your host computer.
 
-    1. mkdir -p /etc/node-smart-remote
-    2. cp config/config-sample.js /etc/node-smart-remote/config.js
-    3. docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped node-smart-remote
+    1. mkdir -p /etc/vision
+    2. cp config/config-sample.js /etc/vision/config.js
+    3. docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped vision
     4. if you don't want to build an image youself you could use a prebuilt version:
-    docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --name node-smart-remote registry.gitlab.com/emilohman/node-smart-remote/rpi
+    docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --name vision smarthomerocks/vision
     
 Now all should be up and running, verify by using a webbrowser to \<IP address to your raspberry-server>
 
@@ -85,18 +85,18 @@ Now all should be up and running, verify by using a webbrowser to \<IP address t
 
 Build a Docker image if you don't have one already (see #4 in Running for a prebuilt version!)
 
-    1. git clone git@gitlab.com:emilohman/node-smart-remote.git && cd node-smart-remote
-    2. docker build -t node-smart-remote -f hosting/docker/Dockerfile.x64 .
+    1. git clone https://github.com/smarthomerocks/vision.git && cd vision
+    2. docker build -t vision -f hosting/docker/Dockerfile.x64 .
 
 #### Running
 
-Start the Docker image, the configuration file will be located in the /etc/node-smart-remote directory on your host computer.
+Start the Docker image, the configuration file will be located in the /etc/vision directory on your host computer.
 
-    1. mkdir -p /etc/node-smart-remote
-    2. cp config/config-sample.js /etc/node-smart-remote/config.js
-    3. docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped node-smart-remote
+    1. mkdir -p /etc/vision
+    2. cp config/config-sample.js /etc/vision/config.js
+    3. docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped vision
     4. if you don't want to build an image youself you could use a prebuilt version:
-    docker run -d -v /etc/node-smart-remote:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --name node-smart-remote registry.gitlab.com/emilohman/node-smart-remote/x64
+    docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --name vision smarthomerocks/vision
 
 Now all should be up and running, verify by using a webbrowser to \<IP address to your raspberry-server>
 

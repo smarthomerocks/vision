@@ -12,5 +12,4 @@ public/**/*.css
 public/module/**
 modules/**/*.css
 *.log
-node-smart-remote.code-workspace
 plugins/spotify/spotifyTokens.json
