@@ -80,10 +80,10 @@ var APIFetcher = function(lat, lon, fetchInterval) {
           }
 
           // first position in array is the weather the current hour of this day.
-          let bucketIterator = datebuckets.values();
-          currentWeather.push(bucketIterator.next().value.find(t => new Date(t.dateTime).getTime() === currentHour.getTime())); //TODO: we are 1 hour off, no match!
+          //let bucketIterator = datebuckets.values();
+          //currentWeather.push(bucketIterator.next().value.find(t => new Date(t.dateTime).getTime() === currentHour.getTime())); //TODO: we are 1 hour off, no match!
 
-          for (let hourEntries of bucketIterator) {
+          for (let hourEntries of datebuckets.values()) {
             if (hourEntries.length > 0) {
               currentWeather.push(hourEntries[Math.floor(hourEntries.length / 2)]);
             }

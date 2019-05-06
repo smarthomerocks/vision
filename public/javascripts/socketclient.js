@@ -9,7 +9,7 @@ var NSRSocket = function(moduleName) {
 	self.moduleName = moduleName;
 
 	// Private Methods
-	self.socket = io("/" + self.moduleName, {secure: config.ssl});
+	self.socket = io("/" + self.moduleName, {});
 	var notificationCallback = function() {};
 
 	var onevent = self.socket.onevent;
@@ -24,14 +24,14 @@ var NSRSocket = function(moduleName) {
 		winston.error("SOCKET ERROR", err);
 		setTimeout(function() {
 			window.location.reload();
-		}, 100);		
+		}, 1000);		
 	});
 
 	self.socket.on('connect_error', function(err){
 		winston.error('Connection Failed', err);
 		setTimeout(function() {
 			window.location.reload();
-		}, 100);
+		}, 1000);
 	});
 
 	// register catch all.

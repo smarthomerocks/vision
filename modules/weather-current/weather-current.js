@@ -69,11 +69,11 @@ Module.register('weather-current', {
             '12': 'wi-rain',
             '13': 'wi-lightning',
             '14': 'wi-sleet',
-            '15': 'wi-snow'
+            '15': 'wi-snow'                                                                                                                                                                                                                                                                                                                                                                                                                                             
           },
           forecastDOM = '';
 
-      currentWeather.length = this.config.size_x; // show as many weather forecast as the width of the module.
+      currentWeather.length = currentWeather.length >= this.config.size_x ? this.config.size_x : currentWeather.length; // show as many weather forecast as the width of the module (if there are more forecasts available).
 
       for (let weather of currentWeather) {
         forecastDOM += `
