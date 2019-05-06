@@ -54,50 +54,34 @@ First install Docker if that has not already been done, if starting from a clean
 
 <br>
 
-### Raspberry Pi
 
-#### Building
 
-Build a Docker image if you don't have one already (see #4 in Running for a prebuilt version!)
+### Building
+
+Build a Docker image if you don't have one already.
+
+#### Raspberry Pi
 
     1. git clone https://github.com/smarthomerocks/vision.git && cd vision
     2. docker build -t vision -f hosting/docker/Dockerfile.rpi .
 
-#### Running
-
-Start the Docker image, the configuration file will be located in the /etc/vision directory on your host computer.
-
-    1. mkdir -p /etc/vision
-    2. cp config/config-sample.js /etc/vision/config.js
-    3. docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped vision
-    4. if you don't want to build an image youself you could use a prebuilt version:
-    docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --log-driver json-file --log-opt max-size=10m --log-opt max-file=10 --name vision smarthomerocks/vision
-    
-Now all should be up and running, verify by using a webbrowser to \<IP address to your raspberry-server>
-
-(find out the IP address by running "ifconfig" on the server)
-
-<br>
-
-### X64 (PC)
-
-#### Building
-
-Build a Docker image if you don't have one already (see #4 in Running for a prebuilt version!)
+#### X64 (PC)
 
     1. git clone https://github.com/smarthomerocks/vision.git && cd vision
     2. docker build -t vision -f hosting/docker/Dockerfile.x64 .
 
-#### Running
+### Running
 
 Start the Docker image, the configuration file will be located in the /etc/vision directory on your host computer.
 
     1. mkdir -p /etc/vision
     2. cp config/config-sample.js /etc/vision/config.js
-    3. docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped vision
-    4. if you don't want to build an image youself you could use a prebuilt version:
-    docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --log-driver json-file --log-opt max-size=10m --log-opt max-file=10 --name vision smarthomerocks/vision
+    3. docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --log-driver json-file --log-opt max-size=10m --log-opt max-file=10 --name vision vision
 
+if you don't want to build an image youself you could use a prebuilt version:
+
+    docker run -d -v /etc/vision:/home/node/config -p 80:3003 -p 443:3444 --restart unless-stopped --log-driver json-file --log-opt max-size=10m --log-opt max-file=10 --name vision smarthomerocks/vision
+    
 Now all should be up and running, verify by using a webbrowser to \<IP address to your raspberry-server>
 
 (find out the IP address by running "ifconfig" on the server)

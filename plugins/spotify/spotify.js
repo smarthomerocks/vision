@@ -14,7 +14,7 @@ const EventEmitter = require('events').EventEmitter,
       path = require('path'),
       logger = require('../../logger').logger,
       colors = require('colors'), //eslint-disable-line no-unused-vars
-      spotifyStateName = 'node-smart_spotifystate_1337',
+      spotifyStateName = 'vision_spotifystate_1337',
       spotifyTokens = path.join(__dirname, 'spotifyTokens.json'),
       // https://developer.spotify.com/documentation/general/guides/scopes/
       scopes = [
