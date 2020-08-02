@@ -335,6 +335,8 @@ util.inherits(Spotify, EventEmitter);
 
 module.exports = {
   create: function(Dashboard, app, io, config) {
-    return new Spotify(Dashboard, app, io, config);
+    let m = new Spotify(Dashboard, app, io, config);
+    m.setMaxListeners(50); // Temporary fix, see https://github.com/smarthomerocks/vision/issues/7
+    return m;
   }
 };

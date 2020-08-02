@@ -86,7 +86,6 @@ Module.register('gauge', {
       config.value = Number(this.value);
       config.height = boxContentEl.height();
       config.width = boxContentEl.width();
-
       this.gauge = this.config.type === 'linear-gauge' ? new LinearGauge(config): new RadialGauge(config);
       this.gauge.draw();
     }

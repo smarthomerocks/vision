@@ -1,4 +1,4 @@
-// TODO: if not slider: https://codepen.io/jon-walstedt/pen/vfhgx
+// TODO: if not slider: https://codepen.io/jon-walstedt/pen/vfhgx and multitouch https://codepen.io/munrocket/pen/dayZJg
 /*global Module, winston, jsel*/
 Module.register('dimmer', {
 

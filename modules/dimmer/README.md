@@ -43,14 +43,14 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
             plugin:    <string>,  // plugin to use with this module
             id:        <string>,  // identifier that uniquely indentifies this module to the plugin
 	        readonly:  <boolean>, // the dimmer can not be modified
-            type:      <string>,  // type of dimmer, "slider" or "knob"
-            setTopic:  <string>,  // MQTT topic that should be used to set the level of the dimmer
-            getTopic:  <string>,  // MQTT topic that should be used to get the current level of the dimmer
-            statusTopic: <string>,// MQTT topic the dimmer use to report back state changes
+            type:      <string>,  // type of dimmer, "slider", "knob" or "buttons"
+            setTopic:  <string>,  // Topic that should be used to set the level of the dimmer
+            getTopic:  <string>,  // Topic that should be used to get the current level of the dimmer
+            statusTopic: <string>,// Topic the dimmer use to report back state changes
             stateParseExpression: <string>, // XPath expression for parsing the state from an JSON-object, if not set then we expect the returned state be a simple datatype as string or number.
             levelCmd:  <string>,  // command that should be sent to the "setTopic"-topic for changing the level of the dimmer
-            maxLevel:  <number>,  // value that represent te highest value the dimmer can take (fully on)
-            minLevel:  <number>,  // value that represent te lowest value the dimmer can take (fully off)
+            maxLevel:  <number>,  // value that represent the highest value the dimmer can take (fully on)
+            minLevel:  <number>,  // value that represent the lowest value the dimmer can take (fully off)
             column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen
             row:       <number>,  // at what row on the section should this module be displayed at, higher value = more to the bottom of the screen
             size_x: 1, <number>  // width of module, in number of columns <optional>

@@ -93,6 +93,8 @@ util.inherits(MQTT, EventEmitter);
 
 module.exports = {
   create: function(Dashboard, app, io, config) {
-    return new MQTT(Dashboard, app, io, config);
+    let m = new MQTT(Dashboard, app, io, config);
+    m.setMaxListeners(50); // Temporary fix, see https://github.com/smarthomerocks/vision/issues/7
+    return m;
   }
 };

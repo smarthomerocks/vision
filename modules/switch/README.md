@@ -45,9 +45,9 @@ Use this [interactive editor](http://dragonworx.github.io/jsel/) to experiment a
 	      id:        <string>,  // identifier that uniquely indentifies this module to the plugin
 	      readonly:  <boolean>, // the switch can not be modified
           type:      <string>,  // type of switch, "button" or "button momentary" (turns off as soon as you release the button)
-          setTopic:  <string>,  // MQTT topic that should be used to set the switch to a new state
-          getTopic:  <string>,  // MQTT topic that should be used to request the current state of the switch
-          statusTopic: <string>,// MQTT topic the switch use to report back state changes
+          setTopic:  <string>,  // Topic that should be used to set the switch to a new state
+          getTopic:  <string>,  // Topic that should be used to request the current state of the switch
+          statusTopic: <string>,// Topic the switch use to report back state changes
           stateParseExpression: <string>, // XPath expression for parsing the state from an JSON-object, if not set then we expect the returned state be a simple datatype as string or number.
           onCmd:     <string>,  // command that should be sent to the "setTopic"-topic for turning the switch on
           offCmd:    <string>,  // command that should be sent to the "setTopic"-topic for turning the switch off
