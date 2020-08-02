@@ -1,4 +1,4 @@
-FROM balenalib/amd64-debian-node:10-buster-run
+FROM balenalib/amd64-debian-node:12-buster-run
 
 ENV NODE_ENV production
 ENV USING_DOCKER true
