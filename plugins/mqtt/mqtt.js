@@ -20,16 +20,24 @@ function MQTT(Dashboard, app, io, config) {
     }
 
     self.client = mqtt.connect(config.host, {
-      clean: false,
+      clean: true, // to receive all retained messages.
       port: config.port || 1883,
       clientId: 'dashboard_' + ip.address(), // clientId must be unique, but determistic (between restarts).
       username: config.username,
       password: config.password
     });
 
-    self.client.on('connect', function() {
-      // Subscribe on all modules "statusTopic" topics.
-      self.client.subscribe(modulesConfig.map(config => config.statusTopic));
+    self.client.on('connect', function(connack) {
+      /*
+        connack received connack packet.
+        When clean connection option is false and server has a previous session for clientId connection option,
+        then connack.sessionPresent flag is true.
+        When that is the case, you may rely on stored session and prefer not to send subscribe commands for the client.
+      */
+      if (!connack.sessionPresent) {
+        // Subscribe on all modules "statusTopic" topics.
+        self.client.subscribe(modulesConfig.map(config => config.statusTopic));
+      }
 
       logger.info('Plugin ' + 'mqtt '.yellow.bold + 'connected'.blue);
 
@@ -37,7 +45,7 @@ function MQTT(Dashboard, app, io, config) {
       // Momentary buttons should all be off to start with.
       for (let module of modulesConfig) {
         if (module.type === 'button momentary') {
-          self.client.publish(module.setTopic, module.offCmd);
+          self.client.publish(module.setTopic, module.offCmd, { qos: 2, retain: true });
         }
       }
 
@@ -71,20 +79,20 @@ function MQTT(Dashboard, app, io, config) {
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
 
     if (moduleConfig && moduleConfig.getTopic && moduleConfig.getTopic.length > 0) {
-      self.client.publish(moduleConfig.getTopic, '');
+      self.client.publish(moduleConfig.getTopic, '', { qos: 2, retain: false });
     }
   };
   //TODO: should these be moved to module to keep plugin clean of module logic and settings?
   self.setLevel = function(id, level) {
     logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'setLevel'.blue, id, level);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
-    self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)), { qos: 1, retain: 1 });
+    self.client.publish(moduleConfig.setTopic, moduleConfig.levelCmd.replace('<level>', String(level)), { qos: 2, retain: true });
   };
 
   self.toggle = function(id, state) {
     logger.debug('Plugin ' + 'mqtt '.yellow.bold + 'toggle'.blue, id, state);
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
-    self.client.publish(moduleConfig.setTopic, state ? moduleConfig.onCmd : moduleConfig.offCmd, { qos: 1, retain: 1 });
+    self.client.publish(moduleConfig.setTopic, state ? moduleConfig.onCmd : moduleConfig.offCmd, { qos: 2, retain: true });
 
   };
 }
@@ -94,7 +102,7 @@ util.inherits(MQTT, EventEmitter);
 module.exports = {
   create: function(Dashboard, app, io, config) {
     let m = new MQTT(Dashboard, app, io, config);
-    m.setMaxListeners(50); // Temporary fix, see https://github.com/smarthomerocks/vision/issues/7
+    m.setMaxListeners(100); // Temporary fix, see https://github.com/smarthomerocks/vision/issues/7
     return m;
   }
 };

@@ -40,7 +40,7 @@ var CalendarFetcher = function(url, reloadInterval, maximumEntries, maximumNumbe
       try {
         //https://www.npmjs.com/package/got
         let response = await got(url, {
-          timeout: 15000, // 15 secs
+          timeout: 60000, // 60 secs
           username: user,
           password: pass
         });
