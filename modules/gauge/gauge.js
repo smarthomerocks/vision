@@ -73,19 +73,22 @@ Module.register('gauge', {
   },
 
   shown: function() {
+    // create gauge if first time shown
     if (!this.gauge && (this.config.type === 'linear-gauge' || this.config.type === 'radial-gauge')) {
-      // create gauge if first time shown
-
+      let showTitleInGauge = this.config.type === 'radial-gauge';
       // we let canvas gauge show title instead
-      this.$el.find('.js-heading').hide();
+      if (showTitleInGauge) {
+        this.$el.find('.js-heading').hide();
+      }
       // override some config we want to set in code (these should never be used in the config-file anyway)
       let boxContentEl = this.$el.find('.box-content');
       let config = this.config.gaugeConfig;
       config.renderTo = this.$el.find(`.js-gauge-${this.config.id}`)[0];
-      config.title = this.config.title;
+      config.title = showTitleInGauge ? this.config.title : undefined;
       config.value = Number(this.value);
       config.height = boxContentEl.height();
       config.width = boxContentEl.width();
+      config.animation = !!window.requestAnimationFrame; // https://canvas-gauges.com/documentation/user-guide/advanced-usage#improving-performance-on-old-browsers
       this.gauge = this.config.type === 'linear-gauge' ? new LinearGauge(config): new RadialGauge(config);
       this.gauge.draw();
     }

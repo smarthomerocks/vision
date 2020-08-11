@@ -23,7 +23,8 @@ The gauge support visualizing the value in several formats:
             id:        <string>,  // identifier that uniquely indentifies this module to the plugin
             type:      <string>,  // type of gauge, "text", "lcd", "radial-gauge" or "linear-gauge"
             gaugeConfig: <object>,// additional configuration for the specific gauge-type. For radial and linear-gauge see this page: https://canvas-gauges.com/documentation/user-guide/configuration.
-            getTopic:  <string>,  // MQTT topic that should be used to get the current value of the gauge
+            getTopic:  <string>,  // MQTT topic that could be used to trigger a status update (statusTopic-event firing)
+            getTopicPayload:  <string|object>,  // The optional payload that is sent with getTopic to trigger a update
             statusTopic: <string>,// MQTT topic the gauge use to report back state changes
             stateParseExpression: <string>, // XPath expression for parsing the state from an JSON-object, if not set then we expect the returned state be a simple datatype as string or number.
             column:    <number>,  // at what column on the section should this module be displayed at, higher value = more to the right of the screen

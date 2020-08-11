@@ -79,7 +79,9 @@ function MQTT(Dashboard, app, io, config) {
     let moduleConfig = modulesConfig.filter(modConfig => modConfig.id === id)[0];
 
     if (moduleConfig && moduleConfig.getTopic && moduleConfig.getTopic.length > 0) {
-      self.client.publish(moduleConfig.getTopic, '', { qos: 2, retain: false });
+      let payload = moduleConfig.getTopicPayload || '';
+      payload = payload === Object(payload) ? JSON.stringify(payload) : payload; // if object, make it a string.
+      self.client.publish(moduleConfig.getTopic, payload, { qos: 2, retain: false });
     }
   };
   //TODO: should these be moved to module to keep plugin clean of module logic and settings?
