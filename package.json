@@ -34,7 +34,7 @@
     "onvif": "github:agsh/onvif",
     "ping": "^0.2.3",
     "serve-favicon": "2.5.0",
-    "socket.io": "2.3.0",
+    "socket.io": "2.4.0",
     "spotify-web-api-node": "4.0.0",
     "uuid": "3.3.2",
     "verisure": "1.2.0",
