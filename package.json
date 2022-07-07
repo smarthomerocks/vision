@@ -27,7 +27,7 @@
     "ip": "1.1.5",
     "itach": "1.0.0",
     "less-middleware": "3.1.0",
-    "moment": "2.27.0",
+    "moment": "2.29.4",
     "morgan": "1.10.0",
     "mqtt": "4.1.0",
     "nordpool": "2.0.0",
